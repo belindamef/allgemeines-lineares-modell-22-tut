@@ -1,0 +1,12 @@
+# R / R-Studio
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+*.Rproj
+
+# Knit temp output files
+*_cache
+
+# macOS configuration files
+*.DS_Store
