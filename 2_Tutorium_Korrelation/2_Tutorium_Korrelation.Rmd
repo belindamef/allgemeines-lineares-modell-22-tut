@@ -1,0 +1,835 @@
+---
+fontsize: 8pt
+bibliography: Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: yes
+    includes:
+      in_header: header.tex
+---
+
+
+```{r, include = F}
+source("R_common.R")
+```
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%"}
+knitr::include_graphics("Abbildungen/wtfi_otto.png")
+```
+
+\vspace{2mm}
+
+\Huge
+Tutorium Allgemeines Lineares Modell
+\vspace{2mm}
+
+
+\normalsize
+BSc Psychologie SoSe 2022
+
+\vspace{2mm}
+\text{4. Termin: Korrelation}
+
+\vspace{18mm}
+Belinda Fleischmann
+
+
+
+# Organisatorisches
+
+Ersatztermin für 16. Juni
+
+* Vorziehen auf Montag, 13. Juni nachmittags? 
+* oder Doppelstunde am Donnerstag (23. Juni) die Woche drauf?
+* Alternativen?
+
+
+# Follow-up letzte Wochen
+\small
+\color{darkcyan}
+*Mal angenommen, wir haben Daten von 20 Proband:innen erhoben. Dann haben wir als Ausgangspunkt, 
+die beobachteten Werte für $y_i$*
+
+\color{black}
+
+```{r, echo = F, eval = F}
+library(latex2exp)
+
+fname       = file.path(getwd(), "Daten", "1_Regression.csv")                  # Datendatei
+D           = read.table(fname, sep = ",", header = TRUE)                        # Dataframe
+y           = D$y_i                                                              # y_i Werte
+x           = D$x_i                                                              # x_i Werte
+
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+plot(
+x,
+y,
+pch        = 16,
+xlab       = "Anzahl Therapiestunden (x)",
+ylab       = "Symptomreduktion (y)",
+xlim       = c(0,21),
+ylim       = c(-10, 40))
+
+legend(
+"topleft",
+TeX("$(x_i,y_i)$"),
+lty         = 0,
+pch         = 16,
+col         = "black",
+bty         = "n",
+cex         = 1,
+x.intersp   = 1)
+
+dev.copy2pdf(
+file        = file.path("Abbildungen", "scatter_beispieldatensatz.pdf"),
+width       = 4,
+height      = 4)
+```
+
+```{r, echo = FALSE, out.width = "50%"}
+knitr::include_graphics("Abbildungen/scatter_beispieldatensatz.pdf")
+```
+
+\small
+\color{darkcyan}
+*Jetzt wollen wir die Daten beschreiben. Genauer gesagt, wollen wir beschreiben und quantifizieren, welcher Zusammenhang zwischen "Anzahl Therapiestunden" (x) und "Symptomreduktion" (y) bestehen könnte. Wie können wir vorgehen? Anders gefragt, welche Maße können wir (bisher) bestimmen?*
+
+
+
+
+# Follow-up letzte Wochen
+
+\color{darkcyan}
+
+Was können wir bestimmen, um den Zusammenhang quantitativ zu beschreiben?
+
+* Ausgleichsgerade
+* Einfache lineare Regression
+* Korrelation und Bestimmtheitsmaß
+
+
+
+
+
+# Follow-up letzte Wochen
+
+\color{darkcyan}
+
+Was können wir bestimmen, um den Zusammenhang quantitativ zu beschreiben?
+
+\setstretch{1.6}
+\footnotesize
+\color{black}
+| Modell           | Modellannahmen | Was wir auf Basis der beobachteten Daten $(x_i,y_i)$ bestimmen können  | 
+| -                | --             | --                                                               | 
+| Ausgleichsgerade |  Die Ausgleichsgerade mit Funktionswerten $f_{\beta}(x)=\beta_0+\beta_1x_i$ minimiert die Summe der quadrierten Abweichungen $q(\beta)$ |  $\hat{\beta_0},\hat{\beta_1},q(\hat{\beta_0},\hat{\beta_1})$    |  
+| Einfache lineare Regression | $Y_i \sim N(\beta_o + \beta_1x_i,\sigma^2)$, u. \newline (Wir betrachten $Y_i$ als Zufallsvariable mit Normalverteilung) | $\hat{\beta_0},\hat{\beta_1},\hat{\sigma^2}$  |
+| Korrelation |  $\rho(X,Y) := \frac{\mathbb{C}(X,Y)}{\mathbb{S}(X)\mathbb{S}(Y)}$ \newline (Wir betrachten $Y_i$ *und* $X_i$ als Zufallsvariablen mit Varianzen $\mathbb{V}(X)$ und $\mathbb{V}(Y)$ und Kovarianz $\mathbb{C}(X,Y)$) | $r_{xy} := \frac{c_{xy}}{s_xs_y}$, $\mbox{R}^2$ | 
+
+\vspace{-3mm}
+\setstretch{1.1}
+Anmerkungen: 
+
+* Beobachtungen, Messungen oder eine Stichprobe sind konkret vorliegende Datenwerte, die eine Zufallsvariable annehmen kann. Wir nennen einzelne Werte, die eine Zufallsvariable annehmen kann, Realisierungen der Zufallsvariable. 
+
+
+# Follow-up letzte Wochen
+\color{darkcyan}
+Angewendet auf unseren Beispieldatensatz:
+
+\small
+\color{black}
+
+Parameterschätzer für Ausgleichsgeraden:  $\hat{\beta_0}= -6.2$, $\hat{\beta_1}= 1.7$, $q(\hat{\beta}) = 250$
+
+Parameterschätzer für einfachen linearen Regression: $\hat{\beta_0}= -6.2$, $\hat{\beta_1}= 1.7$, $\hat{\sigma^2}=3.54$
+
+Korrelation: $r_{xy} = 0.938$, $\mbox{R}^2 = 0.88$
+
+\vspace{4mm}
+
+```{r, echo = F, eval = F}
+# Einlesen des Beispieldatensatzes
+fname       = file.path(getwd(), "Daten", "Beispieldatensatz.csv")
+D           = read.table(fname, sep = ",", header = TRUE)
+
+# Ausgleichsgeradenparameter
+x_bar       = mean(D$x_i)               # Stichprobenmittel der x_i-Werte
+y_bar       = mean(D$y_i)               # Stichprobenmittel der y_i-Werte
+s2x         = var(D$x_i)                # Stichprobenvarianz der  x_i-Werte
+cxy         = cov(D$x_i, D$y_i)         # Stichprobenkovarianz der (x_i,y_i)-Werte
+beta_1_hat  = cxy/s2x                   # \hat{\beta}_1, Steigungsparameter
+beta_0_hat  = y_bar - beta_1_hat*x_bar  # \hat{\beta}_0, Offset Parameter
+cor_dat = cor(D$x_i,D$y_i)
+r_sqr = cor_dat**2
+
+# Visualisierung
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+plot(
+D$x_i,
+D$y_i,
+pch         = 16,
+xlab        = "Anzahl Therapiestunden (x)",
+ylab        = "Symptomreduktion (y)",
+xlim        = c(0,21),
+ylim        = c(-10, 40))
+abline(
+coef        = c(beta_0_hat, beta_1_hat),
+lty         = 1,
+col         = "black")
+points(
+D$x_i,
+beta_0_hat + beta_1_hat*D$x_i,
+pch         = 16,
+col         = "grey")
+arrows(
+x0        = D$x_i,
+y0        = D$y_i,
+x1        = D$x_i,
+y1        = beta_0_hat + beta_1_hat*D$x_i,
+length    = 0,
+col       = "grey")
+
+
+dev.copy2pdf(
+file        = file.path("Abbildungen", "Zsfng.pdf"),
+width       = 4,
+height      = 4)
+```
+
+```{r, echo = FALSE, fig.show='hold', out.width = "45%"}
+knitr::include_graphics("Abbildungen/alm_1_ausgleichsgerade_3.pdf")
+knitr::include_graphics("Abbildungen/Zsfng.pdf")
+
+```
+
+\vspace{-5mm}
+\center
+$\bullet \, (x_i, y_i)$                                     \hspace{2mm}
+\textbf{---} $f_{\hat{\beta}}(x)$                           \hspace{2mm}
+\textcolor{lightgray}{$\bullet$} $\hat{y}_i$                \hspace{2mm}
+\textcolor{lightgray}{\textbf{---}} $\hat{\varepsilon}_i$   \hspace{2mm}
+$i = 1,...,n$
+
+
+
+
+# Selbstkontrollfragen - Regression
+\setstretch{1.6}
+\tiny
+\justifying
+
+1. Geben Sie die Definition der Korrelation zweier Zufallsvariablen wieder.
+2. Geben Sie die Definitionen von Stichprobenmittel, -standardabweichung, -kovarianz und -korrelation wieder.
+3. Erläutern Sie anhand der Mechanik der Kovariationsterme, wann eine Stichprobenkorrelation einen hohen absoluten Wert annimmt, einen hohen positiven Wert annimmt, einen hohen negativen Wert annimmt und einen niedrigen Wert annimmt.
+4. Berechnen Sie die Korrelation von Anzahl der Therapiestunden und Symptomreduktion anhand der Daten in Beispieldatensatz.csv.
+5. Geben Sie das Theorem zur Stichprobenkorrelation bei linear-affinen Transformationen wieder.
+6. Erläutern Sie das Theorem zur Stichprobenkorrelation bei linear-affinen Transformationen.
+7. Geben Sie die Definitionen von erklärten Werten und Residuen einer Ausgleichsgerade wieder.
+8. Geben Sie das Theorem zur Quadratsummenzerlegung bei einer Ausgleichsgerade wieder.
+9. Erläutern Sie die intuitiven Bedeutungen von $\mbox{SQT}, \mbox{SQE}$ und $\mbox{SQR}$.
+10. Geben Sie die Definition des Bestimmtheitsmaßes $\mbox{R}^2$ wieder.
+11. Geben Sie das Theorem zum Zusammenhang von Stichprobenkorrelation und Bestimmtheitsmaß wieder. 
+12. Erläutern Sie die Bedeutung von hohen und niedrigen  $\mbox{R}^2$ Werten im Lichte der Ausgleichsgerade.
+13. Berechnen Sie in einem R-Skript $\mbox{R}^2$ für die Daten in der Datei Beispieldatensatz.csv anhand der Definition von $\mbox{R}^2$. Überprüfen Sie Ihr Ergebnis anhand des Theorems zum Zusammenhang von Stichprobenkorrelation und Bestimmheitsmaß.
+13. Geben Sie das Theorem zum Zusammenhang von Korrelation und linear-affiner Abhängigkeit wieder.
+\color{darkgrey}
+14. Geben Sie die Definition der Regressionsgerade zweier Zufallsvariablen wieder.
+15. Geben Sie das Theorem zur Optimalität der Regressionsgerade zweier Zufallsvariablen wieder.
+16. Geben Sie das Theorem zum Zusammenhang von Korrelation und Regression an.
+17. Erläutern Sie, wie aus den Ergebnissen einer Regressionananlyse das Ergebnis einer Korrelationsanalyse errechnet werden kann.
+
+
+
+
+# Grundlagen Korrelation - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 1. Geben Sie die Definition der Korrelation zweier Zufallsvariablen wieder.
+\vspace{3mm}
+
+\color{black}
+\small
+\begin{definition}[Korrelation]
+\justifying
+Die \textit{Korrelation} zweier Zufallsvariablen $X$ und $Y$ ist definiert als
+\begin{equation}
+\rho(X,Y) := \frac{\mathbb{C}(X,Y)}{\mathbb{S}(X)\mathbb{S}(Y)}
+\end{equation}
+wobei $\mathbb{C}(X,Y)$ die Kovarianz von $X$ und $Y$ und $\mathbb{S}(X)$ und
+$\mathbb{S}(Y)$ die Standardabweichungen von $X$ und $Y$, respektive, bezeichnen.
+\end{definition} 
+
+
+
+
+# Grundlagen Korrelation - Selbstkontrollfragen
+\vspace{1mm}
+\setstretch{1}
+\large
+\color{darkblue} 2. Geben Sie die Definitionen von Stichprobenmittel, -standardabweichung, -kovarianz und -korrelation wieder.
+\vspace{1mm}
+\color{black}
+
+\footnotesize
+\begin{definition}[Stichprobenkorrelation]
+\justifying
+$\{(x_1,y_1),...,(x_n,y_n)\} \subset \mathbb{R}$ sei eine Wertemenge. Weiterhin seien:
+\begin{itemize}
+\item Die Stichprobenmittel der $x_i$ und $y_i$ definiert als
+\begin{equation}
+\bar{x} := \frac{1}{n}\sum_{i=1}^n x_i
+\mbox{ und }
+\bar{y} := \frac{1}{n}\sum_{i=1}^n y_i.
+\end{equation}
+\item Die Stichprobenstandardabweichungen $x_i$ und $y_i$ definiert als
+\begin{equation}
+s_x := \sqrt{\frac{1}{n-1}\sum_{i=1}^n(x_i - \bar{x})^2}
+\mbox{ und }
+s_y := \sqrt{\frac{1}{n-1}\sum_{i=1}^n(y_i - \bar{y})^2}.
+\end{equation}
+\item Die Stichprobenkovarianz der $(x_1,y_1),...,(x_n,y_n)$ definiert als
+\begin{equation}
+c_{xy} := \frac{1}{n-1}\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}).
+\end{equation}
+\end{itemize}
+Dann ist die \textit{Stichprobenkorrelation} der $(x_1,y_1),...,(x_n,y_n)$ definiert als
+\begin{equation}
+r_{xy} := \frac{c_{xy}}{s_xs_y}
+\end{equation}
+und  wird auch \textit{Stichprobenkorrelationskoeffizient} genannt.
+\end{definition}
+
+
+
+
+# Grundlagen Korrelation - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3. Erläutern Sie anhand der Mechanik der Kovariationsterme, wann eine Stichprobenkorrelation einen hohen absoluten Wert annimmt, einen hohen positiven Wert annimmt, einen hohen negativen Wert annimmt und einen niedrigen Wert annimmt.
+\vspace{1mm}
+\color{black}
+\small
+
+Kovariationsterme: 
+$(x_i - \bar{x})(y_i - \bar{y})$
+\vspace{-9mm}
+```{r, echo = FALSE, out.width = "55%",fig.align = 'right'}
+knitr::include_graphics("Abbildungen/alm_2_korrelationsterme.pdf")
+```
+\vspace{-4mm}
+\footnotesize
+\setstretch{1.1}
+* \footnotesize \color{darkgrey} Die Stichprobenkorrelation ist die standardisierte Stichprobenkovarianz ($c_{xy}$).
+* $c_{xy}$ misst die insgesamte (aufsummierte) gemeinsame Abweichung der Beobachtungspunkte von ihren Stichprobenmitteln. Für jeden Beobachtungspunkt wird diese gemeinsame Abweichung als Produkt der Abweichung der $x_i$ und $y_i$ von den jeweiligen Stichprobenmitteln errechnet.
+  * \footnotesize \color{darkgrey} Wenn beide Beobachtungspunkte positiv, oder beide Beobachtungspunkte negativ, also richtungsgleich von ihren Mittelwerten abweichen, wird dieses Produkt positiv. 
+  * Wenn beide Beobachtungspunkte in konträre, oder richtungsungleiche Richtungen von ihren Mittelwerten abweichen, wird dieses Produkt negativ.
+* \color{black} Häufige Abweichungen der $x_i$ und $y_i$ von ihren Mittelwerten (richtungsgleich oder richtungsungleich) \newline $\Rightarrow$ hohe absolute Korrelation
+  * \footnotesize Häufige richtungsgleiche Abweichung der $x_i$ und $y_i$ von ihren Mittelwerten $\Rightarrow$ Positive Korrelation
+  * Häufige richtungsungleiche Abweichung der $x_i$ und $y_i$ von ihren Mittelwerten $\Rightarrow$ Negative Korrelation
+* Keine häufigen Abweichungen der $x_i$ und $y_i$ von ihren Mittelwerten $\Rightarrow$ niedrige absolute Korrelation
+
+
+
+
+
+# Grundlagen Korrelation - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4. Berechnen Sie die Korrelation von Anzahl der Therapiestunden und Symptomreduktion anhand der Daten in Beispieldatensatz.csv.
+
+\vspace{3mm}
+\color{black}
+\tiny
+\setstretch{1.2}
+```{r}
+# Laden des Beispieldatensatzes
+fname = file.path(getwd(), "Daten", "Beispieldatensatz.csv")
+D     = read.table(fname, sep = ",", header = TRUE)                             
+x_i   = D$x_i                                         # x_i Werte 
+y_i   = D$y_i                                         # y_i Werte
+n     = length(x_i)                                   # n (= length(y_i))
+
+# "Manuelle" Berechnung der Stichprobenkorrelation
+x_bar = (1/n)*sum(x_i)                                # Stichprobenmittel x
+y_bar = (1/n)*sum(y_i)                                # Stichprobenmittel y
+s_x   = sqrt(1/(n-1)*sum((x_i - x_bar)^2))            # Stichprobenstandardabweichung x
+s_y   = sqrt(1/(n-1)*sum((y_i - y_bar)^2))            # Stichprobenstandardabweichung y
+c_xy  = 1/(n-1) * sum((x_i - x_bar) * (y_i - y_bar))  # Stichprobenkovarianz
+r_xy_man  = c_xy/(s_x * s_y)                          # Stichprobenkorrelation 
+# Automatische Berechnung mit cor()
+r_xy_aut = cor(x_i,y_i)                               # Stichprobenkorrelation 
+
+# Ausgabe
+cat("r (manuell)"  , r_xy_man,
+    "\n r (automatisch)", r_xy_aut)
+```
+
+
+
+
+# Grundlagen Korrelation - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Geben Sie das Theorem zur Stichprobenkorrelation bei linear-affinen Transformationen wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{theorem}[Stichprobenkorrelation bei linear-affinen Transformationen]
+\justifying
+\normalfont
+Für eine Wertemenge $\{(x_i,y_i)\}_{i = 1,...n} \subset \mathbb{R}^2$ sei
+$\{(\tilde{x}_i,\tilde{y}_i)\}_{i = 1,...n} \subset \mathbb{R}^2$ eine linear-affin
+transformierte Wertemenge mit
+\begin{equation}
+(\tilde{x}_i, \tilde{y}_i) = (a_x x_i + b_x, a_y y_i + b_y), a_x,a_y \neq 0.
+\end{equation}
+Dann gilt
+\begin{equation}
+|r_{\tilde{x}\tilde{y}}| = |r_{xy}|.
+\end{equation}
+\end{theorem}
+
+
+
+
+
+# Grundlagen Korrelation - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 6. Erläutern Sie das Theorem zur Stichprobenkorrelation bei linear-affinen Transformationen.
+
+\vspace{3mm}
+\color{black}
+\small
+
+* Der Betrag der Stichprobenkorrelation ändert sich bei linear-affiner Datentransformation nicht.
+* Man sagt, dass die Stichprobenkorrelation im Gegensatz zur Stichprobenkovarianz \textit{maßstabsunabhängig} ist.
+
+* \color{darkgrey}Das heißt, der Betrag der Stichprobenkorrelation bleibt unverändert, wenn wir die Werte linear-affin transformieren (z.B. Stunden $\to$ Minuten, Grad Celcius $\to$ Grad Fahrenheit)
+
+
+# Korrelation und Bestimmtheitsmaß - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 7. Geben Sie die Definitionen von erklärten Werten und Residuen einer Ausgleichsgerade wieder.
+
+\vspace{3mm}
+\color{black}
+\small
+\begin{definition}[Erklärte Werte und Residuen einer Ausgleichsgerade]
+\justifying
+Gegeben seien eine Wertemenge $\{(x_1,y_1), ..., (x_n,y_n)\} \subset \mathbb{R}^2$
+und die zu dieser Wertemenge gehörende Ausgleichsgerade
+\begin{equation}
+f_{\hat{\beta}} : \mathbb{R} \to \mathbb{R}, x \mapsto f_{\hat{\beta}}(x) := \hat{\beta}_0 + \hat{\beta}_1x
+\end{equation}
+Dann werden für $i = 1,...,n$
+\begin{equation}
+\hat{y}_i := \hat{\beta}_0 + \hat{\beta}_1x_i
+\end{equation}
+die durch die Ausgleichsgerade \textit{erklärten Werte} genannt und
+\begin{equation}
+\hat{\varepsilon}_i := y_i - \hat{y}_i
+\end{equation}
+die \textit{Residuen} der Ausgleichsgerade genannt.
+\end{definition}
+
+
+
+
+# Korrelation und Bestimmtheitsmaß - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 8. Geben Sie das Theorem zur Quadratsummenzerlegung bei einer Ausgleichsgerade wieder.
+
+\vspace{3mm}
+\color{black}
+\small
+\begin{theorem}[Quadratsummenzerlegung bei Ausgleichsgerade]
+\justifying
+\normalfont
+Für eine Wertemenge $\{(x_1,y_1), ..., (x_n,y_n)\} \subset \mathbb{R}^2$ und ihre
+zugehörige Ausgleichsgerade $f_{\hat{\beta}}$ seien für
+\begin{equation}
+\bar{y} := \frac{1}{n}\sum_{i=1}^n y_i \mbox{ und }
+\hat{y}_i := \hat{\beta}_0 + \hat{\beta}_1x_i, \mbox{ für } i= 1,...,n
+\end{equation}
+das Stichprobenmittel der $y$-Werte und die durch die Ausgleichsgerade erklärten Werte,
+respektive. Weiterhin seien
+
+\center
+\vspace{1mm}
+\begin{tabular}{ll}
+$\mbox{SQT} := \sum_{i = 1}^n (y_i - \bar{y})^2$          & die \textit{Total Sum of Squares}      \\\\
+$\mbox{SQE} := \sum_{i = 1}^n (\hat{y}_i - \bar{y})^2$    & die \textit{Explained Sum of Squares}  \\\\
+$\mbox{SQR} := \sum_{i = 1}^n (y_i - \hat{y}_i)^2$        & die \textit{Residual Sum of Squares}   \\
+\end{tabular}
+\vspace{1mm}
+\flushleft
+Dann gilt
+\begin{equation}
+\mbox{SQT} = \mbox{SQE} + \mbox{SQR}
+\end{equation}
+\end{theorem}
+
+
+
+
+# Korrelation und Bestimmtheitsmaß - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 9. Erläutern Sie die intuitiven Bedeutungen von $\mbox{SQT}, \mbox{SQE}$ und $\mbox{SQR}$.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.4}
+
+\begin{itemize}
+\item SQT repräsentiert die Gesamtstreuung der $y_i$-Werte um ihren Mittelwert $\bar{y}$.
+\item SQE repräsentiert die Streuung der erklärten Werte $\hat{y}_i$ um ihren Mittelwert
+\item[] $\Rightarrow$ Große Werte von SQE repräsentieren eine große absolute Steigung der $y_i$ mit den $x_i$
+\item[] $\Rightarrow$ Kleine Werte von SQE repräsentieren eine kleine absolute Steigung der $y_i$ mit den $x_i$
+\item SQE ist also ein Maß für die Stärke des linearen Zusammenhangs der $x$- und $y$-Werte
+\item SQR ist die Summe der quadrierten Residuen.
+\item[] $\Rightarrow$ Große Werte von SQR repräsentieren große Abweichungen der erklärten von den beobachteten $y$-Werten
+\item[] $\Rightarrow$ Kleine Werte von SQR repräsentieren geringe Abweichungen der erklärten von den beobachteten $y$-Werten
+\item SQR ist also ein Maß für die Güte der Beschreibung der Datenmenge durch die Ausgleichsgerade.
+\end{itemize}
+
+
+
+
+# Korrelation und Bestimmtheitsmaß - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 10. Geben Sie die Definition des Bestimmtheitsmaßes $\mbox{R}^2$ wieder. 
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{definition}[Bestimmtheitsmaß $\mbox{R}^2$]
+\justifying
+Für eine Wertemenge $\{(x_1,y_1), ..., (x_n,y_n)\} \subset \mathbb{R}^2$ und ihre
+zugehörige Ausgleichsgerade $f_{\hat{\beta}}$ sowie die zugehörigen Explained Sum of Squares $\mbox{SQE}$
+und Total Sum of Squares $\mbox{SQT}$ heißt
+\begin{equation}
+\mbox{R}^2 := \frac{\mbox{SQE}}{\mbox{SQT}}
+\end{equation}
+\textit{Bestimmtheitsmaß} oder \textit{Determinationskoeffizient}.
+\end{definition}
+
+
+
+
+# Korrelation und Bestimmtheitsmaß - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 11. Geben Sie das Theorem zum Zusammenhang von Stichprobenkorrelation und Bestimmtheitsmaß wieder. 
+
+\vspace{3mm}
+\color{black}
+\begin{theorem}[Stichprobenkorrelation und Bestimmtheitsmaß]
+\justifying
+\normalfont
+Für eine Wertemenge $\{(x_1,y_1), ..., (x_n,y_n)\} \subset \mathbb{R}^2$ sei
+$\mbox{R}^2$ das Bestimmtheitsmaß und $r_{xy}$ sei die Stichprobenkorrelation.
+Dann gilt
+\begin{equation}
+\mbox{R}^2 = r_{xy}^2.
+\end{equation}
+\end{theorem}
+
+
+
+
+# Korrelation und Bestimmtheitsmaß - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 12. Erläutern Sie die Bedeutung von hohen und niedrigen  $\mbox{R}^2$ Werten im Lichte der Ausgleichsgerade.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\setstretch{1.8}
+\begin{itemize}
+\item  Mit $-1 \le r_{xy} \le 1$ folgt aus dem Theorem direkt, dass $0 \le \mbox{R}^2 \le 1$.
+\item  Es gilt $\mbox{R}^2 = 0$ genau dann, wenn $\mbox{SQE} = 0$ ist
+\item[] $\Rightarrow$ Für $\mbox{R}^2 = 0$ ist die erklärte Streuung der Daten durch die Ausgleichsgerade gleich null.
+\item[] $\Rightarrow$ $\mbox{R}^2 = 0$ beschreibt also den Fall einer denkbar schlechten Erklärung der Daten durch die Ausgleichsgerade.
+\item Es gilt $\mbox{R}^2 = 1$ genau dann, wenn $\mbox{SQE} = \mbox{SQT}$ ist.
+\item[] $\Rightarrow$ Für $\mbox{R}^2 = 0$ ist also die Gesamtstreuung gleich der durch die Ausgleichsgerade erklärten Streuung.
+\item[] $\Rightarrow$ $\mbox{R}^2 = 1$ beschreibt also den Fall das sämtliche Datenvariabilität durch die Ausgleichsgerade erklärt wird.
+\end{itemize}
+
+
+
+# Korrelation und lineare Abhängigkeit - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 13. Berechnen Sie in einem R-Skript $\mbox{R}^2$ für die Daten in der Datei Beispieldatensatz.csv anhand der Definition von $\mbox{R}^2$. Überprüfen Sie Ihr Ergebnis anhand des Theorems zum Zusammenhang von Stichprobenkorrelation und Bestimmheitsmaß.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 1/2
+\tiny
+\setstretch{1.2}
+```{r}
+# Laden des Beispieldatensatzes
+fname = file.path(getwd(), "Daten", "Beispieldatensatz.csv")
+D     = read.table(fname, sep = ",", header = TRUE)                             
+n     = length(D$x_i)                                    # n (= length(y_i))
+
+# Stichprobenstatistiken (incl. Korrelation
+x_bar = (1/n)*sum(D$x_i)                                 # Stichprobenmittel x
+y_bar = (1/n)*sum(D$y_i)                                 # Stichprobenmittel y
+s_x   = sqrt(1/(n-1)*sum((D$x_i - x_bar)^2))             # Stichprobenstandardabweichung x
+s_y   = sqrt(1/(n-1)*sum((D$y_i - y_bar)^2))             # Stichprobenstandardabweichung y
+c_xy  = 1/(n-1) * sum((D$x_i - x_bar) * (D$y_i - y_bar)) # Stichprobenkovarianz
+r_xy  = c_xy/(s_x * s_y)   
+```
+
+
+
+# Korrelation und lineare Abhängigkeit - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 13. Berechnen Sie in einem R-Skript $\mbox{R}^2$ für die Daten in der Datei Beispieldatensatz.csv ...
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 2/2
+\tiny
+\setstretch{1.2}
+```{r}
+# Erklärte Werte der Ausgleichsgeraden (y_hat
+beta_1_hat = c_xy / s_x^2                     # beta_0 (Parameter der Ausgleichsgerade)
+beta_0_hat = y_bar - beta_1_hat * x_bar       # beta_1 (Parameter der Ausgleichsgerade)
+D$y_hat = beta_0_hat + beta_1_hat * D$x_i     # Funktionswerte der Ausgleichsgeraden/erklärte Werte (y_hat)
+
+# Berechnung R^2 nach Definition
+SQT = sum((D$y_i - y_bar)^2)                  # Total sum of squares
+SQE = sum((D$y_hat - y_bar)^2)                # Explained sum of sqaures
+R_sqr_def = SQE/SQT                           # Bestimmtheitsmaß
+
+# Berechnung R^2 über Stichprobenkorrelationskoeffizienten
+R_sqr = r_xy^2                                # Bestimmtheitsmaß
+
+# Ausgabe
+cat("r_xy", r_xy, "\n SQT", SQT, "\n SQE", SQE, 
+    "\n R_sqr wie Def", R_sqr_def, "\n R_sqr mit r_xy", R_sqr)
+```
+
+
+
+
+
+
+
+# Korrelation und lineare Abhängigkeit - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 14. Geben Sie das Theorem zum Zusammenhang von Korrelation und linear-affiner Abhängigkeit wieder.
+
+\vspace{3mm}
+\color{black}
+\small
+\begin{theorem}[Korrelation und linear-affine Abhängigkeit]
+\justifying
+\normalfont
+$X$ und $Y$ seien zwei Zufallsvariablen mit positiver Varianz.  Dann besteht genau
+dann eine lineare-affine Abhängigkeit der Form
+\begin{equation}
+Y = \beta_0 + \beta_1X \mbox{ mit } \beta_0,\beta_1\in \mathbb{R}
+\end{equation}
+zwischen $X$ und $Y$, wenn
+\begin{equation}
+\rho(X,Y) = 1 \mbox{ oder } \rho(X,Y) = -1
+\end{equation}
+gilt.
+\end{theorem}
+
+
+
+# Korrelation und Regression - Selbstkontrollfragen (nicht prüfungsrelevant)
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 15. Geben Sie die Definition der Regressionsgerade zweier Zufallsvariablen wieder.
+
+\vspace{3mm}
+\color{black}
+\small
+\begin{definition}[Regressionsgerade zweier Zufallsvariablen]
+\justifying
+$X$ und $Y$ seien zwei Zufallsvariablen. Dann heißt
+\begin{equation}
+Y  = \beta_0 + \beta_1 X \mbox{ mit }
+\end{equation}
+mit
+\begin{equation}
+\beta_1 := \frac{\mathbb{C}(X,Y)}{\mathbb{V}(X)} \mbox{ und }\beta_0 := \mathbb{E}(Y) - \beta_1\mathbb{E}(X)
+\end{equation}
+die \textit{Regressionsgerade der Zufallsvariablen $X$ auf $Y$}, $\beta_0$ und
+$\beta_1$ heißen die zugehörigen \textit{Regressionskoeffizienten}, und die
+Zufallsvariable
+\begin{equation}
+E := Y - \beta_0 - \beta_1 X
+\end{equation}
+heißt die \textit{Residualvariable}.
+\end{definition}
+
+
+
+
+# Korrelation und Regression - Selbstkontrollfragen (nicht prüfungsrelevant)
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 16. Geben Sie das Theorem zur Optimalität der Regressionsgerade zweier Zufallsvariablen wieder.
+
+\vspace{3mm}
+\color{black}
+\small
+\begin{theorem}[Optimalität der Regressionsgerade zweier Zufallsvariablen]
+\justifying
+\normalfont
+Unter allen Geraden der Form
+\begin{equation}
+Y  = \beta_0 + \beta_1 X
+\end{equation}
+ist die Gerade mit
+\begin{equation}
+\beta_1 := \frac{\mathbb{C}(X,Y)}{\mathbb{V}(X)} \mbox{ und } \beta_0 :=  \mathbb{E}(Y) - \beta_1\mathbb{E}(X)
+\end{equation}
+diejenige, für die
+\begin{equation}
+\tilde{q}: \mathbb{R}^2 \to \mathbb{R}, (\beta_0, \beta_1) \mapsto \tilde{q}(\beta_0,\beta_1) := \mathbb{E}\left((Y - (\beta_0 + \beta_1 X)^2\right)
+\end{equation}
+ein Minimum hat.
+\end{theorem}
+
+
+
+
+# Korrelation und Regression - Selbstkontrollfragen (nicht prüfungsrelevant)
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 17. Geben Sie das Theorem zum Zusammenhang von Korrelation und Regression an.
+
+\vspace{3mm}
+\color{black}
+\small
+\footnotesize
+\begin{theorem}[Zusammenhang von Korrelation und Regression]
+\normalfont
+\justifying
+$X$ und $Y$ seien zwei Zufallsvariablen,
+\begin{equation}
+Y = \beta_0 + \beta_1 X
+\mbox{ mit }
+\beta_1 := \frac{\mathbb{C}(X,Y)}{\mathbb{V}(X)}
+\mbox{ und }
+\beta_0 := \mathbb{E}(Y) -\tilde{\beta}_1\mathbb{E}(X)
+\end{equation}
+sei die Regressionsgerade der Zufallsvariablen $Y$ bezüglich der Zufallsvariablen
+$X$ mit den Regressionskoeffizienten  $\beta_0$ und $\beta_1$ und
+\begin{equation}
+X = \tilde{\beta}_0 + \tilde{\beta_1} Y
+\mbox{ mit }
+\tilde{\beta}_1 := \frac{\mathbb{C}(X,Y)}{\mathbb{V}(Y)}
+\mbox{ und }
+\tilde{\beta}_0 := \mathbb{E}(X) -\tilde{\beta}_1\mathbb{E}(Y)
+\end{equation}
+sei die Regressionsgerade der Zufallsvariablen $X$ bezüglich der Zufallsvariablen
+$Y$ mit den Regressionskoeffizienten $\tilde{\beta}_0$ und $\tilde{\beta}_1$. Dann gilt
+\begin{equation}
+\beta_1 \tilde{\beta}_1
+= \frac{\mathbb{C}(X,Y)}{\mathbb{V}(X)}\frac{\mathbb{C}(X,Y)}{\mathbb{V}(Y)}
+= \frac{\mathbb{C}(X,Y)^2}{\mathbb{V}(X)\mathbb{V}(Y)}
+= \rho(X,Y)^2.
+\end{equation}
+\end{theorem}
+
+
+
+
+# Korrelation und Regression - Selbstkontrollfragen (nicht prüfungsrelevant)
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 18. Erläutern Sie, wie aus den Ergebnissen einer Regressionananlyse das Ergebnis einer Korrelationsanalyse errechnet werden kann.
+
+\vspace{3mm}
+\color{black}
+\small
+$\rho(X,Y)$ kann aus den Regressionskoeffizienten von $X$ auf $Y$ und von $Y$ auf $X$ errechnet werden.
+
+Überblick
+
+\footnotesize
+Der fundamentale Unterschied zwischen "Korrelation" und "Regression" ist, dass
+
+* bei Korrelation sowohl die UV (die $x$'s) als auch die AV (die $y$'s) als Zufallsvariablen modelliert werden,
+* bei Regression dagegen lediglich die AV als Zufallsvariable modelliert wird und die UV als vorgegeben gilt.
+
+Dieser Tatsache unbenommen, kann man auf gegebene Daten prinzipiell natürlich sowohl "Korrelation" als auch "Regression" anwenden.
+Das Ergebnis einer Regressionsanalyse lässt sich in das Ergebnis einer Korrelationsanalyse umrechnen. Die zusätzlich Durchführung einer 
+Korrelationsanalyse bei durchgeführter Regressionsanalyse erzeugt kein mehr an Information oder Verständnis über den
+Zusammenhang von UV und AV.
+
+Für ein tieferes Verständnis dieser Zusammenhänge ist ein Regressionsmodell nötig, indem auch die UV eine Zufallsvariable ist.
+In Abgrenzung zum Modell der einfachen linearen Regression, in dem die UV keine Zufallsvariable ist, bezeichnen wir 
+dieses Modell als \textit{Regression}. Letztlich gerät die Terminologie hier an eine Grenze und es muss jeweils geprüft bzw.
+geschlossen werden, welches Modell Datenanalysten nun tatsächlich vorschwebt.

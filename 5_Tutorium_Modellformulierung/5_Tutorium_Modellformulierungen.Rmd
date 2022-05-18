@@ -1,0 +1,689 @@
+---
+fontsize: 8pt
+bibliography: 5_Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: yes
+    includes:
+      in_header: 5_header.tex
+---
+
+
+```{r, include = F}
+source("5_R_common.R")
+```
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%"}
+knitr::include_graphics("5_Abbildungen/wtfi_otto.png")
+```
+
+\vspace{2mm}
+
+\Huge
+Tutorium Allgemeines Lineares Modell
+\vspace{2mm}
+
+
+\normalsize
+BSc Psychologie SoSe 2022
+
+\vspace{2mm}
+\text{7. Termin: Normalverteilungen}
+
+\vspace{18mm}
+Belinda Fleischmann
+
+\vspace{3mm}
+\scriptsize
+Contents are based on [ALM course material](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2022/Allgemeines+Lineares+Modell.html) by [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+
+
+# Follow-up
+
+Matrizen
+\small
+
+* Eine quadratische Matrix $A \in \mathbb{R}^{n\times n}$ ist nur dann invertierbar, wenn gilt, dass $\det(A) \neq 0$.
+
+\normalsize
+Normalverteilungen
+
+\small
+
+* Die gemeinesame Verteilung $n$ **unabhängiger** normalverteilter Zufallsvariablen $y_1,...,y_n$ entspricht dem Produkt aller individuellen Verteilungen, aller $\upsilon_i$ (also der $N(\upsilon_i; \mu_i,\sigma^2)$ für $i=1,...,n$). 
+\begin{align*}
+p_y(\upsilon) = p_{y_1,...,y_n}(\upsilon_1,...,\upsilon_n) = \prod_{i=1}^n p_{y_i}(\upsilon_i)
+\end{align*}
+* Realisierungen aus multivariater Normalverteilung generieren (Daten simulieren) mit ```MASS::mvrnorm```, eine Alternative für ```mvtnorm::rmvnorm```
+
+\footnotesize
+```{r}
+library(MASS)
+
+# Parameterdefinition
+mu = c(1,1) # \mu \in \mathbb{R}ˆ2
+Sigma = matrix(c(0.2, 0.15, 0.15, 0.2), 2) # \Sigma in \mathbb{R}ˆ{2 \times 2}
+
+Realisierungen = mvrnorm(n = 100, mu = mu, Sigma = Sigma)
+```
+
+
+
+
+
+# Follow-up
+
+Normalverteilungen (Fortführung)
+
+\small
+
+* Visualisierung der WDF (SKF Nr. 6)
+
+\setstretch{1.1}
+\tiny
+```{r, eval = F}
+
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+
+# Parameterdefinition
+mu     = c(10,15)                                # Erwartungswertparameter
+Sigma  = matrix(c(3,1,1,2), 2)                   # Kovarianzmatrixparameter
+
+# Ergebnisraumdefintion
+y_min  = 0                                       # y_i Minimum
+y_max  = 20                                      # y_i Maximum
+y_res  = 1e3                                     # y_i Auflösung (1e3 --> 1000 Werte)
+y_1    = seq(y_nin, y_nax, length.out = y_res)   # y_1 Raum
+y_2    = seq(y_nin, y_nax, length.out = y_res)   # y_2 Raum
+y      = expand.grid(y_1,y_2)                    # y = (y_1,y_2)^T Raum
+
+# Wahrscheinlichkeitsdichtefunktionauswertung
+WDF = dmvnorm(as.matrix(y), mu, Sigma)           # Multivariate WDF (als Vektor)
+p      = matrix(WDF, nrow = y_res)               # Matrixkonversion der WDF
+```
+
+```{r, eval = F}
+# Visualisierung
+contour(
+  y_1,
+  y_2,
+  p,
+  xlim      =  c(y_nin,y_nax),
+  ylim      =  c(y_nin,y_nax),
+  xlab      = TeX("$\\upsilon_1$"),
+  ylab      = TeX("$\\upsilon_2$"),
+  nlevels   = 5)
+```
+
+
+
+
+
+# Follow-up
+
+Normalverteilungen (Fortführung)
+
+\small
+
+* Visualisierung der WDF (SKF Nr. 6)
+
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+
+```{r, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("5_Abbildungen/alm_4_mvnwdf.pdf")
+```
+
+
+
+
+
+
+
+# Selbstkontrollfragen - Modellformulierung
+\footnotesize
+\setstretch{2}
+1. \justifying Erläutern Sie das naturwissenschaftliche Paradigma.
+2. Erläutern Sie die Standardprobleme der Frequentistischen Inferenz.
+3. Setzen Sie das naturwissenschaftliche Paradigma und die Frequentistische Inferenz in Beziehung.
+4. Geben Sie die Definition des ALMs in generativer Form wieder.
+5. Erläutern Sie die deterministischen und probabilistischen Aspekte des ALMs.
+6. Wieviele Parameter hat das ALM mit sphärischer Kovarianzmatrix?
+7. Warum sind die Komponenten des ALM Zufallsfehler unabhängig und identisch verteilt?
+8. Geben Sie das Theorem zur ALM Datenverteilung wieder.
+9. Sind die Komponenten des ALM Datenvektors unabhängig und identisch verteilt?
+10. Schreiben Sie das Szenario $n$ unabhängig und identisch verteilter Zufallsvariablen als ALM in Matrixschreibweise.
+11. Schreiben Sie das Szenario der einfachen linearen Regression als ALM in Matrixschreibweise.
+12. Generieren Sie 100 Datensätze von 12 unabhängig und identisch verteilten Zufallsvariablen.
+13. Generieren Sie 100 Datensätze von eines einfachen linearen Regressionsmodels 
+mit 12 äquidistanten Werten der unabhängigen Variable im Intervall $[1,2]$, wobei 
+$x_1 := 1$ und $x_{12} := 2$ sein sollen.
+
+
+
+
+
+
+# Überblick - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 1. Erläutern Sie das naturwissenschaftliche Paradigma.
+
+\vspace{3mm}
+\color{black}
+
+```{r, echo = F, out.width = "60%"}
+knitr::include_graphics("5_Abbildungen/alm_5_wissenschaft.pdf")
+```
+
+\footnotesize
+
+* Wir nehmen an, dass eine Realität existiert, welche wir idR nur indirekt, teilweise und eingeschränkt beobachten können, indem wir Daten erheben (z.B. BDI Fragebogendaten, EEG-Messung).
+* Daten $\neq$ Realität. Daten sind eine Beobachtung/Messung der Realität. 
+* In der (Natur-)wissen bilden wir Theorien und formulieren Modelle über die Realität (Modellformulierung). Mithilfe von Modellen treffen wir Vorhersagen über die Realität. 
+* Wir verwenden Daten, um Modelle zu schätzen (Modellschätzung) und darauf basierend die Güte der Modelle evaluieren (Modellevaluation) 
+* Ergebnisse der Modellevaluation können wiederum dazu verwendet werden die Modellformulierung anzupassen.
+* Angepasste/veränderte Modelle können wieder mit Daten geschätzt und deren Güte evaluiert werden. 
+ 
+
+
+
+
+
+# Überblick - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 2. Erläutern Sie die Standardprobleme der Frequentistischen Inferenz.
+
+\vspace{3mm}
+\color{black}
+
+Standardprobleme Frequentistischer Inferenz
+\small
+
+\noindent (1) Parameterschätzung
+
+Ziel der Parameterschätzung ist es, einen möglichst guten Tipp für die wahren,
+aber unbekannten, Parameterwerte (oder eine Funktion derer) abzugeben,
+typischerweise basierend auf der Beobachtung einer Datenrealisierung.
+\vspace{2mm}
+
+
+\noindent (2) Konfidenzintervalle
+
+Das Ziel der Bestimmung von Konfidenzintervallen ist es, basierend auf der
+Verteilung möglicher Parameterschätzwerte eine quantitative Aussage über die
+mit dem Schätzwert assoziierte Unsicherheit zu treffen.
+\vspace{2mm}
+
+\noindent (3) Hypothesentests
+
+Das Ziel der Auswertung von Hypothesentests ist es, basierend auf der angenommenen
+Verteilung der Daten in einer möglichst sinnvollen Form zu entscheiden, ob ein
+wahrer, aber unbekannter Parameterwert, sich in einer von zwei sich gegenseitig 
+ausschließenden Untermengen des Parameterraumes, welche man als Hypothesen bezeichnet, 
+liegt.
+
+
+
+
+
+
+# Überblick - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3. Setzen Sie das naturwissenschaftliche Paradigma und die Frequentistische Inferenz in Beziehung.
+
+\vspace{3mm}
+\color{darkcyan} Zur Veranschaulichung
+
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics("5_Abbildungen/alm_5_frequentistische_inferenz.pdf")
+```
+
+
+
+
+
+
+# Überblick - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3. Setzen Sie das naturwissenschaftliche Paradigma und die Frequentistische Inferenz in Beziehung.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.3}
+\footnotesize
+
+* Im Rahmen der Frquentistischen Inferenz gehen wir davon aus, dass es in der **Realität** (Welt) wahre, aber unbekannte Parameterwerte gibt (z.B. $\beta$.Parameter, der den Zusammenhang zwischen zwischen zwei Variablen beschreibt)
+* Eine **Modellformulierung** drückt eine Theorie über die Realität (Welt) formal aus. Bsp.: $y = X\beta+\epsilon,\epsilon \sim N(0_n, \sigma^2 I_n)$ ist eine Modellformulierung, die einen linearer Zusammenhang zwischen x und y behauptet.
+* Im Rahmen der **Modellschätzung** werden Parameter basierend auf erhobenen **Daten** geschätzt. 
+* Es wird angenommen, dass ein vorliegender Datensatz eine der möglichen Realisierungen der Daten des Modells ist. Aus frequentistischer Sicht kann man unendlich oft Datensätze basierend auf einem Modell generieren und zu jedem Datensatz Schätzer oder Statistiken auswerten.
+* Im Rahmen der **Modellevaluation** werden Konfidenzintervalle bestimmt und Hypothentests durchgeführt, um die Güte der Modelle zu bewerten. 
+* Um die Qualität statistischer Methoden zu beurteilen betrachtet die frequentistische Statistik die Wahrscheinlichkeitsverteilungen von Schätzern und Statistiken unter Annahme der Datenverteilung. 
+
+
+
+
+
+
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4. Geben Sie die Definition des ALMs in generativer Form wieder.
+
+\vspace{3mm}
+\color{black}
+
+
+\small
+\begin{definition}[Allgemeines Lineares Modell]
+\justifying
+Es sei
+\begin{equation}\label{eq:alm}
+y = X\beta + \varepsilon,
+\end{equation}
+wobei
+\begin{itemize}
+\item $y$ ein $n$-dimensionaler beobachtbarer Zufallsvektor ist, der \textit{Daten} genannt wird,
+\item $X \in \mathbb{R}^{n \times p}$ eine vorgegebene Matrix ist, die \textit{Designmatrix} genannt wird,
+\item $\beta \in \mathbb{R}^p$ ein unbekannter Parametervektor ist, der \textit{Betaparametervektor} genannt wird und
+\item $\varepsilon$ ein $n$-dimensionaler nicht-beobachtbarer Zufallsvektor ist, der \textit{Zufallsfehler} genannt wird und für den angenommen wird, dass
+mit einem unbekannten Varianzparameter $\sigma^2>0$ gilt, dass
+\begin{equation}
+\varepsilon \sim N\left(0_n, \sigma^2I_n\right).
+\end{equation}
+\end{itemize}
+Dann wird \eqref{eq:alm} \textit{Allgemeines Lineares Modell (ALM) in generativer Form} genannt.
+\end{definition}
+
+
+
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkcyan} Beispiele ALM mit $n=5$
+
+
+\color{black}
+
+
+\footnotesize
+$y$ sei ein $5$-dimensionalter Zufallsvektor mit Erwartungswertparameter $X\beta \in \mathbb{R}^{5\times n}$ und Kovarianzmatrixparameter $\sigma^2I_5$. Die Komponenten $y_1,...,y_5$ sind unabhängig aber nicht identisch verteilte Zufallsvariablen der Form $y_i \sim N(\mu_i,\sigma^2)$ für $i=1,...,5$.
+
+
+Beispiel 1: p = 1 (Wir haben nur einen Betaparameter $\beta$)
+\vspace{-3.5mm}
+
+\tiny
+\begin{align*}
+y \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X := \begin{pmatrix}x_1\\x_2\\x_3\\x_4\\x_5\end{pmatrix}  \in \mathbb{R}^{5 \times 1}, \beta \in \mathbb{R}^1, \sigma^2>0.
+\end{align*}
+\vspace{-3mm}
+\begin{alignat*}{2}
+y &= X \beta + \epsilon \\
+\begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
+&= \begin{pmatrix}x_1\\x_2\\x_3\\x_4\\x_5\end{pmatrix} 
+\beta + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix}
+= \begin{pmatrix}x_1 \beta + \epsilon_1 \\ x_2 \beta +\epsilon_2 \\ x_3 \beta +\epsilon_3 \\ x_4 \beta +\epsilon_4 \\ x_5 \beta + \epsilon_5 \end{pmatrix}
+\end{alignat*}
+
+\footnotesize
+Beispiel 2: p = 2 (Wir haben zwei Betaparameter $\beta_1$ und $\beta_2$)
+\vspace{-3.5mm}
+
+\tiny
+\begin{align*}
+y \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X := \begin{pmatrix}x_{11}&x_{12}\\x_{21}&x_{22}\\x_{31}&x_{32}\\x_{41}&x_{42}\\x_{51}&x_{52}\end{pmatrix}  \in \mathbb{R}^{5 \times 2}, \beta \in \mathbb{R}^2, \sigma^2>0.
+\end{align*}
+\vspace{-3mm}
+\begin{alignat*}{2}
+y &= X \beta + \epsilon \\
+\begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
+&= \begin{pmatrix}x_{11}&x_{12}\\x_{21}&x_{22}\\x_{31}&x_{32}\\x_{41}&x_{42}\\x_{51}&x_{52}\end{pmatrix} 
+\begin{pmatrix}\beta_1 \\ \beta_2 \end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix}
+= \begin{pmatrix}x_{11} \beta_1 + x_{12} \beta_2 + \epsilon_1 \\ x_{21} \beta_1 + x_{22} \beta_2 +\epsilon_2 \\ x_{31} \beta_1 + x_{32} \beta_2 +\epsilon_3 \\ x_{41} \beta_1 + x_{42} \beta_2 +\epsilon_4 \\ x_{51} \beta_1 + x_{52} \beta_2 + \epsilon_5 \end{pmatrix}
+\end{alignat*}
+
+
+
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Erläutern Sie die deterministischen und probabilistischen Aspekte des ALMs.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.3}
+\footnotesize
+
+* Wir nennen $X\beta \in \mathbb{R}^n$ den \textit{deterministichen Modellaspekt} und $\varepsilon$ den \textit{probabilistischen Modellaspekt}.
+* *deterministisch* heißt hier, die Komponenten beinhalten keine Zufälligkeit, sondern sind vorgegeben bzw. im Rahmen der Modellformulierung bestimmt
+* *probabilistisch* heißt hier, die Komponenten beinhalten Zufälligkeit. Realisierungen dieser Komponente können aus einer Normalverteilungne gezogen werden. Der probabilistische Aspekt modelliert bei Normalverteilungen alle Einflussfaktoren auf $y$, die nicht durch den deterministischen Askept abgedeckt werden.
+* \color{black}$y$ das Ergebnis der Addition deterministischer und probabilistischer Aspekte ist, ist es auch probabilistisch (i.e. zufällig).
+
+
+
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 6. Wieviele Parameter hat das ALM mit sphärischer Kovarianzmatrix?
+
+\vspace{3mm}
+\color{darkcyan}
+
+\small
+Zur Erinnerung: sphärische Koviaranzmatrix 
+
+\footnotesize
+\begin{align*}
+\sigma^2 I_n = \sigma^2 \begin{pmatrix}1&\dots&0\\\vdots&\ddots&\vdots\\0&\dots&1\end{pmatrix} 
+= \begin{pmatrix}\sigma^2&\dots&0\\\vdots&\ddots&\vdots\\0&\dots&\sigma^2\end{pmatrix}
+\end{align*}
+
+\small
+Beispiel $n=5$
+
+\footnotesize
+\begin{align*}
+\sigma^2 I_5 = \sigma^2 \begin{pmatrix}1&0&0&0&0\\0&1&0&0&0\\0&0&1&0&0\\0&0&0&1&0\\0&0&0&0&1\end{pmatrix} 
+= \begin{pmatrix}\sigma^2&0&0&0&0\\0&\sigma^2&0&0&0\\0&0&\sigma^2&0&0\\0&0&0&\sigma^2&0\\0&0&0&0&\sigma^2\end{pmatrix}
+\end{align*}
+
+\color{black}
+Das ALM mit sphärischer Kovarianzmatrix hat $p+1$ Parameter ($p$ Betaparameter und $1$ Varianzparameter)
+
+
+
+
+
+# Unabhängige und identisch normalverteile Zufallsvariablen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 7. Warum sind die Komponenten des ALM Zufallsfehler unabhängig und identisch verteilt?
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+Wir gehen davon aus, dass alle weiteren Einflüsse, die der deterministische Aspekt des Modells nicht erklärt (auch unbekannte "Störeinflüsse" genannt), viele und unabhängige sind, und modellieren diese als eine Vielzahl unabhängiger Zufallsvariabeln. 
+
+Im Sinne des zentralen Grenzwertsatzes ist die Summe vieler unabhängiger Zufallsvariablen asymptotisch, d.h. für unendlich viele Zufallsvariablen, normalverteilt. 
+
+Der Zufallsfehler modelliert also alle nicht durch den deterministischen Aspekt des Modells erklären Einflüsse, die aufaddiert als normalverteilt angenommen werden. 
+
+Formal gilt $\epsilon\sim N(0_n,\sigma^2I_n)$. Wobei $0_n$ $\Rightarrow$ alle Komponenten $\epsilon_1,...,\epsilon_n$ haben den Erwartungswert $0$, und $0_n,\sigma^2 I_n$ $\Rightarrow$ sphärischer Kovarianzmatrixparameter
+
+* $\Rightarrow$ identische verteilte Komponenten, weil alle Komponenten den Erwartungswert $0$ und Varianzparameter $\sigma^2$ haben. 
+* $\Rightarrow$ unabhängige Komponenten, weil alle nicht-digonal-Elemente, also alle Kovarianzen zwischen Komponenten gleich $0$ (vgl. Tutorium (4) Normalverteilungen - SKF 10)
+
+
+
+
+
+
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 8. Geben Sie das Theorem zur ALM Datenverteilung wieder.
+
+\vspace{3mm}
+\color{black}
+
+\footnotesize
+\begin{theorem}[ALM Datenverteilung]
+\justifying
+\normalfont
+Es sei
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM in generativer Form. Dann gilt
+\begin{equation}
+y \sim N(X\beta,\sigma^2I_n).
+\end{equation}
+\end{theorem}
+
+
+
+
+
+
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 9. Sind die Komponenten des ALM Datenvektors unabhängig und identisch verteilt?
+\vspace{3mm}
+\color{black}
+
+\small
+
+$y \sim N(X\beta,\sigma^2I_n)$ mit $y_i \sim N(\mu_i,\sigma^2)$ für $i=1,...,n$.
+
+\setstretch{1.2}
+
+* Der Kovarianzmatrixparameter ist gegeben gegeben durch $\sigma^2I_n \in \mathbb{R}^{n\times n}$ $\Rightarrow$ sphärische Kovarianzmatrix $\Rightarrow$ unabhängige Komponenten $y_1,...,y_n$
+* Der Erwartungswertparameter ist gegeben durch $X\beta \in \mathbb{R}^n$ $\Rightarrow$ Vektor mit $n$ Einträgen, die in Abhängigkeit von der Designmatrix $X$ für jede Komponente $y_i$ einen anderen Erwartungswert $\mu_i$ annehmen kann. $\Rightarrow$ **nicht** identisch verteilte Komponenten $y_i$.
+
+
+
+
+
+
+# Unabh. und id. normalverteilte Zufallsvariablen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 10. Schreiben Sie das Szenario $n$ unabhängig und identisch verteilter Zufallsvariablen als ALM in Matrixschreibweise.
+
+\vspace{3mm}
+\color{black}
+
+\small
+Wir betrachten das Szenario von $n$ unabhängigen und identisch normalverteilten Zufallsvariabeln mit Erwartungswertparameter $\mu \in \mathbb{R}$ und Varianzparameter $\sigma^2$, mit $y_i \sim N(\mu,\sigma^2)$ für $i=1,...,n$.
+
+\color{darkcyan}
+Anmerkung: Während wir im Theorem zur Datenverteilung im ALM noch gesehen haben, dass die Komponenten $y_1,...,y_n$ jeweils "individuelle" Verteilungen $y_i \sim N(\mu_i,\sigma^2)$ mit "individuellen" $\mu_i$ haben, und somit nicht identisch verteilt sind, haben wir im Szenario $n$ unabhängig und *identisch* verteilter Zufallsvariablen nun nur noch ein $\mu$ gegeben, das für alle Komponenten $y_1,...,y_n$, also für alle $y_i$ gleich ist.
+
+\color{red}
+
+In Matrixschreibweise: 
+
+\begin{align*}
+y \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X := 1_n\in \mathbb{R}^{n \times 1}, \beta := \mu \in \mathbb{R}^1, \sigma^2>0.
+\end{align*}
+
+\begin{align*}
+y = X\beta + \epsilon = X \mu + \epsilon, \mbox{ mit } \epsilon \sim N(0_n,\sigma^2I_n)
+\end{align*}
+
+
+
+
+# Unabh. und id. normalverteilte Zufallsvariablen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+
+\vspace{3mm}
+\color{darkcyan}
+Beispiel $n=5$ unabhängig und identisch normalverteilte Zufallsvariable)
+
+\color{black}
+\small
+Wir betrachten das Szenario von $n=5$ unabhängigen und identisch normalverteilten Zufallsvariabeln mit Erwartungswertparameter $\mu \in \mathbb{R}$ und Varianzparameter $\sigma^2$, mit $y_i \sim N(\mu,\sigma^2)$ für $i=1,...,5$.
+
+\footnotesize
+In Matrixschreibweise: 
+
+\begin{align*}
+y \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X := \begin{pmatrix}1\\1\\1\\1\\1\end{pmatrix}\in \mathbb{R}^{5 \times 1}, \beta := \mu \in \mathbb{R}^1, \sigma^2>0.
+\end{align*}
+
+\begin{alignat*}{3}
+y &= X \beta + \epsilon &&= X \mu + \epsilon \\
+\begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
+&= \begin{pmatrix}1\\1\\1\\1\\1\end{pmatrix}
+\beta + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix}
+&&= \begin{pmatrix}1\\1\\1\\1\\1\end{pmatrix}
+\mu + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix}
+= \begin{pmatrix}\mu+\epsilon_1\\\mu+\epsilon_2\\\mu+\epsilon_3\\\mu+\epsilon_4\\\mu+\epsilon_5\end{pmatrix} 
+\end{alignat*}
+
+
+
+
+
+
+# Einfache lineare Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 11. Schreiben Sie das Szenario der einfachen linearen Regression als ALM in Matrixschreibweise.
+
+\vspace{3mm}
+\color{black}
+
+\tiny
+\begin{align*}
+y \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X:= \begin{pmatrix}1&x_{1}\\\vdots&\vdots\\1&x_{n}\end{pmatrix} \in \mathbb{R}^{n \times 2}, \beta := \begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix}\in \mathbb{R}^2, \sigma^2>0.
+\end{align*}
+\vspace{-3mm}
+
+\color{darkcyan}
+
+\vspace{-3mm}
+\begin{alignat*}{2}
+y &= X \beta + \epsilon \\
+\begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} 
+&= \begin{pmatrix}1&x_{1}\\\vdots&\vdots\\1&x_{n}\end{pmatrix} 
+\begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \vdots \\ \epsilon_n \end{pmatrix} 
+= \begin{pmatrix}\beta_0+x_{1}\beta_1+\epsilon_1\\\vdots\\\beta_0+x_{n}\beta_1+\epsilon_n\end{pmatrix} 
+\end{alignat*}
+
+\small
+Beispiel mit $n=5$
+\tiny
+\begin{alignat*}{2}
+\begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
+&= \begin{pmatrix}1&x_{1}\\1&x_{2}\\1&x_{3}\\1&x_{4}\\1&x_{5}\end{pmatrix} 
+\begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix} 
+= \begin{pmatrix}\beta_0+x_{1}\beta_1+\epsilon_1\\\beta_0+x_{2}\beta_1+\epsilon_2\\\beta_0+x_{3}\beta_1+\epsilon_3\\\beta_0+x_{4}\beta_1+\epsilon_4\\\beta_0+x_{5}\beta_1+\epsilon_5\end{pmatrix} 
+\end{alignat*}
+
+
+
+# Unabhängige und identisch normalverteilte Zufallsvariablen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 12. Generieren Sie 100 Datensätze von 12 unabhängig und identisch verteilten Zufallsvariablen.
+
+\vspace{3mm}
+\color{black}
+\tiny
+```{r, echo = F}
+options(width = 500)                          
+```
+
+
+```{r}
+library(MASS)                                 # package für Funktion MASS::mvrnorm laden
+options(width = 300)                          # Ausgabe layout anpassen
+
+# Modellformulierung
+n      = 12                                   # Anzahl von Datenpunkten
+p      = 1                                    # Anzahl von Betaparametern
+X      = matrix(rep(1,n), nrow = n)           # Designmatrix
+I_n    = diag(n)                              # n x n Einheitsmatrix
+beta   = 2                                    # wahrer, aber unbekannter, Betaparameter
+sigsqr = 1                                    # wahrer, aber unbekannter, Varianzparameter
+
+# Datenrealisierung
+y      = mvrnorm(100, X %*% beta, sigsqr*I_n) # 100 Realisierung eines n-dimensionalen ZVs
+print(y[1:10,])                               # Ausgabe der ersten 10 Datensätze
+```
+
+
+
+
+
+
+# Einfache lineare Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 13. Generieren Sie 100 Datensätze von eines einfachen linearen Regressionsmodels 
+mit 12 äquidistanten Werten der unabhängigen Variable im Intervall $[1,2]$, wobei 
+$x_1 := 1$ und $x_{12} := 2$ sein sollen.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 1/2
+
+\tiny
+
+\begin{align*}
+y \sim N(X\beta,\sigma^2I_12) \mbox{ mit } X:= \begin{pmatrix}1&2.00\\1&1.91\\1&1.82\\1&1.72\\1&1.64\\1&1.55\\1&1.45\\1&1.36\\1&1.27\\1&1.18\\1&1.09\\1&1.00\end{pmatrix} \in \mathbb{R}^{n \times 2}, \beta := \begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix}\in \mathbb{R}^2, \sigma^2>0.
+\end{align*}
+
+
+
+
+# Einfache lineare Regression - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 13. Generieren Sie 100 Datensätze von eines einfachen linearen Regressionsmodels 
+mit 12 äquidistanten Werten der unabhängigen Variable im Intervall $[1,2]$, wobei 
+$x_1 := 1$ und $x_{12} := 2$ sein sollen.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 2/2
+
+\tiny
+```{r}
+library(MASS)                                 # package für Funktion MASS::mvrnorm laden
+options(width = 300)                          # Ausgabe layout anpassen
+
+# Modellformulierung
+n      = 12                                   # Anzahl von Datenpunkten
+p      = 2                                    # Anzahl von Betaparametern
+x      = seq(2,1,-1/11)                       # Prädiktorwerte
+X      = matrix(c(rep(1,n),x), nrow = n)      # Designmatrix
+I_n    = diag(n)                              # n x n Einheitsmatrix
+beta   = matrix(c(0,1), nrow = p)             # wahrer, aber unbekannter, Betaparameter
+sigsqr = 1                                    # wahrer, aber unbekannter, Varianzparameter
+
+# Datenrealisierung
+y      = mvrnorm(100, X %*% beta, sigsqr*I_n) # 100 Realisierungen des n-dimensionalen ZVs
+print(y[1:10,])                               # Ausgabe der ersten 10 Datensätze
+```
+
+

@@ -1,0 +1,1188 @@
+---
+fontsize: 8pt
+bibliography: 3_Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: yes
+    includes:
+      in_header: 3_header.tex
+---
+
+
+```{r, include = F}
+source("3_R_common.R")
+```
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%"}
+knitr::include_graphics("3_Abbildungen/wtfi_otto.png")
+```
+
+\vspace{2mm}
+
+\Huge
+Tutorium Allgemeines Lineares Modell
+\vspace{2mm}
+
+
+\normalsize
+BSc Psychologie SoSe 2022
+
+\vspace{2mm}
+\text{5. Termin: Matrizen}
+
+\vspace{18mm}
+Belinda Fleischmann
+
+\vspace{3mm}
+\scriptsize
+Contents are based on [ALM course material](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2022/Allgemeines+Lineares+Modell.html) by [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+# Organisatorisches
+
+Ersatztermin für 16. Juni
+
+* Montag, 13. Juni 15.00 - 17.00 Uhr
+
+
+# Follow-up letzte Woche
+
+Kann man $\mbox{R}^2$ in Prozent ausdrücken?
+
+\small
+\setstretch{1.7}
+
+* $\mbox{R}^2:= \frac{\mbox{SQE}}{\mbox{SQT}}$
+* $0\leq\mbox{R}^2\leq1$. Das heißt, $\mbox{R}^2$ ist streng genommen kein Prozentwert (Vorsicht bei der Beschriftung von Achsen in Grafiken)
+* Das Bestimmtheitsmaß drückt aus, welcher Anteil der Datenvariabilität - quantifiziert durch $\mbox{SQT}$ - durch die Ausgleichsgerade erklärt wird.
+
+
+
+
+
+
+# Selbstkontrollfragen - Matrizen
+\footnotesize
+\begin{enumerate}
+\item Geben Sie Definition einer Matrix wieder.
+\item Nennen Sie sechs Matrixoperationen.
+\item Geben Sie Definitionen der Matrixaddition und -subtraktion wieder.
+\item Geben Sie die Definition der Skalarmultiplikation für Matrizen wieder.
+\item Geben Sie die Definition der Matrixtransposition wieder.
+\item Es seien
+\begin{equation}
+A :=
+\begin{pmatrix*}[r]
+1 & 2 \\
+2 & 1
+\end{pmatrix*},
+B :=
+\begin{pmatrix*}[r]
+3 & 0 \\
+1 & 2
+\end{pmatrix*},
+\mbox{ und }
+c := 2
+\end{equation}
+Berechnen Sie
+\begin{equation}
+D := c\left(A - B^T\right)
+\mbox{ und }
+E := \left(cA\right)^T + B.
+\end{equation}
+per Hand und überprüfen Sie Ihre Rechnung mit R.
+
+```{r, eval = F, echo = F}
+
+# Definitionen
+A = matrix(c(1,2,
+             2,1),
+           nrow  = 2,
+           byrow = TRUE)
+B = matrix(c(3,0,
+             1,2),
+           nrow  = 2,
+           byrow = TRUE)
+c = 2
+
+# Evaluation
+print(A)
+print(B)
+print(c*(A - t(B)))
+print(t(c*A) + B)
+
+```
+\item Geben Sie die Definition der Matrixmultiplikation wieder.
+\item Es seien $A \in \mathbb{R}^{3 \times 2}, B \in \mathbb{R}^{2\times 4}$
+und $C \in \mathbb{R}^{3 \times 4}$. Prüfen Sie, ob folgende Matrixprodukte
+definiert sind, und wenn ja, geben Sie die Größe der resultierenden Matrix and
+\begin{equation}
+ABC, \quad ABC^T, \quad, A^TCB^T \quad, BAC
+\end{equation}
+```{r, echo = F, eval = F}
+A = matrix(rnorm(6) , nrow = 3)
+B = matrix(rnorm(8) , nrow = 2)
+C = matrix(rnorm(12), nrow = 3)
+print(A)
+print(B)
+print(C)
+print(A %*% B %*% t(C))
+print(t(A) %*% C %*% t(B))
+
+```
+\end{enumerate}
+
+# Selbstkontrollfragen
+\footnotesize
+\begin{enumerate}
+\setcounter{enumi}{8}
+\item Es seien
+\begin{equation}
+A :=
+\begin{pmatrix*}[r]
+1 & 2 & 3 \\
+4 & 5 & 6 \\
+3 & 2 & 0
+\end{pmatrix*}
+B :=
+\begin{pmatrix*}[r]
+1 & 2 & 2 \\
+1 & 3 & 1 \\
+2 & 0 & 0
+\end{pmatrix*}
+\mbox{ und }
+C :=
+\begin{pmatrix*}[r]
+1 \\ 3 \\ 2
+\end{pmatrix*}
+\end{equation}
+Berechnen Sie die Matrixprodukte
+\begin{equation}
+AB , \quad\quad
+B^TA^T, \quad\quad
+\left(B^TA^T\right)^T, \quad\quad
+AC
+\end{equation}
+per Hand und überprüfen Sie Ihre Rechnung mit R.
+
+```{r, eval = F, echo = F}
+# Definitionen
+A = matrix(c(1,2,3,
+             4,5,6,
+             3,2,0),
+           nrow  = 3,
+           byrow = TRUE)
+B = matrix(c(1,2,2,
+             1,3,1,
+             2,0,0),
+           nrow  = 3,
+           byrow = TRUE)
+C = matrix(c(1,3,2),
+           nrow  = 3,
+           byrow = TRUE)
+print(A)
+print(B)
+print(C)
+print(A %*% B)
+print(t(B) %*% t(A))
+print(t(t(B) %*% t(A)))
+print(A %*% C)
+```
+
+\item Invertieren Sie die Matrizen $A$ und $B$ aus der vorherigen Aufgabe mithilfe
+von matlib::inv und überprüfen Sie die Inverseeigenschaft der inversen Matrizen
+mithilfe von R.
+
+```{r, eval = F, echo = F}
+
+# Matrixinversion
+library(matlib)
+A = matrix(c(1,2,3,
+             4,5,6,
+             3,2,0),
+           nrow  = 3,
+           byrow = TRUE)
+B = matrix(c(1,2,2,
+             1,3,1,
+             2,0,0),
+           nrow  = 3,
+           byrow = TRUE)
+print(inv(A))
+print(inv(B))
+print(inv(A) %*% A)
+print(inv(B) %*% B)
+print(solve(B) %*% B)
+
+```
+
+\item Geben Sie die Formel für die Determinante von $A := (A_{ij})_{1 \le i,j \le 2} \in \mathbb{R}^2$ wieder.
+\item Geben Sie die Formel für die Determinante von $A := (A_{ij})_{1 \le i,j \le 3} \in \mathbb{R}^3$ wieder.
+\item Berechnen Sie die Determinanten von
+\begin{equation}
+A := \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}
+B := \begin{pmatrix} 3 & 2 & 1 \\ 2 & 3 & 2 \\ 1 & 2 & 3 \end{pmatrix} \mbox{ und }
+C := \mbox{diag}(1,2,3)
+\end{equation}
+per Hand und überprüfen Sie Ihre Rechnung mit R.
+\end{enumerate}
+
+# Selbstkontrollfragen
+\footnotesize
+\setstretch{1.6}
+\begin{enumerate}
+\setcounter{enumi}{13}
+\item Geben Sie die Definition einer symmetrischen Matrix wieder.
+\item Geben Sie die Definition einer Diagonalmatrix wieder.
+\item Geben Sie die Definition einer orthogonalen Matrix wieder.
+\item Geben Sie die Definition einer positiv-definiten Matrix wieder.
+\item Geben Sie die Definition des Rangs einer Matrix wieder
+\item Wann sagt man, dass eine Matrix vollen Spaltenrang hat?
+\item Bestimmen Sie dien Rang folgender Matrizen durch überlegen und mithilfe von R
+\begin{equation}
+X_1 = \begin{pmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3\end{pmatrix},
+X_2 = \begin{pmatrix} 1 & 1 & 0\\ 1 & 1 & 0 \\ 1 & 0 & 1 \\ 1 & 0 & 1\end{pmatrix},
+X_3 = \begin{pmatrix} 1 & 0\\ 1 & 0 \\ 1 & 1 \\ 1 & 1\end{pmatrix}.
+\end{equation}
+\end{enumerate}
+
+
+
+
+
+# Definition - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 1. Geben Sie Definition einer Matrix wieder.
+
+\vspace{3mm}
+\color{black}
+\small
+\begin{definition}[Matrix]
+Eine Matrix ist eine rechteckige Anordnung von Zahlen, die wie folgt bezeichnet
+wird
+\begin{equation}
+A := \begin{pmatrix*}[r]
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{pmatrix*}
+:= {(a_{ij})}_{1\le i\le n,\, 1\le j\le m}.
+\end{equation}
+\end{definition}
+
+
+
+
+
+# Operationen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 2. Nennen Sie sechs Matrixoperationen.
+
+\vspace{3mm}
+\color{black}
+\small
+\setstretch{1.5}
+
+* Matrixaddition  
+* Matrixsubtraktion
+* Skalarmultiplikation
+* Matrixtransposition
+* Matrixmultiplikation
+* Matrixinversion
+
+
+
+
+
+# Operationen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3. Geben Sie Definitionen der Matrixaddition und -subtraktion wieder.
+
+\vspace{3mm}
+\color{black}
+\small Teil 1/2
+\footnotesize
+\begin{definition}[Matrixaddition]
+Es seien $A,B\in \mathbb{R}^{n\times m}$. Dann ist  die \textit{Addition} von $A$
+und $B$ definiert als die Abbildung
+\begin{equation}
++ : \mathbb{R}^{n\times m} \times \mathbb{R}^{n\times m} \to \mathbb{R}^{n \times m}, \,
+(A,B) \mapsto +(A,B) := A + B
+\end{equation}
+mit
+\begin{align}
+\begin{split}
+A + B
+& =
+\begin{pmatrix*}[c]
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{pmatrix*}
++
+\begin{pmatrix*}[c]
+b_{11} & b_{12} & \cdots & b_{1m} \\
+b_{21} & b_{22} & \cdots & b_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+b_{n1} & b_{n2} & \cdots & b_{nm}
+\end{pmatrix*}
+\\
+&
+:=
+\begin{pmatrix*}[c]
+a_{11} + b_{11} & a_{12} + b_{12} & \cdots & a_{1m} + b_{1m} \\
+a_{21} + b_{21} & a_{22} + b_{22} & \cdots & a_{2m} + b_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} + b_{n1} & a_{n2} + b_{n2} & \cdots & a_{nm} + b_{nm}
+\end{pmatrix*}.
+\end{split}
+\end{align}
+\end{definition}
+
+
+
+
+# Operationen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3. Geben Sie Definitionen der Matrixaddition und -subtraktion wieder.
+
+\vspace{3mm}
+\color{black}
+\small 
+Teil 2/2
+\footnotesize
+\begin{definition}[Matrixsubtraktion]
+Es seien $A,B\in \mathbb{R}^{n\times m}$. Dann ist  die \textit{Subtraktion} von $A$
+und $B$ definiert als die Abbildung
+\begin{equation}
+- : \mathbb{R}^{n\times m} \times \mathbb{R}^{n\times m} \to \mathbb{R}^{n\times m}, \,
+(A,B) \mapsto -(A,B) := A - B
+\end{equation}
+mit
+\begin{align}
+\begin{split}
+A - B
+& =
+\begin{pmatrix*}[c]
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{pmatrix*}
+-
+\begin{pmatrix*}[c]
+b_{11} & b_{12} & \cdots & b_{1m} \\
+b_{21} & b_{22} & \cdots & b_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+b_{n1} & b_{n2} & \cdots & b_{nm}
+\end{pmatrix*}
+\\
+&
+:=
+\begin{pmatrix*}[c]
+a_{11} - b_{11} & a_{12} - b_{12} & \cdots & a_{1m} - b_{1m} \\
+a_{21} - b_{21} & a_{22} - b_{22} & \cdots & a_{2m} - b_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} - b_{n1} & a_{n2} - b_{n2} & \cdots & a_{nm} - b_{nm}
+\end{pmatrix*}.
+\end{split}
+\end{align}
+\end{definition}
+
+
+
+
+# Operationen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4. Geben Sie die Definition der Skalarmultiplikation für Matrizen wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{definition}[Skalarmultiplikation]
+Es sei $c \in \mathbb{R}$ ein Skalar und $A \in \mathbb{R}^{n\times m}$. Dann
+ist die \textit{Skalarmultiplikation} von $c$ und $A$ definiert als die Abbildung
+\begin{equation}
+\cdot : \mathbb{R} \times \mathbb{R}^{n\times m} \to \mathbb{R}^{n\times m}, \,
+(c,A) \mapsto \cdot (c,A) := cA
+\end{equation}
+mit
+\begin{align}
+\begin{split}
+cA
+=
+c
+\begin{pmatrix*}[c]
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{pmatrix*}
+:=
+\begin{pmatrix*}[c]
+ca_{11} & ca_{12} & \cdots & ca_{1m}  \\
+ca_{21} & ca_{22} & \cdots & ca_{2m}  \\
+\vdots  & \vdots  & \ddots & \vdots    \\
+ca_{n1} & ca_{n2} & \cdots & ca_{nm}
+\end{pmatrix*}.
+\end{split}
+\end{align}
+\end{definition}
+
+
+
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Geben Sie die Definition der Matrixtransposition wieder.
+
+\color{black}
+\footnotesize
+\begin{definition}[Matrixtransposition]
+Es sei $A \in \mathbb{R}^{n\times m}$. Dann ist  die \textit{Transposition}
+von $A$ definiert als die Abbildung
+\begin{equation}
+\cdot^{T} : \mathbb{R}^{n\times m} \to \mathbb{R}^{m \times n}, \,
+A \mapsto \cdot^{T}(A) := A^T
+\end{equation}
+mit
+\begin{align}
+\begin{split}
+A^T
+=
+\begin{pmatrix*}[c]
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{pmatrix*}^T
+:=
+\begin{pmatrix*}[c]
+a_{11} & a_{21} & \cdots & a_{n1} \\
+a_{12} & a_{22} & \cdots & a_{n2} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{1m} & a_{2m} & \cdots & a_{mn}
+\end{pmatrix*}
+\end{split}
+\end{align}
+\end{definition}
+
+
+
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1.2}
+\normalsize
+\color{darkblue} 6. Es seien $A := \begin{pmatrix} 1 & 2 \\ 2 & 1\end{pmatrix}$,
+$B := \begin{pmatrix} 3 & 0 \\ 1 & 2 \end{pmatrix}$, und $c := 2$. Berechnen Sie
+$D := c\left(A - B^T\right)$ und $E := \left(cA\right)^T + B$ per Hand und überprüfen Sie Ihre Rechnung mit R.
+
+\vspace{3mm}
+
+\color{black}
+\small
+
+Teil 1/3 -  Berechunung mit Hand
+
+\footnotesize 
+\begin{align*}
+D = 2 \left( \begin{pmatrix} 1 & 2 \\ 2 & 1\end{pmatrix} - \begin{pmatrix} 3 & 0 \\ 1 & 2\end{pmatrix}^T \right) 
+= 2 \left( \begin{pmatrix} 1 & 2 \\ 2 & 1\end{pmatrix}- \begin{pmatrix} 3 & 1 \\ 0 & 2\end{pmatrix} \right)
+= 2 \begin{pmatrix*}[r] -2 & 1 \\ 2 & -1\end{pmatrix*} = \begin{pmatrix*}[r] -4 & 2 \\ 4 & -2\end{pmatrix*}
+\end{align*}
+
+\begin{align*}
+E = \left(2 \begin{pmatrix} 1 & 2 \\ 2 & 1\end{pmatrix} \right)^T + \begin{pmatrix} 3 & 0 \\ 1 & 2\end{pmatrix}
+= \begin{pmatrix} 2 & 4 \\ 4 & 2\end{pmatrix}^T + \begin{pmatrix} 3 & 0 \\ 1 & 2\end{pmatrix}
+= \begin{pmatrix} 2 & 4 \\ 4 & 2\end{pmatrix} + \begin{pmatrix} 3 & 0 \\ 1 & 2\end{pmatrix}
+= \begin{pmatrix} 5 & 4 \\ 5 & 4\end{pmatrix}
+\end{align*}
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1.2}
+\normalsize
+\color{darkblue} 6. Es seien $A := \begin{pmatrix} 1 & 2 \\ 2 & 1\end{pmatrix}$,
+$B := \begin{pmatrix} 3 & 0 \\ 1 & 2 \end{pmatrix}$, und $c := 2$. Berechnen Sie
+$D := c\left(A - B^T\right)$ und $E := \left(cA\right)^T + B$ per Hand und überprüfen Sie Ihre Rechnung mit R.
+
+\vspace{3mm}
+
+\color{black}
+\small
+
+Teil 2/3 - Berechnung mit R
+
+```{r, eval = T, echo = T}
+
+# Definitionen
+A = matrix(c(1,2,
+             2,1),
+           nrow  = 2,
+           byrow = TRUE)
+B = matrix(c(3,0,
+             1,2),
+           nrow  = 2,
+           byrow = TRUE)
+c = 2
+```
+
+
+
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1.2}
+\normalsize
+\color{darkblue} 6. Es seien $A := \begin{pmatrix} 1 & 2 \\ 2 & 1\end{pmatrix}$,
+$B := \begin{pmatrix} 3 & 0 \\ 1 & 2 \end{pmatrix}$, und $c := 2$. Berechnen Sie
+$D := c\left(A - B^T\right)$ und $E := \left(cA\right)^T + B$ per Hand und überprüfen Sie Ihre Rechnung mit R.
+
+\vspace{3mm}
+
+\color{black}
+\small
+
+Teil 3/3 -  Berechnung mit R
+
+```{r, eval = T, echo = T}
+
+# Berechnung
+D = c*(A - t(B))
+E = t(c*A) + B
+
+# Ausgabe
+print(D)
+print(E)
+```
+
+
+
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 7. Geben Sie die Definition der Matrixmultiplikation wieder.
+\vspace{3mm}
+
+\color{black}
+\footnotesize
+\setstretch{1.7}
+\begin{definition}[Matrixmultiplikation]
+Es seien $A\in \mathbb{R}^{n \times m}$ und $B \in \mathbb{R}^{m \times k}$. Dann
+ist  die \textit{Matrixmultiplikation} von $A$ und $B$ definiert als die Abbildung
+\begin{equation}
+\cdot : \mathbb{R}^{n\times m} \times \mathbb{R}^{m\times k} \to \mathbb{R}^{n \times k}, \,
+(A,B) \mapsto \cdot(A,B) := AB
+\end{equation}
+mit
+\begin{align}
+\begin{split}
+AB
+& =
+\begin{pmatrix*}[c]
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{pmatrix*}
+\begin{pmatrix*}[c]
+b_{11} & b_{12} & \cdots & b_{1k} \\
+b_{21} & b_{22} & \cdots & b_{2k} \\
+\vdots & \vdots & \ddots & \vdots \\
+b_{m1} & b_{m2} & \cdots & b_{mk}
+\end{pmatrix*}
+\\
+&
+:=
+\begin{pmatrix*}[c]
+\sum_{i=1}^m a_{1i}b_{i1} & \sum_{i=1}^m a_{1i}b_{i2} & \cdots & \sum_{i=1}^m a_{1i}b_{ik}  \\
+\sum_{i=1}^m a_{2i}b_{i1} & \sum_{i=1}^m a_{2i}b_{i2} & \cdots & \sum_{i=1}^m a_{2i}b_{ik}  \\
+\vdots                    & \vdots                    & \ddots & \vdots                     \\
+\sum_{i=1}^m a_{ni}b_{i1} & \sum_{i=1}^m a_{ni}b_{i2} & \cdots & \sum_{i=1}^m a_{ni}b_{ik}
+\end{pmatrix*}
+\end{split}
+\end{align}
+\end{definition}
+
+
+
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 8. Es seien $A \in \mathbb{R}^{3 \times 2}, B \in \mathbb{R}^{2\times 4}$
+und $C \in \mathbb{R}^{3 \times 4}$. Prüfen Sie, ob folgende Matrixprodukte
+definiert sind, und wenn ja, geben Sie die Größe der resultierenden Matrix an
+\begin{align*}
+ABC, \quad ABC^T, \quad, A^TCB^T \quad, BAC
+\end{align*}
+
+\vspace{3mm}
+
+\color{black}
+\small
+\setstretch{1.5}
+
+* für $ABC$ gilt (informell) $(3\times2)(2\times4)(3\times4)$ $\rightarrow$ $AB$, mit $(3\times2)(2\times4) = (3\times4)$ wäre definiert, aber die Multiplikation des Resultats mit $C$, also $(AB)C$, für die $(3\times4)(3\times4)$, ist nicht definiert. Das sieht man auch daran, dass für $BC$ gilt $(2\times4)(3\times4)$ $\Rightarrow$ nicht definiert.
+* für $ABC^T$ gilt $(3\times2)(2\times4)(4\times3) = (3\times3)$ 
+* für $A^TCB^T$ gilt $(2\times3)(3\times4)(4\times2) = (2\times2)$ 
+* für $BAC$ gilt $(2\times4)(3\times2)(3\times4)$ $\Rightarrow$ nicht definiert.
+
+```{r, echo = F, eval = F}
+A = matrix(rnorm(6) , nrow = 3)
+B = matrix(rnorm(8) , nrow = 2)
+C = matrix(rnorm(12), nrow = 3)
+print(A)
+print(B)
+print(C)
+# print(A %*% B %*% C)
+print(A %*% B %*% t(C))
+print(t(A) %*% C %*% t(B))
+```
+
+
+
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 9. Es seien
+$A := \begin{pmatrix*}[r] 1 & 2 & 3 \\ 4 & 5 & 6 \\ 3 & 2 & 0 \end{pmatrix*}$, 
+$B := \begin{pmatrix*}[r] 1 & 2 & 2 \\ 1 & 3 & 1 \\ 2 & 0 & 0 \end{pmatrix*}$ und
+$C := \begin{pmatrix*}[r] 1 \\ 3 \\ 2 \end{pmatrix*}$.Berechnen Sie die Matrixprodukte
+$AB$, $B^TA^T$, $\left(B^TA^T\right)^T$ und  $AC$ per Hand und überprüfen Sie Ihre Rechnung mit R.
+
+\vspace{3mm}
+
+\color{black}
+\small
+Teil 1/4 - Berechnung per Hand
+
+$AB = \begin{pmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \\ 3 & 2 & 0 \end{pmatrix} \begin{pmatrix} 1 & 2 & 2 \\ 1 & 3 & 1 \\ 2 & 0 & 0 \end{pmatrix} = \begin{pmatrix} 9 & 8 & 4 \\ 21 & 23 & 13 \\ 5 & 12 & 8 \end{pmatrix}$
+
+$B^TA^T = \begin{pmatrix} 1 & 1 & 2 \\ 2 & 3 & 0 \\ 2 & 1 & 0 \end{pmatrix} \begin{pmatrix} 1 & 4 & 3 \\ 2 & 5 & 2 \\ 3 & 6 & 0 \end{pmatrix} = \begin{pmatrix} 9 & 21 & 5 \\ 8 & 23 & 12 \\ 4 & 13 & 8 \end{pmatrix}$
+
+$\left(B^TA^T\right)^T = \left(\begin{pmatrix} 1 & 1 & 2 \\ 2 & 3 & 0 \\ 2 & 1 & 0 \end{pmatrix} \begin{pmatrix} 1 & 4 & 3 \\ 2 & 5 & 2 \\ 3 & 6 & 0 \end{pmatrix}\right)^T = \begin{pmatrix} 9 & 8 & 4 \\ 21 & 23 & 13 \\ 5 & 12 & 8 \end{pmatrix}$
+
+$AC = \begin{pmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \\ 3 & 2 & 0 \end{pmatrix} \begin{pmatrix*}[r] 1 \\ 3 \\ 2 \end{pmatrix*} = \begin{pmatrix} 13 \\ 31 \\ 9 \end{pmatrix}$
+
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 9. Es seien
+$A := \begin{pmatrix*}[r] 1 & 2 & 3 \\ 4 & 5 & 6 \\ 3 & 2 & 0 \end{pmatrix*}$, 
+$B := \begin{pmatrix*}[r] 1 & 2 & 2 \\ 1 & 3 & 1 \\ 2 & 0 & 0 \end{pmatrix*}$ und
+$C := \begin{pmatrix*}[r] 1 \\ 3 \\ 2 \end{pmatrix*}$.Berechnen Sie die Matrixprodukte
+$AB$, $B^TA^T$ $\left(B^TA^T\right)^T$ und  $AC$ per Hand und überprüfen Sie Ihre Rechnung mit R.
+\vspace{3mm}
+
+\color{black}
+\small
+Teil 2/4 - Berechnung mit R
+\vspace{3mm}
+
+```{r, eval = T, echo = T}
+# Definitionen
+A = matrix(c(1,2,3,
+             4,5,6,
+             3,2,0),
+           nrow  = 3,
+           byrow = TRUE)
+B = matrix(c(1,2,2,
+             1,3,1,
+             2,0,0),
+           nrow  = 3,
+           byrow = TRUE)
+C = matrix(c(1,3,2),
+           nrow  = 3,
+           byrow = TRUE)
+```
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 9. Es seien
+$A := \begin{pmatrix*}[r] 1 & 2 & 3 \\ 4 & 5 & 6 \\ 3 & 2 & 0 \end{pmatrix*}$, 
+$B := \begin{pmatrix*}[r] 1 & 2 & 2 \\ 1 & 3 & 1 \\ 2 & 0 & 0 \end{pmatrix*}$ und
+$C := \begin{pmatrix*}[r] 1 \\ 3 \\ 2 \end{pmatrix*}$.Berechnen Sie die Matrixprodukte
+$AB$, $B^TA^T$ $\left(B^TA^T\right)^T$ und  $AC$ per Hand und überprüfen Sie Ihre Rechnung mit R.
+\vspace{3mm}
+
+\color{black}
+\small
+Teil 3/4 - Berechnung mit R
+\vspace{3mm}
+```{r, eval = T, echo = T}
+# Ausgabe
+print(A %*% B)
+print(t(B) %*% t(A))
+```
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 9. Es seien
+$A := \begin{pmatrix*}[r] 1 & 2 & 3 \\ 4 & 5 & 6 \\ 3 & 2 & 0 \end{pmatrix*}$, 
+$B := \begin{pmatrix*}[r] 1 & 2 & 2 \\ 1 & 3 & 1 \\ 2 & 0 & 0 \end{pmatrix*}$ und
+$C := \begin{pmatrix*}[r] 1 \\ 3 \\ 2 \end{pmatrix*}$.Berechnen Sie die Matrixprodukte
+$AB$, $B^TA^T$ $\left(B^TA^T\right)^T$ und  $AC$ per Hand und überprüfen Sie Ihre Rechnung mit R.
+\vspace{3mm}
+
+\color{black}
+\small
+Teil 4/4 - Berechnung mit R
+\vspace{3mm}
+```{r, eval = T, echo = T}
+# Ausgabe
+print(t(t(B) %*% t(A)))
+print(A %*% C)
+```
+
+
+
+
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 10. Invertieren Sie die Matrizen $A$ und $B$ aus der vorherigen Aufgabe mithilfe
+von matlib::inv und überprüfen Sie die Inverseeigenschaft der inversen Matrizen
+mithilfe von R.
+\vspace{3mm}
+
+\color{black}
+\small
+Teil 1/4 - Definition der Matrizen
+\vspace{3mm}
+
+```{r, eval = T, echo = T}
+library(matlib)  # Import des matlib packages
+
+# Definitionen
+A = matrix(c(1,2,3,
+             4,5,6,
+             3,2,0),
+           nrow  = 3,
+           byrow = TRUE)
+B = matrix(c(1,2,2,
+             1,3,1,
+             2,0,0),
+           nrow  = 3,
+           byrow = TRUE)
+```
+
+
+
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 10. Invertieren Sie die Matrizen $A$ und $B$ aus der vorherigen Aufgabe mithilfe
+von matlib::inv und überprüfen Sie die Inverseeigenschaft der inversen Matrizen
+mithilfe von R.
+\vspace{3mm}
+
+
+\color{black}
+\small
+Teil 2/4 -  Berechnung der Inversen mit ```inv()```
+\vspace{3mm}
+```{r, eval = T, echo = T}
+
+# Matrixinversion mit inv()
+print(inv(A))
+print(inv(B))
+```
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 10. Invertieren Sie die Matrizen $A$ und $B$ aus der vorherigen Aufgabe mithilfe
+von matlib::inv und überprüfen Sie die Inverseeigenschaft der inversen Matrizen
+mithilfe von R.
+\vspace{3mm}
+
+
+\color{black}
+\small
+Teil 3/4 -  Berechnung der Inversen mit ```solve()```
+\vspace{3mm}
+```{r, eval = T, echo = T}
+
+
+# Matrixinversion mit solve()
+print(solve(A))
+print(solve(B))
+```
+
+
+
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 10. Invertieren Sie die Matrizen $A$ und $B$ aus der vorherigen Aufgabe mithilfe
+von matlib::inv und überprüfen Sie die Inverseeigenschaft der inversen Matrizen
+mithilfe von R.
+\vspace{3mm}
+
+
+\color{black}
+\small
+Teil 4/4 - Zeigen der Inverseeigenschaft
+\vspace{3mm}
+```{r, eval = T, echo = T}
+# Multiplikation der Matrizen mit ihren Inversen
+print(inv(A) %*% A)
+print(inv(B) %*% B)
+```
+
+
+
+
+
+# Determinanten - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 11. Geben Sie die Formel für die Determinante von $A := (A_{ij})_{1 \le i,j \le 2} \in \mathbb{R}^2$ wieder.
+\vspace{3mm}
+
+\color{black}
+\normalsize
+Es sei $A = (a_{ij})_{1 \le i,j \le 2} \in \mathbb{R}^{2 \times 2}$. Dann gilt
+\begin{align*}
+\det(A)
+= a_{11}a_{22} - a_{12}a_{21}.
+\end{align*}
+
+
+
+
+
+# Determinanten - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 12. Geben Sie die Formel für die Determinante von $A := (A_{ij})_{1 \le i,j \le 3} \in \mathbb{R}^3$ wieder.
+\vspace{3mm}
+
+\color{black}
+\normalsize
+Es sei $A = (a_{ij})_{1 \le i,j \le 3} \in \mathbb{R}^{3 \times 3}$. Dann gilt
+\begin{align*}
+\det(A)
+= a_{11}a_{22}a_{33} + a_{12}a_{23}a_{31} + a_{13}a_{21}a_{32}
+- a_{12}a_{21}a_{33} - a_{11}a_{23}a_{32} - a_{13}a_{22}a_{31}.
+\end{align*}
+
+
+
+
+
+# Determinanten - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 13. Berechnen Sie die Determinanten von
+$A := \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$, $B := \begin{pmatrix} 3 & 2 & 1 \\ 2 & 3 & 2 \\ 1 & 2 & 3 \end{pmatrix}$ und $C := \mbox{diag}(1,2,3) = \begin{pmatrix}1&0&0\\0&2&0\\0&0&3 \end{pmatrix}$ per Hand und überprüfen Sie Ihre Rechnung mit R.
+\vspace{3mm}
+
+\color{black}
+\small
+Teil 1/2 - Berechnung per Hand
+\vspace{3mm}
+\begin{align*}
+\det(A) & = a_{11}a_{22} - a_{12}a_{21} = 2\times2 - 1\times1 \\
+&= 3 \\[2mm]
+\det(B) & = b_{11}b_{22}b_{33} + b_{12}b_{23}b_{31} + b_{13}b_{21}b_{32} 
+- b_{12}b_{21}b_{33} - b_{11}b_{23}b_{32} - b_{13}b_{22}b_{31} \\
+& = 3 \times 3 \times 3 + 2 \times 2 \times 1 + 1 \times 2 \times 2 - 2 \times 2 \times 3 - 3 \times 2 \times 2 - 1 \times 3 \times 1 \\ 
+& = 8 \\[2mm]
+\det(C) & = c_{11}c_{22}c_{33} + c_{12}c_{23}c_{31} + c_{13}c_{21}c_{32} - c_{12}c_{21}c_{33} - c_{11}c_{23}c_{32} - c_{13}c_{22}c_{31} \\
+& = 1 \times 2 \times 3 + 0 \times 0 \times 0 + 0 \times 0 \times 0 - 0 \times 0 \times 3 - 1 \times 0 \times 0 - 0 \times 2 \times 0 \\ 
+& = 6
+\end{align*}
+
+
+
+
+
+# Determinanten - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 13. Berechnen Sie die Determinanten von
+$A := \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$, $B := \begin{pmatrix} 3 & 2 & 1 \\ 2 & 3 & 2 \\ 1 & 2 & 3 \end{pmatrix}$ und $C := \mbox{diag}(1,2,3)$ per Hand und überprüfen Sie Ihre Rechnung mit R.
+\vspace{3mm}
+
+\color{black}
+\small
+Teil 2/2 - Berechnung mit R
+\footnotesize
+\vspace{3mm}
+```{r, eval = T, echo = T}
+# Definitionen
+A = matrix(c(2,1,
+             1,2),
+           nrow  = 2,
+           byrow = TRUE)
+B = matrix(c(3,2,1,
+             2,3,2,
+             1,2,3),
+           nrow  = 3,
+           byrow = TRUE)
+C = diag(c(1,2,3))
+# print(C)  # Ausgabe C
+
+# Berechnung und Ausgabe der Determinanten
+cat("det(A) =", det(A),
+    "\ndet(B) =", det(B),
+    "\ndet(C) =", det(C))
+```
+
+
+
+# Spezielle Matrizen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 14. Geben Sie die Definition einer symmetrischen Matrix wieder.
+\vspace{3mm}
+
+\color{black}
+\normalsize
+\vspace{3mm}
+Eine Matrix $S \in \mathbb{R}^{n \times n}$ heißt \textit{symmetrisch}, wenn gilt dass $S^T = S$.
+
+
+
+
+# Spezielle Matrizen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 15. Geben Sie die Definition einer Diagonalmatrix wieder.
+\vspace{3mm}
+
+\color{black}
+\normalsize
+\vspace{3mm}
+Eine Matrix $D \in \mathbb{R}^{n \times n}$ heißt \textit{Diagonalmatrix}, wenn $d_{ij} = 0$ für $1 \le i,j \le n, i \neq j$.
+
+
+
+
+# Spezielle Matrizen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 16. Geben Sie die Definition einer orthogonalen Matrix wieder.
+\vspace{3mm}
+
+\color{black}
+\normalsize
+\vspace{3mm}
+Eine Matrix $Q \in \mathbb{R}^{n \times n}$ heißt \textit{orthogonal}, wenn ihre Spaltenvektoren wechselseitig \textit{orthonormal} sind.
+
+
+
+
+
+# Spezielle Matrizen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 17. Geben Sie die Definition einer positiv-definiten Matrix wieder.
+\vspace{3mm}
+
+\color{black}
+\normalsize
+\begin{definition}[Positiv-definite Matrix]
+Eine quadratische Matrix $C \in \mathbb{R}^{n \times n}$ heißt positiv-definit ($\mbox{p.d.}$), wenn
+\begin{itemize}
+\item $C$ eine symmetrische Matrix ist und
+\item für alle $x \in \mathbb{R}^n, x \neq 0_n$ gilt, dass $x^TCx > 0$ ist.
+\end{itemize}
+\end{definition}
+
+
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 18. Geben Sie die Definition des Rangs einer Matrix wieder. \newline
+19. Wann sagt man, dass eine Matrix vollen Spaltenrang hat?
+\vspace{3mm}
+
+\color{black}
+\small
+\begin{definition}[Rang einer Matrix]
+\justifying
+Es sei $A \in \mathbb{R}^{n \times m}$ und
+\begin{equation}
+a_1 :=
+\begin{pmatrix}
+a_{11} \\
+\vdots \\
+a_{n1}
+\end{pmatrix},
+a_2 :=
+\begin{pmatrix}
+a_{12} \\
+\vdots \\
+a_{n2}
+\end{pmatrix},
+...,
+a_n :=
+\begin{pmatrix}
+a_{1m} \\
+\vdots \\
+a_{nm}
+\end{pmatrix}
+\in
+\mathbb{R}^{n}
+\end{equation}
+seien die \textit{Spalten(vektoren)} von $A$. Dann ist \textit{der Rang von $A$}, 
+geschrieben als $\mbox{rg}(A)$ definiert als die maximale Anzahl der linear unabhängigen
+Spalten(vektoren) von $A$. Ist die Anzahl der maximal linear unabhängigen Spalten(vektoren)
+von $A$ gleich $m$, so sagt man, dass \textit{$A$ vollen Spaltenrang hat}.
+\end{definition}
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 20. Bestimmen Sie den Rang folgender Matrizen durch überlegen und mithilfe von R
+\begin{align*}
+X_1 = \begin{pmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3\end{pmatrix},
+X_2 = \begin{pmatrix} 1 & 1 & 0\\ 1 & 1 & 0 \\ 1 & 0 & 1 \\ 1 & 0 & 1\end{pmatrix},
+X_3 = \begin{pmatrix} 1 & 0\\ 1 & 0 \\ 1 & 1 \\ 1 & 1\end{pmatrix}.
+\end{align*}
+\vspace{3mm}
+
+\color{black}
+\footnotesize
+
+
+
+
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 20. Bestimmen Sie den Rang folgender Matrizen durch überlegen und mithilfe von R
+\begin{align*}
+X_1 = \begin{pmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3\end{pmatrix},
+X_2 = \begin{pmatrix} 1 & 1 & 0\\ 1 & 1 & 0 \\ 1 & 0 & 1 \\ 1 & 0 & 1\end{pmatrix},
+X_3 = \begin{pmatrix} 1 & 0\\ 1 & 0 \\ 1 & 1 \\ 1 & 1\end{pmatrix}.
+\end{align*}
+\vspace{3mm}
+
+\color{black}
+\small
+Teil 1/2
+\vspace{2mm}
+\footnotesize
+```{r, eval = T, echo = T}
+# Matrixdefinitionen
+X_1 = matrix(c(1,1,
+               1,2,
+               1,3),
+           nrow  = 3,
+           byrow = TRUE)
+X_2 = matrix(c(1,1,0,
+               1,1,0,
+               1,0,1,
+               1,0,1),
+           nrow  = 4,
+           byrow = TRUE)
+X_3 = matrix(c(1,0,
+               1,0,
+               1,1,
+               1,1),
+           nrow  = 4,
+           byrow = TRUE)
+```
+
+
+
+
+
+# Rang - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 20. Bestimmen Sie den Rang folgender Matrizen durch überlegen und mithilfe von R
+\begin{align*}
+X_1 = \begin{pmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3\end{pmatrix},
+X_2 = \begin{pmatrix} 1 & 1 & 0\\ 1 & 1 & 0 \\ 1 & 0 & 1 \\ 1 & 0 & 1\end{pmatrix},
+X_3 = \begin{pmatrix} 1 & 0\\ 1 & 0 \\ 1 & 1 \\ 1 & 1\end{pmatrix}.
+\end{align*}
+\vspace{3mm}
+
+\color{black}
+\small
+Teil 2/2
+\vspace{2mm}
+\footnotesize
+```{r, eval = T, echo = T}
+
+# Berechnung der Ränge
+rg_X_1 = qr(X_1)$rank
+rg_X_2 = qr(X_2)$rank
+rg_X_3 = qr(X_3)$rank
+
+
+# Ausgabe
+cat("rg(X_1) = ", rg_X_1,
+    "\nrg(X_2) = ", rg_X_2,
+    "\nrg(X_3) = ", rg_X_3)
+```

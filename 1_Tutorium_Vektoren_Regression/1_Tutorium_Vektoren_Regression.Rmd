@@ -1,0 +1,1165 @@
+---
+fontsize: 8pt
+bibliography: 1_Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: yes
+    includes:
+      in_header: 1_header.tex
+---
+
+
+```{r, include = F}
+source("1_R_common.R")
+```
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%"}
+knitr::include_graphics("1_Abbildungen/wtfi_otto.png")
+```
+
+\vspace{2mm}
+
+\Huge
+Tutorium Allgemeines Lineares Modell
+\vspace{2mm}
+
+
+\normalsize
+BSc Psychologie SoSe 2022
+
+\vspace{2mm}
+\text{2. Termin: Vektoren und Regression}
+
+\vspace{18mm}
+Belinda Fleischmann
+
+
+
+# Organisatorisches
+\setstretch{1}
+
+Termine:
+
+* jeden Donnerstag 
+  * außer 26.05. (Christi Himmelfahrt)
+  * Gruppe 1: 11.15 - 12.45 Uhr [G22A-112]
+  * Gruppe 2: 13.15 - 14.45 Uhr [G22A-209]
+
+# 
+\vfill
+\setstretch{2.3}
+\Large
+
+Follow-up letzte Woche
+
+Selbstkontrollfragen - Vektoren
+
+Selbstkontrollfragen - Regression (1 bis 7)
+
+# 
+\vfill
+\setstretch{2.3}
+\Large
+
+**Follow-up letzte Woche**
+
+Selbstkontrollfragen - Vektoren
+
+Selbstkontrollfragen - Regression (1 bis 7)
+
+
+# Follow-up letzte Woche
+
+**Definition von Vektoren in R**
+
+\footnotesize
+
+Die R-Funktion ```c(data)``` erzeugt einen Zeilenvektor
+
+```{r}
+c(1:12)
+```
+
+Um einen Spaltenvektor zu erzeugen, verwenden wir die R-Funktion ```matrix(data, nrow, ncol, byrow)``` 
+```{r}
+matrix(c(1:12), nrow = 12)     # Vektor mit 12 Zeilen
+```
+
+# Follow-up letzte Woche
+
+**Definition von Vektoren in R**
+
+\footnotesize
+
+```matrix(data, nrow, ncol, byrow)``` befüllt eine Matrix mit Vektorelementen. Mit den Argumenten ```nrow``` und ```ncol``` bestimmen wir den Matrixtyp und mit ```byrow``` können wir bestimmen, *wie* die Matrix befüllt wird.
+
+```{r}
+matrix(c(1:12), nrow = 3) # Vektor mit 3 Zeilen
+matrix(c(1:12), ncol = 4) # Vektor mit 4 Spalten
+```
+Per default ist ```byrow=FASLE```. D.h. die Matrix wird *nicht* "byrow", also Reihen-weise" befüllt, sondern Spalten-weise. Wenn wir ```byrow=TRUE``` setzen, wird die Matrix "byrow", also Reihenweise befüllt. 
+```{r}
+matrix(c(1:12), nrow = 3, byrow = TRUE) # Vektor mit 3 Zeilen, reihenweise befüllt
+```
+
+# 
+\vfill
+\setstretch{2.3}
+\Large
+
+Follow-up letzte Woche
+
+**Selbstkontrollfragen - Vektoren**
+
+Selbstkontrollfragen - Regression (1 bis 7)
+
+
+# Selbstkontrollfragen - Vektoren
+\footnotesize
+\setstretch{1.5}
+1. Geben Sie die Definition eines Vektorraums wieder.
+2. Geben Sie die Definition des reellen Vektorraums wieder.
+3. Es seien 
+\begin{equation}
+x := \begin{pmatrix} 2 \\ 1 \end{pmatrix}, 
+y := \begin{pmatrix} 0 \\ 1 \end{pmatrix}
+\mbox{ und } 
+a := 2. 
+\end{equation}
+Berechnen Sie
+\begin{equation}
+v = a(x+y) \mbox{ und } w = \frac{1}{a}(y-x)
+\end{equation}
+und überprüfen Sie ihre Rechnung mit R.
+4. Geben Sie die Definition des Skalarproduktes auf $\mathbb{R}^m$ wieder.
+5. Für
+\begin{equation}
+x := \begin{pmatrix} 2 \\ 1 \\ 3 \end{pmatrix},
+y := \begin{pmatrix} 1 \\ 0 \\ 1 \end{pmatrix},
+z := \begin{pmatrix} 3 \\ 1 \\ 0 \end{pmatrix} 
+\end{equation}
+berechnen Sie
+\begin{equation}
+\langle x,y \rangle, \langle x, z \rangle, \langle y,z \rangle
+\end{equation}
+und überprüfen Sie ihre Rechnung mithilfe von R.
+6. Geben Sie die Definition des Euklidischen Vektorraums wieder.
+7. Definieren Sie die Länge eines Vektors im Euklidischen Vektorraum.
+8. Berechnen Sie die Längen der Vektoren $x,y,z$ aus Aufgabe 5 und überprüfen
+Sie ihre Rechnung mit R.
+
+# Selbstkontrollfragen - Vektoren
+\footnotesize
+\setstretch{1.9}
+9. Geben Sie Definition des Abstands zweier Vektoren im Euklidischen Vektorraum wieder.
+10. Berechnen Sie $d(x,y), d(x,z)$ und $d(y,z)$ für $x,y,z$ aus Aufgabe 5.
+11. Geben Sie die Definition des Winkels zwischen zwei Vektoren im Euklidischen
+Vektorraum wieder.
+12. Berechnen Sie die Winkel zwischen den Vektoren $x$ und $y$, $x$ und $z$, sowie
+$y$ und $z$ aus Aufgabe 5 mit R.
+13. Definieren Sie die Begriffe der Orthogonalität und Orthonormalität von Vektoren.
+14. Definieren Sie den Begriff der Linearkombination von Vektoren.
+15. Definieren Sie den Begriff der linearen Unabhängigkeit von Vektoren.
+16. Woran kann man erkennen, dass zwei Vektoren linear abhängig sind?
+17. Dokumentieren Sie alle in dieser Einheit eingeführten R Befehle in einem Skript.
+
+
+# Reeller Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\large
+\textcolor{darkblue}{1. Geben Sie die Definition eines Vektorraums wieder.}
+\vspace{3mm}
+
+\footnotesize
+\begin{definition}[Vektorraum]
+\footnotesize
+\justifying
+Es seien $V$ eine nichtleere Menge und $S$ eine Menge von Skalaren. Weiterhin sei
+eine Abbildung
+\begin{equation}
++ : V \times V \to V, (v_1,v_2) \mapsto +(v_1, v_2) =: v_1 + v_2,
+\end{equation}
+genannt \textit{Vektoraddition}, definiert. Schließlich sei eine Abbildung
+\begin{equation}
+\cdot : S \times V \to V, (s,v) \mapsto \cdot(s,v) =: sv,
+\end{equation}
+genannt \textit{Skalarmultiplikation} definiert. Dann wird das Tupel $(V,S,+,\cdot)$
+genau dann \textit{Vektorraum} genannt, wenn für beliebige Elemente
+$v,w,u\in V$ und $a,b \in S$ folgende Bedingungen gelten:
+\vspace{2mm}
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{ll}
+(1) Kommutativität der Vektoraddition
+& $v + w = w + v$
+\\
+(2) Assoziativität der Vektoraddition
+& $(v + w) + u = v + (w + u)$
+\\
+(3) Existenz eines neutralen Elements der Vektoraddition
+& $\exists\, 0 \in V$ mit $v + 0 = 0 + v = v$.
+\\
+(4) Existenz inverser Elemente der Vektoraddition
+& $\forall v \in V\, \exists\, -v \in V$ mit  $v + (-v) = 0$.
+\\
+(5) Existenz eines neutralen Elements der Skalarmultiplikation
+& $\exists\, 1 \in S$ mit $1 \cdot v = v$.
+\\
+(6) Assoziativität der Skalarmultiplikation
+& $a \cdot (b \cdot c) = (a \cdot b)\cdot c$.
+\\
+(7) Distributivität hinsichtlich der Vektoraddition
+& $a\cdot (v + w) = a\cdot v + a \cdot w$.
+\\
+(8) Distributivität hinsichtlich der Skalaraddition
+& $(a + b)\cdot v = a\cdot v + b\cdot v$.
+\end{tabular}
+\end{center}
+\end{definition}
+
+
+
+# Reeller Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\large
+\textcolor{darkblue}{2. Geben Sie die Definition des reellen Vektorraums wieder.}
+\vspace{3mm}
+
+\small
+\setstretch{1.2}
+\justifying
+\begin{definition}[Reeller Vektorraum]
+\footnotesize
+\justifying
+Für alle $x,y \in \mathbb{R}^m$ und $a \in \mathbb{R}$ definieren wir die \textit{Vektoraddition} durch 
+\begin{equation}
++ : \mathbb{R}^m  \times \mathbb{R}^m \to \mathbb{R}^m, (x,y) \mapsto x+y = 
+\begin{pmatrix}
+x_1 \\ \vdots \\ x_m
+\end{pmatrix} + 
+\begin{pmatrix}
+y_1 \\ \vdots \\ y_m
+\end{pmatrix} :=
+\begin{pmatrix}
+x_1 + y_1 \\ \vdots \\ x_m + y_m
+\end{pmatrix}
+\end{equation}
+und die \textit{Skalarmultiplikation} durch
+\begin{equation}
+\cdot : \mathbb{R} \times \mathbb{R}^m \to \mathbb{R}^m, (a,x) \mapsto ax = a
+\begin{pmatrix}
+x_1 \\ \vdots \\ x_m
+\end{pmatrix} :=
+\begin{pmatrix}
+ax_1 \\ \vdots \\ ax_m
+\end{pmatrix}.
+\end{equation}
+Dann bildet $(\mathbb{R}^m, +, \cdot)$ mit den Rechenregeln der Addition und Multiplikation in $\mathbb{R}$ einen Vektorraum, den wir den \textit{reellen Vektorraum} nennen.
+\end{definition}
+
+
+
+# Reeller Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3. Es seien $x := \begin{pmatrix} 2 \\ 1 \end{pmatrix}, y := \begin{pmatrix} 0 \\ 1 \end{pmatrix}$ und  $a := 2.$ 
+\newline Berechnen Sie $v = a(x+y) \mbox{ und } w = \frac{1}{a}(y-x)$ und überprüfen Sie ihre Rechnung mit R.
+
+\color{black}
+\footnotesize
+$v = a(x+y) = 2\left(\begin{pmatrix}2\\1\end{pmatrix} + \begin{pmatrix}0\\1\end{pmatrix} \right) = \begin{pmatrix}2(2+0)\\2(1+1)\end{pmatrix} = \begin{pmatrix}4\\4\end{pmatrix}$ 
+
+$w = \frac{1}{a}(y-x) = \frac{1}{2}\left(\begin{pmatrix}0\\1\end{pmatrix} - \begin{pmatrix}2\\1\end{pmatrix}\right) = \begin{pmatrix}0.5(0-2)\\0.5(1-1)\end{pmatrix} = \begin{pmatrix}-1\\0\end{pmatrix}$ 
+\vspace{2mm}
+\setstretch{1.1}
+```{r}
+x = matrix(c(2,1), nrow = 2)   # Vektordefinition
+y = matrix(c(0,1), nrow = 2)   # Vektordefinition
+a = 2                          # Skalardefinition
+v = a*(x + y)                  # Vektoraddition und Skalarmultiplikation
+w = 1/a * (y - x)
+print(v)
+print(w)
+```
+
+
+# Euklidischer Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4. Geben Sie die Definition des Skalarproduktes auf $\mathbb{R}^m$ wieder
+\vspace{3mm}
+
+\justifying
+\setstretch{1.2}
+
+\color{black}
+\begin{definition}[Skalarprodukt auf $\mathbb{R}^m$]
+\footnotesize
+Das \textit{Skalarprodukt auf $\mathbb{R}^m$} ist definiert als die Abbildung
+\begin{equation}
+\langle \rangle : \mathbb{R}^m \times \mathbb{R}^m \to \mathbb{R}, (x,y) \mapsto \langle (x,y) \rangle := \langle x,y \rangle := \sum^m_{i=1}x_iy_i.
+\end{equation}
+\end{definition}
+
+
+
+# Euklidischer Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Für $x := \begin{pmatrix} 2 \\ 1 \\ 3 \end{pmatrix}, y := \begin{pmatrix} 1 \\ 0 \\ 1 \end{pmatrix}, z := \begin{pmatrix} 3 \\ 1 \\ 0 \end{pmatrix}$, berechnen Sie
+$\langle x,y \rangle, \langle x, z \rangle, \langle y,z \rangle$
+und überprüfen Sie ihre Rechnung mithilfe von R.
+\vspace{3mm}
+
+\color{black}
+\setstretch{1.2}
+\footnotesize
+$\langle x,y\rangle = x_1 y_1 + x_2 y_2 +  x_3  y_3 = 2 \cdot 1 + 1 \cdot 0 +  3 \cdot 1 = 2+0+3 = 5$
+
+$\langle x,z\rangle = x_1 z_1 + x_2 z_2 +  x_3  z_3 = 2 \cdot 3 + 1 \cdot 1 +  3 \cdot 0 = 6+1+0 = 7$
+
+$\langle y,z\rangle = y_1 z_1 + y_2 z_2 +  y_3  z_3 = 1 \cdot 3 + 0 \cdot 1 +  1 \cdot 0 = 3+0+0 = 3$
+
+\vspace{3mm}
+
+```{r}
+# Vektordefinition
+x = matrix(c(2,1,3), nrow = 3)
+y = matrix(c(1,0,1), nrow = 3)
+z = matrix(c(3,1,0), nrow = 3)
+
+# Skalarprodukt mit R's komponentenweiser Multiplikation * und sum()
+skalarprodukt_xy = sum(x*y)
+skalarprodukt_xz = sum(x*z)
+skalarprodukt_yz = sum(y*z)
+print(c(skalarprodukt_xy, skalarprodukt_xz, skalarprodukt_yz))
+```
+
+
+
+# Euklidischer Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Für $x := \begin{pmatrix} 2 \\ 1 \\ 3 \end{pmatrix}, y := \begin{pmatrix} 1 \\ 0 \\ 1 \end{pmatrix}, z := \begin{pmatrix} 3 \\ 1 \\ 0 \end{pmatrix}$, berechnen Sie
+$\langle x,y \rangle, \langle x, z \rangle, \langle y,z \rangle$
+und überprüfen Sie ihre Rechnung mithilfe von R.
+\vspace{3mm}
+
+\color{black}
+\footnotesize
+\setstretch{1.2}
+$\langle x,y\rangle = x_1 y_1 + x_2 y_2 +  x_3  y_3 = 2 \cdot 1 + 1 \cdot 0 +  3 \cdot 1 = 2+0+3 = 5$
+
+$\langle x,z\rangle = x_1 z_1 + x_2 z_2 +  x_3  z_3 = 2 \cdot 3 + 1 \cdot 1 +  3 \cdot 0 = 6+1+0 = 7$
+
+$\langle y,z\rangle = y_1 z_1 + y_2 z_2 +  y_3  z_3 = 1 \cdot 3 + 0 \cdot 1 +  1 \cdot 0 = 3+0+0 = 3$
+
+\vspace{3mm}
+```{r}
+# Vektordefinition
+x = matrix(c(2,1,3), nrow = 3)
+y = matrix(c(1,0,1), nrow = 3)
+z = matrix(c(3,1,0), nrow = 3)
+
+# Skalarprodukt mit R's Matrixtransposition t() und -multiplikation (%*%)
+skalarprodukt_xy = t(x) %*% y
+skalarprodukt_xz = t(x) %*% z
+skalarprodukt_yz = t(y) %*% z
+print(c(skalarprodukt_xy, skalarprodukt_xz, skalarprodukt_yz))
+
+```
+
+
+
+# Euklidischer Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 6. Geben Sie die Definition des Euklidischen Vektorraums wieder.
+\vspace{3mm}
+
+\color{black}
+\justify
+\setstretch{1.2}
+\begin{definition}[Euklidischer Vektorraum]
+Das Tupel $((\mathbb{R}^m,+,\cdot),\langle\rangle)$ aus dem reellen Vektorraum $(\mathbb{R}^m,+,\cdot)$ und dem Skalarprodukt $\langle \rangle$ auf $\mathbb{R}^m$ heißt \textit{reeller kanonischer Euklidischer Vektorraum}.
+\end{definition}
+
+
+
+# Euklidischer Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 7. Definieren Sie die Länge eines Vektors im Euklidischen Vektorraum.
+\vspace{3mm}
+
+\color{black}
+\small
+\begin{definition}[Länge]
+$((\mathbb{R}^m,+,\cdot),\langle\rangle)$ sei der Euklidische Vektorraum.
+\begin{itemize}
+\item Die \textit{Länge} eines Vektors $x \in \mathbb{R}^m$ ist definiert als
+\begin{equation}
+\lVert x \rVert := \sqrt{\langle x,x \rangle}.
+\end{equation}
+\end{itemize}
+\end{definition}
+
+
+
+# Euklidischer Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 8. Berechnen Sie die Längen der Vektoren $x,y,z$ aus Aufgabe 5 und überprüfen
+Sie ihre Rechnung mit R.
+\vspace{2mm}
+
+\color{black}
+\footnotesize
+\begin{align*}
+\begin{split}
+& \lVert x\rVert=\left\lVert \begin{pmatrix}2\\1\\3\end{pmatrix}\right\rVert = \sqrt{\left\langle \begin{pmatrix}2\\1\\3\end{pmatrix},\begin{pmatrix}2\\1\\3\end{pmatrix}  \right\rangle} = \sqrt{2^2+1^2+3^2} = \sqrt{4+1+9} = \sqrt{14} \approx 3.74 \\[1mm]
+& \lVert y\rVert=\left\lVert \begin{pmatrix}1\\0\\1\end{pmatrix}\right\rVert = \sqrt{\left\langle \begin{pmatrix}1\\0\\1\end{pmatrix},\begin{pmatrix}1\\0\\1\end{pmatrix}  \right\rangle} = \sqrt{1^2+0^2+1^2} = \sqrt{1+0+1} = \sqrt{2} \approx 1.41 \\[1mm]
+& \lVert z\rVert = \left\lVert \begin{pmatrix}3\\1\\0\end{pmatrix}\right\rVert = \sqrt{\left\langle \begin{pmatrix}3\\1\\0\end{pmatrix},\begin{pmatrix}3\\1\\0\end{pmatrix}  \right\rangle} = \sqrt{3^2+1^2+0^2} = \sqrt{9+1+0} = \sqrt{10} \approx 3.16
+\end{split}
+\end{align*}
+\vspace{1mm}
+\footnotesize
+\setstretch{1.1}
+```{r}
+norm_x = norm(matrix(c(2,1,3), nrow = 3), type = "2")  # Vektorlänge = l_2 Norm (type = "2")
+norm_y = norm(matrix(c(1,0,1), nrow = 3), type = "2")
+norm_z = norm(matrix(c(3,1,0), nrow = 3), type = "2")
+print(c(norm_x, norm_y, norm_z))
+```
+
+
+
+# Euklidischer Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 9. Geben Sie Definition des Abstands zweier Vektoren im Euklidischen Vektorraum wieder.
+\vspace{3mm}
+
+\color{black}
+\small
+\begin{definition}[Abstand]
+$((\mathbb{R}^m,+,\cdot),\langle\rangle)$ sei der Euklidische Vektorraum.
+\begin{itemize}
+\item Der \textit{Abstand} zweier Vektoren $x,y \in \mathbb{R}^m$ ist definiert als
+\begin{equation}
+d(x,y) := \lVert x-y \rVert.
+\end{equation}
+\end{itemize}
+\end{definition}
+
+
+
+# Euklidischer Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\large
+\color{darkblue} 10. Berechnen Sie $d(x,y), d(x,z)$ und $d(y,z)$ für $x,y,z$ aus Aufgabe 5.
+\vspace{3mm}
+
+\color{black}
+\footnotesize
+\setstretch{1.1}
+
+\begin{align*}
+\begin{split}
+& d(x,y) = d\left(\begin{pmatrix}2\\1\\3\end{pmatrix}, \begin{pmatrix}1\\0\\1\end{pmatrix}\right) = \left\lVert \begin{pmatrix}2\\1\\3\end{pmatrix} - \begin{pmatrix}1\\0\\1\end{pmatrix}\right\rVert = \left\lVert \begin{pmatrix}1\\1\\2\end{pmatrix}\right\rVert = \sqrt{1^2+1^2+2^2} = \sqrt{6} \approx 2.45 \\[1mm]
+& d(x,z) = d\left(\begin{pmatrix}2\\1\\3\end{pmatrix}, \begin{pmatrix}3\\1\\0\end{pmatrix}\right) = \left\lVert \begin{pmatrix}2\\1\\3\end{pmatrix} - \begin{pmatrix}3\\1\\0\end{pmatrix}\right\rVert = \left\lVert \begin{pmatrix}-1\\0\\3\end{pmatrix}\right\rVert = \sqrt{(-1)^2+0^2+3^2} = \sqrt{10} \approx 3.16 \\[1mm]
+& d(y,z) = d\left(\begin{pmatrix}1\\0\\1\end{pmatrix}, \begin{pmatrix}3\\1\\0\end{pmatrix}\right) = \left\lVert \begin{pmatrix}1\\0\\1\end{pmatrix} - \begin{pmatrix}3\\1\\0\end{pmatrix}\right\rVert = \left\lVert \begin{pmatrix}-2\\-1\\1\end{pmatrix}\right\rVert = \sqrt{(-2)^2+(-1)^2+1^2} = \sqrt{6} \approx 2.45\\
+\end{split}
+\end{align*}
+\vspace{1.5mm}
+
+\footnotesize
+\setstretch{1.2}
+```{r}
+Abstand_xy = norm(matrix(c(2,1,3), nrow = 3) - matrix(c(1,0,1), nrow = 3), type = "2")
+Abstand_xz = norm(matrix(c(2,1,3), nrow = 3) - matrix(c(3,1,0), nrow = 3), type = "2")
+Abstand_yz = norm(matrix(c(1,0,1), nrow = 3) - matrix(c(3,1,0), nrow = 3), type = "2")
+print(c(Abstand_xy, Abstand_xz, Abstand_yz))
+```
+
+
+
+# Euklidischer Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 11. Geben Sie die Definition des Winkels zwischen zwei Vektoren im Euklidischen
+Vektorraum wieder.
+\vspace{3mm}
+
+\color{black}
+\small
+\begin{definition}[Winkel]
+$((\mathbb{R}^m,+,\cdot),\langle\rangle)$ sei der Euklidische Vektorraum.
+\begin{itemize}
+\item Der \textit{Winkel} $\alpha$ zwischen zwei Vektoren $x,y \in \mathbb{R}^m$ mit $x,y \neq 0$ ist definiert durch \begin{equation}
+0 \leq \alpha \leq \pi \text{ und } \cos\alpha := \frac{\langle x,y \rangle}{\lVert x \rVert\lVert y \rVert}
+\end{equation}
+\end{itemize}
+\end{definition}
+
+
+
+# Euklidischer Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 12. Berechnen Sie die Winkel zwischen den Vektoren $x$ und $y$, $x$ und $z$, sowie
+$y$ und $z$ aus Aufgabe 5 mit R.
+\vspace{3mm}
+
+\color{black}
+\small
+Winkel zwischen $x$ und $y$ in Radians
+
+\tiny
+\begin{align*}
+\alpha = \mbox{acos} \left ( \frac{\left \langle \begin{pmatrix} 2\\1\\3 \end{pmatrix}, \begin{pmatrix} 1\\0\\1 \end{pmatrix} \right \rangle}{\left \lVert \begin{pmatrix}2\\1\\3\end{pmatrix}\right \rVert \left \lVert \begin{pmatrix}1\\0\\1\end{pmatrix}\right \rVert}\right)
+= \mbox{acos}\left(\frac{2 \cdot 1 + 1 \cdot 0 + 3 \cdot 1}{\sqrt{2^2 + 1^2 + 3^2} \cdot \sqrt{1^2 + 0^2 + 1^2}}\right)
+= \mbox{acos}\left(\frac{5}{2 \cdot \sqrt{7}}\right)
+\approx 0.333
+\end{align*}
+
+\vspace{6pt}
+\small
+Winkel zwischen $x$ und $y$ in Grad
+
+\footnotesize
+\begin{align*}
+\mbox{acos}\left(\frac{5}{2 \cdot \sqrt{7}}\right) \cdot \frac{180}{\pi} \approx 19.107
+\end{align*}
+
+\small
+Berechnung in R
+\footnotesize
+```{r}
+x = matrix(c(2,1,3), nrow = 3)                                   
+y = matrix(c(1,0,1), nrow = 3)                                   
+alpha = acos(sum(x*y)/(sqrt(sum(x*x))*sqrt(sum(y*y))))           # Winkel in Radians
+w = acos(sum(x*y)/(sqrt(sum(x*x))*sqrt(sum(y*y)))) * 180/pi      # Winkel in Grad
+print(c(alpha,w))
+```
+
+
+
+# Euklidischer Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 12. Berechnen Sie die Winkel zwischen den Vektoren $x$ und $y$, $x$ und $z$, sowie
+$y$ und $z$ aus Aufgabe 5 mit R.
+\vspace{3mm}
+
+\color{black}
+\small
+Winkel zwischen $x$ und $z$ in Radians
+
+\tiny
+\begin{align*}
+\alpha = \mbox{acos} \left ( \frac{\left \langle \begin{pmatrix} 2\\1\\3 \end{pmatrix}, \begin{pmatrix} 3\\1\\0 \end{pmatrix} \right \rangle}{\left \lVert \begin{pmatrix}2\\1\\3\end{pmatrix}\right \rVert \left \lVert \begin{pmatrix}3\\1\\0\end{pmatrix}\right \rVert}\right)
+= \mbox{acos}\left(\frac{2 \cdot 3 + 1 \cdot 1 + 3 \cdot 0}{\sqrt{2^2 + 1^2 + 3^2} \cdot \sqrt{3^2 + 1^2 + 0^2}}\right)
+= \mbox{acos}\left(\frac{7}{2 \cdot \sqrt{35}}\right)
+\approx 0.938
+\end{align*}
+
+\vspace{6pt}
+\small
+Winkel zwischen $x$ und $y$ in Grad
+
+\footnotesize
+\begin{align*}
+\mbox{acos}\left(\frac{7}{2 \cdot \sqrt{35}}\right) \cdot \frac{180}{\pi} \approx 53.729
+\end{align*}
+
+\small
+Berechnung in R
+\footnotesize
+```{r}
+x = matrix(c(2,1,3), nrow = 3)                                   
+z = matrix(c(3,1,0), nrow = 3)                                   
+alpha = acos(sum(x*z)/(sqrt(sum(x*x))*sqrt(sum(z*z))))           # Winkel in Radians
+w = acos(sum(x*z)/(sqrt(sum(x*x))*sqrt(sum(z*z)))) * 180/pi      # Winkel in Grad
+print(c(alpha,w))
+```
+
+
+
+# Euklidischer Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 12. Berechnen Sie die Winkel zwischen den Vektoren $x$ und $y$, $x$ und $z$, sowie
+$y$ und $z$ aus Aufgabe 5 mit R.
+\vspace{3mm}
+
+\color{black}
+\small
+Winkel zwischen $y$ und $z$ in Radians
+
+\tiny
+\begin{align*}
+\alpha = \mbox{acos} \left ( \frac{\left \langle \begin{pmatrix} 1\\0\\1 \end{pmatrix}, \begin{pmatrix} 3\\1\\0 \end{pmatrix} \right \rangle}{\left \lVert \begin{pmatrix}1\\0\\1\end{pmatrix}\right \rVert \left \lVert \begin{pmatrix}3\\1\\0\end{pmatrix}\right \rVert}\right)
+= \mbox{acos}\left(\frac{1 \cdot 3 + 0 \cdot 1 + 1 \cdot 0}{\sqrt{1^2 + 0^2 + 1^2} \cdot \sqrt{3^2 + 1^2 + 0^2}}\right)
+= \mbox{acos}\left(\frac{3}{2 \cdot \sqrt{5}}\right)
+\approx 0.835
+\end{align*}
+
+\vspace{6pt}
+\small
+Winkel zwischen $x$ und $y$ in Grad
+
+\footnotesize
+\begin{align*}
+\mbox{acos}\left(\frac{3}{2 \cdot \sqrt{5}}\right) \cdot \frac{180}{\pi} = 47.87
+\end{align*}
+
+\small
+Berechnung in R
+\footnotesize
+```{r}
+y = matrix(c(1,0,1), nrow = 3)                                   
+z = matrix(c(3,1,0), nrow = 3)                                   
+alpha = acos(sum(y*z)/(sqrt(sum(y*y))*sqrt(sum(z*z))))           # Winkel in Radians
+w = acos(sum(y*z)/(sqrt(sum(y*y))*sqrt(sum(z*z)))) * 180/pi      # Winkel in Grad
+print(c(alpha,w))
+```
+
+
+
+# Euklidischer Vektorraum - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 13. Definieren Sie die Begriffe der Orthogonalität und Orthonormalität von Vektoren.
+\vspace{3mm}
+
+\color{black}
+\setstretch{1.2}
+\small
+\begin{definition}[Orthogonalität und Orthonormalität von Vektoren]
+\justifying
+$\left((\mathbb{R}^m, +, \cdot), \langle \rangle \right)$ sei der Euklidische Vektorraum.
+\begin{itemize}
+\item Zwei Vektoren $x,y \in \mathbb{R}^m$ heißen \textit{orthogonal}, wenn gilt, dass
+\begin{equation}
+\langle x, y \rangle = 0
+\end{equation}
+\item Zwei Vektoren $x,y \in \mathbb{R}^m$ heißen \textit{orthonormal}, wenn gilt, dass
+\begin{equation}
+\langle x, y \rangle = 0 \mbox{ und } \Vert x \Vert = \Vert y \Vert = 1.
+\end{equation}
+\end{itemize}
+\end{definition}
+
+
+
+# Lineare Unabhängigkeit - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 14. Definieren Sie den Begriff der Linearkombination von Vektoren.
+\vspace{3mm}
+
+
+\color{black}
+\setstretch{1}
+\small
+\begin{definition}[Linearkombination]
+\justifying
+$\{v_1, v_2, ..., v_k\}$ sei eine Menge von $k$ Vektoren eines Vektorraums $V$.
+Dann ist die \textit{Linearkombination} der Vektoren in $v_1, v_2, ..., v_k$ mit den
+skalaren Koeffizienten $a_1, a_2,...,a_k$ definiert als der Vektor
+\begin{equation}
+w := \sum_{i=1}^k a_i v_i \in V.
+\end{equation}
+\end{definition}
+
+
+
+# Lineare Unabhängigkeit - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 15. Definieren Sie den Begriff der linearen Unabhängigkeit von Vektoren.
+\vspace{3mm}
+
+\color{black}
+\small
+\begin{definition}[Lineare Unabhängigkeit]
+\justifying
+$V$ sei ein Vektorraum. Eine Menge $W := \{w_1, w_2, ...,w_k\}$ von Vektoren in $V$ heißt
+\textit{linear unabhängig}, wenn die einzige Repräsentation des Nullelements
+$0 \in V$ durch eine Linearkombination der $w \in W$ die triviale
+Repräsentation
+\begin{equation}
+0 = a_1 w_1 + a_2 w_2 + \cdots + a_k w_k \mbox{ mit } a_1 = a_2 =  \cdots = a_k = 0
+\end{equation}
+ist. Wenn die Menge $W$ nicht linear unabhängig ist, dann heißt sie \textit{linear abhängig}.
+\end{definition}
+
+
+
+# Lineare Unabhängigkeit - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 16. Woran kann man erkennen, dass zwei Vektoren linear abhängig sind?
+\vspace{3mm}
+
+\color{black}
+\small
+\begin{theorem}[Lineare Abhängigkeit von zwei Vektoren]
+\justifying
+\normalfont
+$V$ sei ein Vektorraum. Zwei Vektoren $v_1, v_2 \in V$ sind linear abhängig,
+wenn einer der Vektoren ein skalares Vielfaches des anderen Vektors ist.
+\end{theorem}
+
+
+# 
+\vfill
+\setstretch{2.3}
+\Large
+
+Follow-up letzte Woche
+
+Selbstkontrollfragen - Vektoren
+
+**Selbstkontrollfragen - Regression (1 bis 7)**
+
+
+# Selbstkontrollfragen - Regression (1 bis 7)
+\small
+\setstretch{1.5}
+1. Geben Sie die funktionale Form eine linear-affinen Funktion an.
+2. Erläutern Sie die Bedeutung der Parameter einer linear-affinen Funktion.
+3. Definieren Sie den Begriff der Ausgleichsgerade.
+4. Erläutern Sie die intuitive Bedeutung der Funktion der quadrierten vertikalen Abweichungen.
+5. Geben Sie das Theorem zur Ausgleichsgerade wieder.
+6. Skizzieren Sie den Beweis des Theorems zur Ausgleichsgeraden.
+7. Definieren Sie den Begriff des Ausgleichspolynoms.
+
+
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 1. Geben Sie die funktionale Form eine linear-affinen Funktion an.
+\vspace{3mm}
+
+\color{black}
+\small
+\justifying
+Für $\beta := (\beta_0,\beta_1)^T \in \mathbb{R}^2$ hat die linear-affine Funktion
+$f_\beta : \mathbb{R} \to \mathbb{R}, x \mapsto f_\beta(x)$
+die funktionale Form
+$f_\beta(x) := \beta_0 + \beta_1 x.$
+
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 2. Erläutern Sie die Bedeutung der Parameter einer linear-affinen Funktion.
+\vspace{3mm}
+
+\color{black}
+\small
+Für linear-affine Funktionen $f_\beta(x) := \beta_0 + \beta_1 x$ ist
+
+\small
+* $\beta_0$ der Schnittpunkt von Gerade und $y$-Achse ("Offset Parameter") und
+* $\beta_1$ die $y$-Differenz pro $x$-Einheitsdifferenz ("Steigungsparameter").
+
+\vspace{1cm}
+Beispiele: 
+
+```{r, echo = F, eval = F}
+library(MASS)                                         # Normalverteilungen
+library(matlib)                                       # Normalverteilungen
+library(tinytex)
+library(latex2exp)
+set.seed(0)                                           # Ergebnisreproduzierbarkeit
+n           = 20                                      # Anzahl Datenpunkte
+p           = 3                                       # Anzahl Regressionskoeffizienten
+x           = seq(1,n,len = n)                        # Kontrollvariable
+X           = matrix(c(rep(1,n), x, x^2), ncol = 3)   # Designmatrix
+beta        = matrix(c(.5,.2,.06), ncol = 1)          # Wahre, unbekannte, Regressionskoeffizientenwerte
+mu          = X %*% beta                              # Erwartungswertparameter
+sigsqr      = 10                                      # Varianzparameter
+Sigma       = sigsqr*diag(n)                          # Kovarianzmatrixparameter
+y           = as.matrix(mvrnorm(1,mu,Sigma))          # Datengeneration
+D           = data.frame(y_i = y, x_i = x)            # Dataframe
+
+
+# Ausgleichs- und weitere Geraden
+X           = matrix(c(rep(1,n), x), ncol = 2)              # Designmatrix
+beta_hat    = inv(t(X) %*% X) %*% t(X) %*% y                # OLS Schätzer
+beta_set    = matrix(c(5,.5, -20,3,beta_hat), nrow = 2)     # Weitere Geraden
+
+
+# Visualisierung
+lab         = c(TeX("$\\beta_0 =   5.0, \\beta_1 = 0.5$"),  # Labels
+                TeX("$\\beta_0 = -20.0, \\beta_1 = 3.0$"),
+                TeX("$\\beta_0 =  -6.2, \\beta_1 = 1.7$"))
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,3),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+for(i in 1:3){
+  plot(
+  x,
+  y,
+  pch         = 16,
+  xlab        = "Anzahl Therapiestunden (x)",
+  ylab        = "Symptomreduktion (y)",
+  xlim        = c(0,21),
+  ylim        = c(-10, 40),
+  main        = lab[i])
+  abline(coef = beta_set[,i], lty = 1, col = "black")
+}
+fdir        = file.path(getwd(), "1_Abbildungen")   
+dev.copy2pdf(
+file        = file.path(fdir, "alm_1_ausgleichsgerade_1.pdf"),
+width       = 12,
+height      = 4)
+```
+
+```{r, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("1_Abbildungen/alm_1_ausgleichsgerade_1.pdf")
+```
+
+
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3. Definieren Sie den Begriff der Ausgleichsgerade.
+\vspace{3mm}
+
+\color{black}
+\footnotesize
+\begin{definition}[Ausgleichsgerade]
+\justifying
+Für $\beta := (\beta_0,\beta_1)^T \in \mathbb{R}^2$ heißt die linear-affine Funktion
+\begin{equation}
+f_\beta : \mathbb{R} \to \mathbb{R}, x \mapsto f_\beta(x) := \beta_0 + \beta_1 x,
+\end{equation}
+für die für eine Wertemenge  $\{(x_1,y_1),...,(x_n,y_n)\} \subset \mathbb{R}^2$ die Funktion
+\begin{equation}
+q : \mathbb{R}^2 \to \mathbb{R}_{\ge 0}, \beta \mapsto q(\beta)
+:= \sum_{i=1}^n (y_i-f_\beta(x_i))^2
+ = \sum_{i=1}^n (y_i- (\beta_0 + \beta_1x_i))^2
+\end{equation}
+der quadrierten vertikalen Abweichungen der $y_i$ von den Funktionswerten $f_{\beta}(x_i)$
+ihr Minimum annimt, die \textit{Ausgleichsgerade} für die Wertemenge $\{(x_1,y_1),...,(x_n,y_n)\}$.
+\end{definition}
+
+
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4. Erläutern Sie die intuitive Bedeutung der Funktion der quadrierten vertikalen Abweichungen.
+\vspace{3mm}
+
+\color{black}
+\small
+Die Funktion der quadrierten vertikalen Abweichungen $q(\beta)$ quantifiziert die Abweichungen der Funktionswerte $f_\beta(x_i)$ der Ausgleichsgeraden $f_\beta$ von den (beobachteten) Werten $y_i$.
+
+Die Abweichungen werden *quadriert*, damit sich positive und negative Abweichungen nicht zu null ausgleichen.
+
+Intuitiv misst die Funktion $q(\beta)$ "wie gut" eine Ausgleichsgerade mit bestimmten Werten für $\beta_0$ und $\beta_1$ in das Streudiagramm der Datenpunkte "rein passt". 
+
+Je größer ein Funktionswert $q(\beta)$, desto größer ist die aufsummierte Abweichung und desto "schlechter" passt die Ausgleichsgerade $f_\beta$ in das Streudiagramm der Datenpunkte.
+
+Je geringer ein Funktionswert $q(\beta)$, desto geringer ist die aufsummierte Abweichung und desto "besser" passt die Ausgleichsgerade $f_\beta$ in das Streudiagramm der Datenpunkte. 
+
+
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+
+\textcolor{darkcyan}{Zur Veranschaulichung}
+
+\small
+Funktion der quadrierten vertikalen Abweichungen
+\begin{align*}
+q(\beta) := \sum_{i=1}^n (y_i - (\beta_0 + \beta_1x_i))^2
+\end{align*}
+
+```{r, echo = F, eval = F}
+
+n           = 20                                      # Anzahl Datenpunkte
+p           = 3                                       # Anzahl Regressionskoeffizienten
+x           = seq(1,n,len = n)                        # Kontrollvariable
+X           = matrix(c(rep(1,n), x, x^2), ncol = 3)   # Designmatrix
+beta        = matrix(c(.5,.2,.06), ncol = 1)          # Wahre, unbekannte, Regressionskoeffizientenwerte
+mu          = X %*% beta                              # Erwartungswertparameter
+sigsqr      = 10                                      # Varianzparameter
+Sigma       = sigsqr*diag(n)                          # Kovarianzmatrixparameter
+y           = as.matrix(mvrnorm(1,mu,Sigma))          # Datengeneration
+D           = data.frame(y_i = y, x_i = x)            # Dataframe
+
+
+# Ausgleichs- und weitere Geraden
+X           = matrix(c(rep(1,n), x), ncol = 2)              # Designmatrix
+beta_hat    = inv(t(X) %*% X) %*% t(X) %*% y                # OLS Schätzer
+beta_set    = matrix(c(5,.5, -20,3,beta_hat), nrow = 2)     # Weitere Geraden
+
+
+# q Funktionswerte
+q1          = t(y - X %*% beta_set[,1]) %*% (y - X %*% beta_set[,1])
+q2          = t(y - X %*% beta_set[,2]) %*% (y - X %*% beta_set[,2])
+q3          = t(y - X %*% beta_set[,3]) %*% (y - X %*% beta_set[,3])
+
+# Visualisierung
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,3),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+lab         = c(TeX("$q(\\beta) = 1159$"),
+                TeX("$q(\\beta) = 1451$"),
+                TeX("$q(\\beta) = 250$"))
+
+for(i in 1:3){
+  plot(
+  x,
+  y,
+  pch         = 16,
+  xlab        = "Anzahl Therapiestunden (x)",
+  ylab        = "Symptomreduktion (y)",
+  xlim        = c(0,21),
+  ylim        = c(-10, 40),
+  main        = lab[i])
+  abline(coef = beta_set[,i], lty = 1, col = "black")
+  arrows(
+  x0        = x,
+  y0        = y,
+  x1        = x,
+  y1        = X %*% beta_set[,i],
+  length    = 0,
+  col       = "orange")
+}
+fdir        = file.path(getwd(), "1_Abbildungen")  
+dev.copy2pdf(
+file        = file.path(fdir, "alm_1_ausgleichsgerade_2.pdf"),
+width       = 12,
+height      = 4)
+```
+
+```{r, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("1_Abbildungen/alm_1_ausgleichsgerade_2.pdf")
+```
+\center
+\textcolor{orange}{\textbf{------}} $y_i - (\beta_0 + \beta_1x_i)$ für $i = 1,...,n$
+
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Geben Sie das Theorem zur Ausgleichsgerade wieder.
+\vspace{3mm}
+
+\color{black}
+\footnotesize
+\begin{theorem}[Ausgleichsgerade]
+\justifying
+\normalfont
+Für eine Wertemenge $\{(x_1,y_1),...,(x_n,y_n)\}\subset\mathbb{R}^2$ hat die Ausgleichsgerade die Form
+\begin{equation}
+f_\beta : \mathbb{R} \to \mathbb{R}, x \mapsto f_\beta(x) := \hat{\beta}_0 + \hat{\beta}_1 x,
+\end{equation}
+wobei mit der Stichprobenkovarianz $c_{xy}$ der $(x_i,y_i)$-Werte, der
+Stichprobenvarianz $s_x^2$ der $x_i$-Werte und den Stichprobenmitteln $\bar{x}$
+und $\bar{y}$ der $x_i$- und $y_i$-Werte, respektive, gilt, dass
+\begin{equation}
+\hat{\beta}_1 = \frac{c_{xy}}{s_x^2} \mbox{ und } \hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}
+\end{equation}
+\end{theorem}
+
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 6. Skizzieren Sie den Beweis des Theorems zur Ausgleichsgeraden.
+\vspace{3mm}
+
+\color{black}
+\small
+Wir wollen zeigen, dass die Summe der quadrierten Abweichungen $q(\beta_0,\beta_1)$ für die Werte $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}$ und $\hat{\beta}_1 = \frac{c_{xy}}{s_x^2}$ ihr Minimum annimmt, wobei $\bar{x}$ und $\bar{y}$ die Stichprobenmittel der $x_i$- und $y_i$-Werte, repektive, sind, $c_{xy}$ die Stichprobenkovarianz der $(x_i,y_i)$-Werte und $s^2_x$ die Stichprobenvarianz der $x_i$-Werte entspricht. 
+
+Dafür bestimmen wir zunächst das Minimum der Funktion $q(\beta_0,\beta_1)$, indem wir die partiellen Ableitungen hinsichtlich $\beta_0$ und $\beta_1$ berechnen und diese gleich $0$ setzen. Formal,
+
+\begin{align*}
+\frac{\partial}{\partial \beta_0} q(\beta_0,\beta_1)  = 0       & \mbox{ und }
+\frac{\partial}{\partial \beta_1} q(\beta_0,\beta_1)  = 0
+\end{align*}
+
+Durch die partielle Ableitungen und das anschließende Umstellen von Termen ergibt sich ein Gleichungssystem, das das \textit{System der Normalengleichungen} genannt wird und die notwendige Bedingung für ein Minimum von $q$ beschreibt. Auflösen dieses Gleichungssystems nach $\beta_0$ und $\beta_1$ liefert dann die Werte $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}$ und $\hat{\beta}_1 = \frac{c_{xy}}{s_x^2}$
+des Theorems. 
+
+
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 7. Definieren Sie den Begriff des Ausgleichspolynoms.
+\vspace{3mm}
+
+\color{black}
+\footnotesize
+\begin{definition}[Ausgleichspolynom]
+\justifying
+Für $\beta := (\beta_0,...,\beta_k)^T \in \mathbb{R}^{k+1}$ heißt die Polynomfunktion $k$ten Grades
+\begin{equation}
+f_\beta : \mathbb{R} \to \mathbb{R}, x \mapsto f_\beta(x) := \sum_{i=0}^k \beta_i x^i,
+\end{equation}
+für die für eine Wertemenge  $\{(x_1,y_1),...,(x_n,y_n)\} \subset \mathbb{R}^2$ die Funktion
+\begin{equation}
+q : \mathbb{R}^2 \to \mathbb{R}_{\ge 0}, \beta \mapsto q(\beta)
+:= \sum_{i=1}^n \left(y_i-f_\beta(x_i)\right)^2
+ = \sum_{i=1}^n \left(y_i- \sum_{i=0}^k \beta_i x^i\right)^2
+\end{equation}
+der quadrierten vertikalen Abweichungen der $y_i$ von den Funktionswerten
+$f_{\beta}(x_i)$ ihr Minimum annimt, das \textit{Ausgleichspolynom $k$ten Grades}
+für die Wertemenge $\{(x_1,y_1),...,(x_n,y_n)\}$.
+\end{definition}
+
+
+
+
+# Methode der kleinsten Quadrate - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+
+\textcolor{darkcyan}{Zur Veranschaulichung}
+
+\small
+Beispieldatensatz Ausgleichspolynome 1ten bis 4ten Grades
+
+\footnotesize
+```{r, echo = F, eval = F}
+# Daten und Modellparameter
+library(matlib)                                                                  # Matrizentools
+library(pracma)                                                                  # Polynomtools
+fname       = file.path(getwd(), "1_Daten", "1_Regression.csv")                  # Datendatei
+D           = read.table(fname, sep = ",", header = TRUE)                        # Dataframe
+y           = D$y_i                                                              # y_i Werte
+x           = D$x_i                                                              # x_i Werte
+n           = length(y)                                                          # n
+k_max       = 4                                                                  # maximaler Polynomgrad
+beta_hat    = list()                                                             # Parameterschätzerlisteninitialisierung
+q           = rep(NaN,k_max)                                                     # q-Funktionswertinitialisierung
+
+# Iteration über Ausgleichspolynome
+for(k in 1:k_max){
+  X = matrix(rep(1,n), nrow = n)                                                 # Design Matrix Initialisierung
+  for(i in 1:k){
+    X = cbind(X,x^i)                                                             # Polynomterme
+  }
+  beta_hat[[k]] = inv(t(X) %*% X) %*% t(X) %*% y                                 # Parameterschätzer
+  q[k]          = t(y - X %*% beta_hat[[k]]) %*% (y - X %*% beta_hat[[k]])       # q Funktionswert
+}
+
+
+# Visualisierung
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(2,2),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+
+# Iterationen über Subplots
+for(k in 1:k_max){
+
+  # Datenwerte
+  plot(
+  D$x_i,
+  D$y_i,
+  pch         = 16,
+  xlab        = "x",
+  ylab        = "y",
+  xlim        = c(0,21),
+  ylim        = c(-10, 40),
+  main        = sprintf("k = %1.0f, q = %3.1f", k, q[k]))
+
+  # Ausgleichspolynom
+  pol         = polyval(rev(as.vector(beta_hat[[k]])), D$x_i)
+  print(pol)
+  lines(
+  D$x_i,
+  pol)
+
+  # Speichern
+  dev.copy2pdf(
+  file        = file.path(fdir, "alm_1_ausgleichspolynom.pdf"),
+  width       = 7,
+  height      = 7)
+
+}
+```
+
+```{r, echo = FALSE, out.width = "60%"}
+knitr::include_graphics("1_Abbildungen/alm_1_ausgleichspolynom.pdf")
+```
+\vspace{-4mm}
+\footnotesize
+\center
+
+$\bullet (x_i, y_i)$ \hspace{2mm} \textbf{---} $f_{\hat{\beta}}(x) = \sum_{i=0}^k \hat{\beta}_i x^{i}$

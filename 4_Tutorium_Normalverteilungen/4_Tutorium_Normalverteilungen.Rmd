@@ -1,0 +1,1107 @@
+---
+fontsize: 8pt
+bibliography: 4_Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: yes
+    includes:
+      in_header: 4_header.tex
+---
+
+
+```{r, include = F}
+source("4_R_common.R")
+```
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%"}
+knitr::include_graphics("4_Abbildungen/wtfi_otto.png")
+```
+
+\vspace{2mm}
+
+\Huge
+Tutorium Allgemeines Lineares Modell
+\vspace{2mm}
+
+
+\normalsize
+BSc Psychologie SoSe 2022
+
+\vspace{2mm}
+\text{6. Termin: Normalverteilungen}
+
+\vspace{18mm}
+Belinda Fleischmann
+
+\vspace{3mm}
+\scriptsize
+Contents are based on [ALM course material](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2022/Allgemeines+Lineares+Modell.html) by [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+
+
+
+# Selbstkontrollfragen - Normalverteilungen
+\setstretch{1.1}
+\footnotesize
+\begin{enumerate}
+\item Definieren Sie die WDF eines multivariaten normalverteilten Zufallsvektors und erläutern Sie diese.
+\item Geben Sie die Definitionen des Erwartungswerts und der Kovarianzmatrix eines Zufallsvektors wieder.
+\item Was repräsentieren die Elemente einer Kovarianzmatrix eines Zufallsvektors?
+\item Welche Werte haben der Erwartungswert und die Kovarianzmatrix eines normalverteilten Zufallsvektors?
+\item Beweisen Sie die letzte Gleichung im Beweis der funktionalen Form der WDF der bivariaten Normalverteilung.
+\item Visualisieren Sie die WDF eines 2-dimensionalen normalverteilten Zufallsvektors mit den Parameterwerten
+\begin{align*}
+\mu := \begin{pmatrix}10\\15\end{pmatrix} \mbox{ und } \Sigma := \begin{pmatrix}3&1\\1&2\end{pmatrix}.
+\end{align*}
+Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+\item Geben Sie das Theorem zur nichtsingulären linearen Transformation multivariater Normalverteilungen wieder.
+\item Geben Sie das Theorem zur linear-affinen Transformation multivariater Normalverteilungen wieder.
+\item Geben Sie das Theorem zu Unabhängigen normalverteilten Zufallsvariablen wieder.
+\item Erläutern Sie den Begriff des sphärischen Kovarianzmatrixparameters.
+\item Skizzieren Sie den Beweis des Theorem zu Unabhängigen normalverteilten Zufallsvariablen.
+\end{enumerate}
+
+
+
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 1. Definieren Sie die WDF eines multivariaten normalverteilten Zufallsvektors und erläutern Sie diese.
+
+\vspace{3mm}
+\color{black}
+
+\footnotesize
+\justifying
+Die WDF eines multivariat normalverteilten Zufallsvektors ist definiert als
+\begin{align*}
+p : \mathbb{R}^n \to \mathbb{R}_{>0},\, \upsilon \mapsto p(\upsilon)
+:= (2\pi)^{-\frac{n}{2}}|\Sigma|^{-\frac{1}{2}}\exp\left(-\frac{1}{2}(\upsilon-\mu)^T \Sigma^{-1} (\upsilon-\mu)\right).
+\end{align*}
+Hierbei sind
+
+* $\mu \in \mathbb{R}^n$ der \textit{Erwartungswertparameter}, welche dem Wert höchster WD entspricht
+* $\Sigma \in \mathbb{R}^{n \times n}$ der positive-definite \textit{Kovarianzmatrixparameter}
+* $(2\pi)^{-\frac{n}{2}}|\Sigma|^{-\frac{1}{2}}$ die Normalisierungskonstante, wobei $|\Sigma|$ die Determinante von $\Sigma$ ist, \color{darkcyan}(Anm.: die Normalisierungskonstante wird verwendet, sodass die Fläche unter dem Graphen der WDF $1$ ergibt)
+* \color{black} und $\Sigma^{-1}$ die (ebenfalls positiv-definite) Inverse des Kovarianzmatrixparameters
+
+Die WDF nimmt (als Definitionsmenge/"input") einen Wert $\upsilon \in \mathbb{R}^n$ aus dem Ergebnisraum von $y$ (also einen $n$-dimensionalen Wert, den der Zufallsvektor $y$ annehmen kann) und gibt eine reelle Zahl ($\mathbb{R}_{>0}$) zurück, welche die Wahrscheinlichkeitsdichte beschreibt. 
+
+\color{darkcyan}
+Anmerkung: 
+
+* \color{darkcyan} Werte der WDF für bestimmte $\upsilon \in \mathbb{R}^n$ sind \textit{nicht} die Wahrscheinlichkeiten dafür, dass die Zufallsvariable $y$ diesen Wert $\upsilon$ annimmt, sondern die Wahrscheinlichkeitsdichte für bestimmte $\upsilon$.
+* Die Inverse einer p.d. Matrix ist auch p.d.
+* Wir bezeichnen die WDF eines multivariat normalverteilten Zufallsvektors bezeichnen auch mit $N(\upsilon;\mu,\Sigma)$.
+
+
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 2. Geben Sie die Definitionen des Erwartungswerts und der Kovarianzmatrix eines Zufallsvektors wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{definition}[Erwartungswert und Kovarianzmatrix von Zufallsvektoren]
+\justifying
+$y$ sei ein $n$-dimensionaler Zufallvektor. Dann ist der \textit{Erwartungwert}
+von $y$ definiert als der $n$-dimensionale Vektor
+\begin{equation}
+\mathbb{E}(y) :=
+\left(\mathbb{E}(y_1), ..., \mathbb{E}(y_n)\right)^T 
+\end{equation}
+und die  \textit{Kovarianzmatrix} von $y$ ist definiert als die $n \times n$ Matrix
+\begin{equation}
+\mathbb{C}(y) := \mathbb{E}\left((y - \mathbb{E}(y))(y - \mathbb{E}(y))^T \right)
+\end{equation}
+\end{definition}
+
+
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3. Was repräsentieren die Elemente einer Kovarianzmatrix eines Zufallsvektors?
+
+\vspace{3mm}
+\color{black}
+\small
+Einzelne Elemente $\mathbb{C}(y_i,y_j)$ der Kovarianzmatrix $\mathbb{C}(y)$ repräsentieren die Kovarianzen von je zwei der Komponenten $y_1, ..., y_n$ von $y$.
+
+\color{darkcyan}
+Anmerkung: 
+
+* \color{darkcyan}Auf der Diagonalen stehen die Varianzen der jeweiligen Komponenten.
+
+
+
+
+
+# Definition und Eigenschaften
+
+\color{darkcyan}
+Zur Erinnerung
+
+\footnotesize
+\begin{theorem}[Kovarianzmatrix eines Zufallsvektors]
+\justifying
+\normalfont
+$y$ sei ein $n$-dimensionaler Zufallvektor und $\mathbb{C}(y)$ sei seine Kovarianzmatrix.
+Dann gilt
+\begin{equation}
+\mathbb{C}(y) 
+= \left(\mathbb{C}(y_i,y_j)\right)_{1 \le i,j \le n}  
+= 
+\begin{pmatrix}
+\mathbb{C}(y_1,y_1) & \mathbb{C}(y_1,y_2) & \cdots & \mathbb{C}(y_1,y_n) \\
+\mathbb{C}(y_2,y_1) & \mathbb{C}(y_2,y_2) & \cdots & \mathbb{C}(y_2,y_n) \\
+\vdots              & \vdots              & \ddots & \vdots              \\
+\mathbb{C}(y_n,y_1) & \mathbb{C}(y_n,y_2) & \cdots & \mathbb{C}(y_n,y_n) \\
+\end{pmatrix}.
+\end{equation}
+\end{theorem}
+
+
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4. Welche Werte haben der Erwartungswert und die Kovarianzmatrix eines normalverteilten Zufallsvektors?
+
+\vspace{3mm}
+\color{black}
+\small
+Der Erwartungswert eines normalverteilten Zufallsvektors entspricht seinem Erwartungswertparameter, formal $\mathbb{E}(y) = \mu$ und die Kovarianzmatrix eines normalverteilten Zufallsvektors entspricht seinem Kovarianzmatrixparameter, formal $\mathbb{C}(y) = \Sigma$.
+
+
+
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Beweisen Sie die letzte Gleichung im Beweis der funktionalen Form der WDF der bivariaten Normalverteilung.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 1/6
+
+Gefragt ist nach dem Beweis für die Gleichung 
+
+\tiny
+\begin{align*}
+\begin{split}
+& (2\pi)^{-\frac{2}{2}}\left(\sigma_{22}\sigma_{11}\sqrt{(1 -\rho^2)}\right)^{-1} \\
+& \times 
+    \exp\left(
+    -\frac{1}{2}
+     \frac{1}{\sigma_{11}^2\sigma_{22}^2 - \sigma_{12}^4}
+     \begin{pmatrix}
+     \upsilon_1 - \mu_1 & \upsilon_2 - \mu_2
+     \end{pmatrix}
+     \begin{pmatrix*}[r]
+     \sigma_{22}^2 & -\sigma_{12}^2 \\
+    -\sigma_{12}^2 &  \sigma_{11}^2 \\
+     \end{pmatrix*}
+     \begin{pmatrix}
+     \upsilon_1 - \mu_1 \\
+     \upsilon_2 - \mu_2 \\
+     \end{pmatrix}
+     \right) \\
+& = \frac{1}{2\pi(1-\rho^2)^{\sfrac{1}{2}}\sigma_{11}\sigma_{22}} \\
+& \times 
+    \exp\left(
+    -\frac{1}{2(1-\rho^2)}
+    \left(\left(\frac{\upsilon_1-\mu_1}{\sigma_{11}}\right)^2
+    -2\rho\left(\frac{\upsilon_1-\mu_1}{\sigma_{11}}\right)
+          \left(\frac{\upsilon_2-\mu_2}{\sigma_{22}}\right)
+         +\left(\frac{\upsilon_2-\mu_2}{\sigma_{22}}\right)^2
+    \right)
+    \right)
+\end{split}
+\end{align*}
+
+\color{darkcyan}
+\normalsize
+Der Beweis ergibt sich aus der Definition der Matrixmultiplikation
+
+
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\color{darkcyan}
+Zur Erinnerung 
+
+\color{black}
+\footnotesize
+\setstretch{1.7}
+\begin{definition}[Matrixmultiplikation]
+Es seien $A\in \mathbb{R}^{n \times m}$ und $B \in \mathbb{R}^{m \times k}$. Dann
+ist  die \textit{Matrixmultiplikation} von $A$ und $B$ definiert als die Abbildung
+\begin{equation}
+\cdot : \mathbb{R}^{n\times m} \times \mathbb{R}^{m\times k} \to \mathbb{R}^{n \times k}, \,
+(A,B) \mapsto \cdot(A,B) := AB
+\end{equation}
+mit
+\begin{align}
+\begin{split}
+AB
+& =
+\begin{pmatrix*}[c]
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{pmatrix*}
+\begin{pmatrix*}[c]
+b_{11} & b_{12} & \cdots & b_{1k} \\
+b_{21} & b_{22} & \cdots & b_{2k} \\
+\vdots & \vdots & \ddots & \vdots \\
+b_{m1} & b_{m2} & \cdots & b_{mk}
+\end{pmatrix*}
+\\
+&
+:=
+\begin{pmatrix*}[c]
+\sum_{i=1}^m a_{1i}b_{i1} & \sum_{i=1}^m a_{1i}b_{i2} & \cdots & \sum_{i=1}^m a_{1i}b_{ik}  \\
+\sum_{i=1}^m a_{2i}b_{i1} & \sum_{i=1}^m a_{2i}b_{i2} & \cdots & \sum_{i=1}^m a_{2i}b_{ik}  \\
+\vdots                    & \vdots                    & \ddots & \vdots                     \\
+\sum_{i=1}^m a_{ni}b_{i1} & \sum_{i=1}^m a_{ni}b_{i2} & \cdots & \sum_{i=1}^m a_{ni}b_{ik}
+\end{pmatrix*}
+\end{split}
+\end{align}
+\end{definition}
+
+
+
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Beweisen Sie die letzte Gleichung im Beweis der funktionalen Form der WDF der bivariaten Normalverteilung.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 2/6
+
+Durch Matrixmultiplikation ergibt sich 
+\tiny
+\begin{align*}
+\begin{split}
+& \begin{pmatrix}
+     \upsilon_1 - \mu_1 & \upsilon_2 - \mu_2
+     \end{pmatrix}
+     \begin{pmatrix*}[r]
+     \sigma_{22}^2 & -\sigma_{12}^2 \\
+    -\sigma_{12}^2 &  \sigma_{11}^2 \\
+     \end{pmatrix*}
+     \begin{pmatrix}
+     \upsilon_1 - \mu_1 \\
+     \upsilon_2 - \mu_2 \\
+     \end{pmatrix} \\
+& = \begin{pmatrix}
+     (\upsilon_1 - \mu_1) \sigma_{22}^2 + (\upsilon_2 - \mu_2) (-\sigma_{12}^2)
+      & (\upsilon_1 - \mu_1) (-\sigma_{12}^2) + (\upsilon_2 - \mu_2) \sigma_{11}^2
+    \end{pmatrix}
+    \begin{pmatrix}
+      \upsilon_1 - \mu_1 \\
+      \upsilon_2 - \mu_2 \\
+     \end{pmatrix} \\
+& = \left( (\upsilon_1 - \mu_1) \sigma_{22}^2 + (\upsilon_2 - \mu_2) (-\sigma_{12}^2)\right) (\upsilon_1 - \mu_1) + \left((\upsilon_1 - \mu_1) (-\sigma_{12}^2) + (\upsilon_2 - \mu_2) \sigma_{11}^2)\right) (\upsilon_2 - \mu_2) \\
+& = \hspace{0.5mm} (\upsilon_1 - \mu_1)^2 \sigma_{22}^2 - (\upsilon_2 - \mu_2) \sigma_{12}^2 (\upsilon_1 - \mu_1) - (\upsilon_1 - \mu_1) \sigma_{12}^2 (\upsilon_2 - \mu_2) +  (\upsilon_2 - \mu_2)^2 \sigma_{11}^2) \\
+& = \hspace{0.5mm} (\upsilon_1 - \mu_1)^2 \sigma_{22}^2  - 2 (\upsilon_2 - \mu_2) \sigma^2_{12} (\upsilon_1 - \mu_1)  + (\upsilon_2 - \mu_2)^2 \sigma_{11}^2
+\end{split}
+\end{align*}
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Beweisen Sie die letzte Gleichung im Beweis der funktionalen Form der WDF der bivariaten Normalverteilung.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 3/6
+
+\small 
+mit der Definition von $\rho$
+
+\tiny
+\begin{align*}
+\rho
+= \frac{\sigma_{12}^2}{\sigma_{11}\sigma_{22}}
+\Rightarrow
+\rho  = \frac{\sigma_{21}^2}{\sigma_{11}\sigma_{22}}
+\Rightarrow
+\sigma_{12}^2 = \sigma_{21}^2 = \rho \sigma_{11}\sigma_{22}
+\end{align*}
+
+\small 
+lässt sich der Term 
+\tiny
+\begin{align*}
+(\upsilon_1 - \mu_1)^2 \sigma_{22}^2  - 2 (\upsilon_2 - \mu_2) \sigma^2_{12} (\upsilon_1 - \mu_1)  + (\upsilon_2 - \mu_2)^2  \sigma_{11}^2
+\end{align*}
+
+\small
+umschreiben zu
+\tiny
+\begin{align*}
+(\upsilon_1 - \mu_1)^2 \sigma_{22}^2 - 2 (\upsilon_1 - \mu_1) (\upsilon_2 - \mu_2)  \rho\sigma_{11}\sigma_{22}  + (\upsilon_2 - \mu_2)^2 \sigma_{11}^2
+\end{align*}
+
+
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Beweisen Sie die letzte Gleichung im Beweis der funktionalen Form der WDF der bivariaten Normalverteilung.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 4/6
+Anschließend können wir den Term umformen wie folgt
+\tiny
+\begin{align*}
+\begin{split}
+& \left. (\upsilon_1 - \mu_1)^2 \sigma_{22}^2 - 2 (\upsilon_1 - \mu_1) (\upsilon_2 - \mu_2)  \rho\sigma_{11}\sigma_{22}  + (\upsilon_2 - \mu_2)^2 \sigma_{11}^2 \quad \right 
+\vert \cdot \frac{\sigma^2_{11}}{\sigma^2_{11}} \frac{\sigma^2_{22}}{\sigma^2_{22}}\\
+& = (\upsilon_1 - \mu_1)^2 \frac{\sigma_{22}^2\sigma^2_{11}\sigma^2_{22}}{\sigma^2_{11}\sigma^2_{22}}
+- 2 \rho (\upsilon_1 - \mu_1) (\upsilon_2 - \mu_2) \frac{\sigma_{11}\sigma_{22}\sigma^2_{11}\sigma^2_{22}}{\sigma^2_{11}\sigma^2_{22}}
++ (\upsilon_2 - \mu_2)^2 \frac{\sigma_{11}^2\sigma^2_{11}\sigma^2_{22}}{\sigma^2_{11}\sigma^2_{22}} \\
+& = \sigma^2_{11}\sigma^2_{22}\left((\upsilon_1 - \mu_1)^2 \frac{1}{\sigma^2_{11}}
+- 2 \rho (\upsilon_1 - \mu_1) (\upsilon_2 - \mu_2) \frac{1}{\sigma_{11}\sigma_{22}}
++ (\upsilon_2 - \mu_2)^2 \frac{1}{\sigma^2_{22}} \right)\\
+& = \sigma^2_{11}\sigma^2_{22}\left(\frac{(\upsilon_1 - \mu_1)^2 }{\sigma^2_{11}}
+- 2 \rho\frac{(\upsilon_1 - \mu_1) (\upsilon_2 - \mu_2)}{\sigma_{11}\sigma_{22}}
++ \frac{(\upsilon_2 - \mu_2)^2}{\sigma^2_{22}} \right) \\
+& = \sigma^2_{11}\sigma^2_{22}\left(\left(\frac{\upsilon_1 - \mu_1}{\sigma_{11}}\right)^2
+- 2 \rho\left(\frac{(\upsilon_1 - \mu_1)}{\sigma_{11}}\right) \left(\frac{(\upsilon_2 - \mu_2)}{\sigma_{22}}\right)
++ \left(\frac{\upsilon_2 - \mu_2}{\sigma_{22}}\right)^2\right)
+\end{split}
+\end{align*}
+
+
+
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Beweisen Sie die letzte Gleichung im Beweis der funktionalen Form der WDF der bivariaten Normalverteilung.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 5/6
+
+Abschließend erhalten wir mit
+
+\tiny
+\begin{align*}
+\begin{split}
+& -\frac{1}{2}\frac{1}{\sigma^2_{11}\sigma^2_{22}-\sigma^4_{12}}
+= -\frac{1}{2}\frac{1}{\sigma^2_{11}\sigma^2_{22}-\left(\rho\sigma_{11}\sigma_{22}\right)^2} 
+= -\frac{1}{2}\frac{1}{\sigma^2_{11}\sigma^2_{22}-\rho^2\sigma^2_{11}\sigma^2_{22}}
+\end{split}
+\end{align*}
+
+\small
+und
+
+\tiny
+\begin{align*}
+\begin{split}
+& -\frac{1}{2}\frac{1}{\sigma^2_{11}\sigma^2_{22}-\rho^2\sigma^2_{11}\sigma^2_{22}}
+\sigma^2_{11}\sigma^2_{22}\left(\left(\frac{\upsilon_1 - \mu_1}{\sigma_{11}}\right)^2
+- 2 \rho\left(\frac{(\upsilon_1 - \mu_1)}{\sigma_{11}}\right) \left(\frac{(\upsilon_2 - \mu_2)}{\sigma_{22}}\right)
++ \left(\frac{\upsilon_2 - \mu_2}{\sigma_{22}}\right)^2\right) \\
+& = -\frac{1}{2(1-\rho^2)}
+    \left(\left(\frac{\upsilon_1-\mu_1}{\sigma_{11}}\right)^2
+    -2\rho\left(\frac{\upsilon_1-\mu_1}{\sigma_{11}}\right)
+          \left(\frac{\upsilon_2-\mu_2}{\sigma_{22}}\right)
+         +\left(\frac{\upsilon_2-\mu_2}{\sigma_{22}}\right)^2
+    \right)
+\end{split}
+\end{align*}
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Beweisen Sie die letzte Gleichung im Beweis der funktionalen Form der WDF der bivariaten Normalverteilung.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 6/6
+
+
+
+
+\small
+die zu beweisende Gleichung
+
+\tiny
+\begin{align*}
+\begin{split}
+& (2\pi)^{-\frac{2}{2}}\left(\sigma_{22}\sigma_{11}\sqrt{(1 -\rho^2)}\right)^{-1} \\
+& \times 
+    \exp\left(
+    -\frac{1}{2}
+     \frac{1}{\sigma_{11}^2\sigma_{22}^2 - \sigma_{12}^4}
+     \begin{pmatrix}
+     \upsilon_1 - \mu_1 & \upsilon_2 - \mu_2
+     \end{pmatrix}
+     \begin{pmatrix*}[r]
+     \sigma_{22}^2 & -\sigma_{12}^2 \\
+    -\sigma_{12}^2 &  \sigma_{11}^2 \\
+     \end{pmatrix*}
+     \begin{pmatrix}
+     \upsilon_1 - \mu_1 \\
+     \upsilon_2 - \mu_2 \\
+     \end{pmatrix}
+     \right) \\
+& = \frac{1}{2\pi(1-\rho^2)^{\sfrac{1}{2}}\sigma_{11}\sigma_{22}} \\
+& \times 
+    \exp\left(
+    -\frac{1}{2(1-\rho^2)}
+    \left(\left(\frac{\upsilon_1-\mu_1}{\sigma_{11}}\right)^2
+    -2\rho\left(\frac{\upsilon_1-\mu_1}{\sigma_{11}}\right)
+          \left(\frac{\upsilon_2-\mu_2}{\sigma_{22}}\right)
+         +\left(\frac{\upsilon_2-\mu_2}{\sigma_{22}}\right)^2
+    \right)
+    \right)
+\end{split}
+\end{align*}
+
+
+
+
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 6. Visualisieren Sie die WDF eines 2-dimensionalen normalverteilten Zufallsvektors mit den Parameterwerten $\mu := \begin{pmatrix}10\\15\end{pmatrix}$ und $\Sigma:=\begin{pmatrix}3&1\\1&2\end{pmatrix}$. Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 1/9 - Visualisierung der WDF
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+
+```{r, eval = F, echo = F}
+
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+
+# Parameterdefinition
+mu     = c(10,15)               # \mu \in \mathbb{R}^2
+Sigma  = matrix(c(3,1,1,2), 2)  # \Sigma in \mathbb{R}^{2 \times 2}
+
+# Ergebnisraumdefintion
+y_nin  = 0                                       # y_i Minimum
+y_nax  = 20                                      # y_i Maximum
+y_res  = 1e3                                     # y_i Auflösung (1e3 --> 1000 Werte)
+y_1    = seq(y_nin, y_nax, length.out = y_res)   # y_1 Raum
+y_2    = seq(y_nin, y_nax, length.out = y_res)   # y_2 Raum
+y      = expand.grid(y_1,y_2)                    # y = (y_1,y_2)^T Raum
+
+# Wahrscheinlichkeitsdichtefunktionauswertung
+WDF = dmvnorm(as.matrix(y), mu, Sigma)  # Multivariate WDF
+p      = matrix(WDF, nrow = y_res)      # Matrixkonversion der WDF
+
+# Abbildungsparameter
+graphics.off()
+fdir        =  file.path(getwd(), "4_Abbildungen")
+dev.new()
+par(
+  family      = "sans",
+  pty         = "s",
+  bty         = "l",
+  lwd         = 1,
+  las         = 1,
+  mgp         = c(2,1,0),
+  xaxs        = "i",
+  yaxs        = "i",
+  font.main   = 1,
+  cex         = .7,
+  cex.main    = 1.2)
+
+# Visualisierung
+contour(
+  y_1,
+  y_2,
+  p,
+  xlim      =  c(y_nin,y_nax),
+  ylim      =  c(y_nin,y_nax),
+  xlab      = TeX("$\\upsilon_1$"),
+  ylab      = TeX("$\\upsilon_2$"),
+  nlevels   = 5)
+
+# export to pdf
+dev.copy2pdf(                                                                    # export to PDF
+             file   = file.path("4_Abbildungen", "alm_4_mvnwdf.pdf"),           # filename
+             width  = 8,                                                         # PDF width
+             height = 4                                                          # PDF height
+             )
+```
+
+```{r, eval = F}
+
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+
+# Parameterdefinition
+mu     = c(10,15)                                # Erwartungswertparameter
+Sigma  = matrix(c(3,1,1,2), 2)                   # Kovarianzmatrixparameter
+
+# Ergebnisraumdefintion
+y_min  = 0                                       # y_i Minimum
+y_max  = 20                                      # y_i Maximum
+y_res  = 1e3                                     # y_i Auflösung (1e3 --> 1000 Werte)
+y_1    = seq(y_nin, y_nax, length.out = y_res)   # y_1 Raum
+y_2    = seq(y_nin, y_nax, length.out = y_res)   # y_2 Raum
+y      = expand.grid(y_1,y_2)                    # y = (y_1,y_2)^T Raum
+
+# Wahrscheinlichkeitsdichtefunktionauswertung
+WDF = dmvnorm(as.matrix(y), mu, Sigma)           # Multivariate WDF (als Vektor)
+p      = matrix(WDF, nrow = y_res)               # Matrixkonversion der WDF
+```
+
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 6. Visualisieren Sie die WDF eines 2-dimensionalen normalverteilten Zufallsvektors mit den Parameterwerten $\mu := \begin{pmatrix}10\\15\end{pmatrix}$ und $\Sigma:=\begin{pmatrix}3&1\\1&2\end{pmatrix}$. Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 2/9 - Visualisierung der WDF
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+
+```{r, eval = F}
+# Visualisierung
+contour(
+  y_1,
+  y_2,
+  p,
+  xlim      =  c(y_nin,y_nax),
+  ylim      =  c(y_nin,y_nax),
+  xlab      = TeX("$\\upsilon_1$"),
+  ylab      = TeX("$\\upsilon_2$"),
+  nlevels   = 5)
+```
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 6. Visualisieren Sie die WDF eines 2-dimensionalen normalverteilten Zufallsvektors mit den Parameterwerten $\mu := \begin{pmatrix}10\\15\end{pmatrix}$ und $\Sigma:=\begin{pmatrix}3&1\\1&2\end{pmatrix}$. Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 3/9 - Visualisierung der WDF
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+
+
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics("4_Abbildungen/alm_4_mvnwdf.pdf")
+```
+
+
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 6. Visualisieren Sie die WDF eines 2-dimensionalen normalverteilten Zufallsvektors mit den Parameterwerten $\mu := \begin{pmatrix}10\\15\end{pmatrix}$ und $\Sigma:=\begin{pmatrix}3&1\\1&2\end{pmatrix}$. Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 4/9 - Realisierungen
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+
+```{r}
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+
+# Parameterdefinition
+mu     = c(10,15)               # \mu \in \mathbb{R}^2
+Sigma  = matrix(c(3,1,1,2), 2)  # \Sigma in \mathbb{R}^{2 \times 2}
+
+# Zufallsvektorrealisierungen
+Realisierungen = rmvnorm(n = 100, mu, Sigma)
+print(Realisierungen[1:8,])    # Ausgabe der ersten 8 Realisierungen
+```
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 6. Visualisieren Sie die WDF eines 2-dimensionalen normalverteilten Zufallsvektors mit den Parameterwerten $\mu := \begin{pmatrix}10\\15\end{pmatrix}$ und $\Sigma:=\begin{pmatrix}3&1\\1&2\end{pmatrix}$. Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 5/9 - Visualisierung der 100 Realisierungen
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+
+```{r, eval = F, echo = F}
+
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+library(latex2exp)
+
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+
+# Parameterdefinition
+mu     = c(10,15)               # \mu \in \mathbb{R}^2
+Sigma  = matrix(c(3,1,1,2), 2)  # \Sigma in \mathbb{R}^{2 \times 2}
+
+# Zufallsvektorrealisierungen
+Realisierungen = rmvnorm(n = 100, mu, Sigma)
+print(Realisierungen[1:8,])    # Ausgabe der ersten 8 Realisierungen
+
+# Abbildungsparameter
+graphics.off()
+fdir        =  file.path(getwd(), "4_Abbildungen")
+dev.new()
+par(
+  family      = "sans",
+  pty         = "s",
+  bty         = "l",
+  lwd         = 1,
+  las         = 1,
+  mgp         = c(2,1,0),
+  xaxs        = "i",
+  yaxs        = "i",
+  font.main   = 1,
+  cex         = .7,
+  cex.main    = 1.2)
+
+# Visualisierung
+plot(
+  Realisierungen,
+  xlim  = c(0,20),
+  ylim  = c(0,20),
+  xlab  = TeX("$\\upsilon_1$"),
+  ylab  = TeX("$\\upsilon_2$"),
+  pch   = 21,
+  col   = "white",
+  bg    = "gray60",
+  cex   = 1.5)
+
+# Speichern
+dev.copy2pdf(file=file.path(fdir, "alm_4_skf_6.pdf"))
+```
+
+
+
+```{r, eval = F, echo = T}
+
+# R Paket für latex 
+library(latex2exp)
+
+# Abbildungsparameter
+par(
+  family      = "sans",
+  pty         = "s",      # plotting type "s" = square plotting region
+  bty         = "l",      # boxtype 
+  lwd         = 1,
+  las         = 1,        # Achsenbeschriftung 1 = horizontal
+  mgp         = c(2,1,0), # margin line für Achsenbeschriftung und Linie
+  xaxs        = "i",
+  yaxs        = "i",
+  font.main   = 1,
+  cex         = .7,
+  cex.main    = 1.2)
+```
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 6. Visualisieren Sie die WDF eines 2-dimensionalen normalverteilten Zufallsvektors mit den Parameterwerten $\mu := \begin{pmatrix}10\\15\end{pmatrix}$ und $\Sigma:=\begin{pmatrix}3&1\\1&2\end{pmatrix}$. Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 6/9 - Visualisierung der 100 Realisierungen
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+```{r, eval = F, echo = T}
+# Visualisierung
+plot(
+  Realisierungen,
+  xlim  = c(min(Realisierungen[,1])-1,max(Realisierungen[,1])+1),
+  ylim  = c(min(Realisierungen[,2])-1,max(Realisierungen[,2])+1),
+  xlab  = TeX("$\\upsilon_1$"),
+  ylab  = TeX("$\\upsilon_2$"),
+  pch   = 21,        # plotting character 21 = kl. Kreis
+  col   = "white",   # color Umrandung
+  bg    = "gray60",  # background color
+  cex   = 1.5)       # Größe der pch
+```
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 6. Visualisieren Sie die WDF eines 2-dimensionalen normalverteilten Zufallsvektors mit den Parameterwerten $\mu := \begin{pmatrix}10\\15\end{pmatrix}$ und $\Sigma:=\begin{pmatrix}3&1\\1&2\end{pmatrix}$. Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 7/9 - Visualisierung der 100 Realisierungen
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics("4_Abbildungen/alm_4_skf_6.pdf")
+```
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 6. Visualisieren Sie die WDF eines 2-dimensionalen normalverteilten Zufallsvektors mit den Parameterwerten $\mu := \begin{pmatrix}10\\15\end{pmatrix}$ und $\Sigma:=\begin{pmatrix}3&1\\1&2\end{pmatrix}$. Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+
+
+
+```{r, eval = F, echo = F}
+
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+library(latex2exp)
+
+# R Paket für multivariate Normalverteilungen
+library(mvtnorm)
+
+# Parameterdefinition
+mu     = c(10,15)               # \mu \in \mathbb{R}^2
+Sigma  = matrix(c(3,1,1,2), 2)  # \Sigma in \mathbb{R}^{2 \times 2}
+
+# Zufallsvektorrealisierungen
+Realisierungen = rmvnorm(n = 100, mu, Sigma)
+print(Realisierungen[1:8,])    # Ausgabe der ersten 8 Realisierungen
+
+# Abbildungsparameter
+graphics.off()
+fdir        =  file.path(getwd(), "4_Abbildungen")
+dev.new()
+par(
+  family      = "sans",
+  pty         = "s",
+  bty         = "l",
+  lwd         = 1,
+  las         = 1,
+  mgp         = c(2,1,0),
+  xaxs        = "i",
+  yaxs        = "i",
+  font.main   = 1,
+  cex         = .7,
+  cex.main    = 1.2)
+
+# Ergebnisraumdefintion
+y_nin  = 0                                       # y_i Minimum
+y_nax  = 20                                      # y_i Maximum
+y_res  = 1e3                                     # y_i Auflösung (1e3 --> 1000 Werte)
+y_1    = seq(y_nin, y_nax, length.out = y_res)   # y_1 Raum
+y_2    = seq(y_nin, y_nax, length.out = y_res)   # y_2 Raum
+y      = expand.grid(y_1,y_2)                    # y = (y_1,y_2)^T Raum
+
+# Wahrscheinlichkeitsdichtefunktionauswertung
+WDF = dmvnorm(as.matrix(y), mu, Sigma)  # Multivariate WDF
+p      = matrix(WDF, nrow = y_res)      # Matrixkonversion der WDF
+
+# Visualisierung
+contour(
+  y_1,
+  y_2,
+  p,
+  xlim      =  c(y_nin,y_nax),
+  ylim      =  c(y_nin,y_nax),
+  xlab      = TeX("$\\upsilon_1$"),
+  ylab      = TeX("$\\upsilon_2$"),
+  nlevels   = 5)
+points(
+  Realisierungen,
+  pch   = 21,
+  col   = "white",
+  bg    = "gray60",
+  cex   = 1)
+
+# Speichern
+dev.copy2pdf(file=file.path("4_Abbildungen/alm_4_skf_6_overlapp.pdf"))
+```
+
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 8/9 - Visualisierung der WDF und der 100 Realisierung
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+
+```{r, eval = F, echo = T}
+# Visualisierung der WDF und der 100 Realisierung
+contour(
+  y_1,
+  y_2,
+  p,
+  xlim      =  c(y_nin,y_nax),
+  ylim      =  c(y_nin,y_nax),
+  xlab      = TeX("$\\upsilon_1$"),
+  ylab      = TeX("$\\upsilon_2$"),
+  nlevels   = 5)
+points(
+  Realisierungen,
+  pch   = 21,
+  col   = "white",
+  bg    = "gray60",
+  cex   = 1)
+
+```
+
+
+
+
+
+
+# Definition und Eigenschaften - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 6. Visualisieren Sie die WDF eines 2-dimensionalen normalverteilten Zufallsvektors mit den Parameterwerten $\mu := \begin{pmatrix}10\\15\end{pmatrix}$ und $\Sigma:=\begin{pmatrix}3&1\\1&2\end{pmatrix}$. Generieren Sie 100 Realisierungen aus dieser Verteilung und visualisieren Sie diese.
+
+
+\vspace{3mm}
+\color{black}
+\small
+Teil 9/9 - Visualisierung der WDF und der 100 Realisierung
+\footnotesize
+\setstretch{1.1}
+\vspace{1mm}
+
+
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics("4_Abbildungen/alm_4_skf_6_overlapp.pdf")
+```
+
+
+
+
+
+
+# Transformation - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 7. Geben Sie das Theorem zur nichtsingulären linearen Transformation multivariater Normalverteilungen wieder.
+
+\vspace{3mm}
+\color{black}
+\small
+\begin{theorem}[Nichtsinguläre lineare Transformation]
+\justifying
+\normalfont
+$x \sim N(\mu,\Sigma)$ sei ein normalverteilter $n$-dimensionaler Zufallsvektor
+und es sei $y := Ax$ mit einer invertierbaren Matrix $A \in \mathbb{R}^{n \times n}$.
+Dann gilt
+\begin{equation}
+y \sim N\left(A\mu,A\Sigma A^T\right)
+\end{equation}
+\end{theorem}
+
+\small
+\color{darkcyan}
+Anmerkung:
+
+* \color{darkcyan}Eine Matrix ist singulär, wenn die Determinante gleich $0$ ist und sie entsprechend auch keine Inverse besitzt
+
+
+
+
+
+# Transformation - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 8. Geben Sie das Theorem zur linear-affinen Transformation multivariater Normalverteilungen wieder.
+
+\vspace{3mm}
+\color{black}
+\small
+\begin{theorem}[Linear-affine Transformation]
+\justifying
+\normalfont
+$x \sim N(\mu,\Sigma)$ sei ein normalverteilter $n$-dimensionaler Zufallsvektor
+und es sei $y := Ax + b$ mit $A \in \mathbb{R}^{m \times n}$ und $b \in \mathbb{R}^m$.
+Dann gilt
+\begin{equation}
+y \sim N\left(A\mu + b,A\Sigma A^T\right)
+\end{equation}
+\end{theorem}
+
+
+
+
+
+# Unabhängigkeit - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 9. Geben Sie das Theorem zu Unabhängigen normalverteilten Zufallsvariablen wieder.
+
+\vspace{3mm}
+\color{black}
+\small
+\begin{theorem}[Unabhängige normalverteilte Zufallsvariablen]
+\justifying
+\normalfont
+Für $i = 1,...,n$ seien $N(\upsilon_i; \mu_i,\sigma^2)$ die WDFen von $n$ unabhängigen
+univariaten normalverteilten Zufallsvariablen $y_1,...,y_n$ mit $\mu_1,...,\mu_n \in \mathbb{R}$
+und $\sigma^2 > 0$. Weiterhin sei $N(\upsilon;\mu,\sigma^2I_n)$ die WDF eines $n$-variaten
+Zufallsvektors $y$ mit Erwartungswertparameter $\mu := (\mu_1,...,\mu_n) \in \mathbb{R}^n$.
+Dann gilt
+\begin{equation}
+p_y(\upsilon) = p_{y_1,...,y_n}(\upsilon_1,...,\upsilon_n) = \prod_{i=1}^n p_{y_i}(\upsilon_i)
+\end{equation}
+und insbesondere
+\begin{equation}
+N\left(\upsilon;\mu,\sigma^2I_n\right) = \prod_{i=1}^n N\left(\upsilon_i;\mu_i,\sigma^2\right).
+\end{equation}
+\end{theorem}
+
+
+
+
+
+# Unabhängigkeit - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 10. Erläutern Sie den Begriff des sphärischen Kovarianzmatrixparameters.
+\vspace{3mm}
+\color{black}
+\small
+
+\setstretch{1.2}
+\justify
+
+* Ein \textit{sphärischer} Kovarianzmatrixparameter hat die Form $\sigma^2 I_n$
+* Sphärische Kovarianzmatrixparamter von $n$-variaten Normalverteilungen entsprechen $n$ unabhängigen univariaten Normalverteilungen und umgekehrt. 
+* \color{darkcyan} Die sphärische Form spiegelt die Unabhängigkeit der univariaten Zufallsvariablen wieder, da alle nicht-Diagonal-Elemente gleich $0$ sind (i.e. $(\sigma^2 I_n)_{ij}=0$ für $i\neq j$) und ensprechend keine Kovarianzen existieren. 
+
+\vspace{2mm}
+\color{darkcyan}
+\setstretch{1}
+Beispiel
+\footnotesize
+
+Für $i = 1, .., 5$ seien seien $N(\upsilon; \mu_i,\sigma^2)$ die WDFen von $n$ unabhängigen **univariaten** normalverteilten Zufallsvariablen $y_1,...,y_n$ mit $\mu_1,...,\mu_n \in \mathbb{R}$
+und $\sigma^2 = 9$. Weiterhin sei $N(\upsilon;\mu,\sigma^2I_n)$ die WDF eines $n$-variaten (**multivariaten**) Zufallsvektors $y$ mit Erwartungswertparameter $\mu := (\mu_1,...,\mu_n) \in \mathbb{R}^n$. Dann gilt 
+
+\begin{align*}
+N\left(\upsilon;\mu,\sigma^2 I_n\right) = \prod_{i=1}^n N\left(\upsilon_i;\mu_i,\sigma^2=9\right).
+\end{align*}
+\vspace{-1mm}
+mit 
+\vspace{-1mm}
+\begin{align*}
+\sigma^2 I_n = 9 I_n = 9 \begin{pmatrix}1&0&0&0&0\\0&1&0&0&0\\0&0&1&0&0\\0&0&0&1&0\\0&0&0&0&1\end{pmatrix} 
+= \begin{pmatrix}9&0&0&0&0\\0&9&0&0&0\\0&0&9&0&0\\0&0&0&9&0\\0&0&0&0&9\end{pmatrix}
+\end{align*}
+
+
+
+# Unabhängigkeit - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 11. Skizzieren Sie den Beweis des Theorem zu Unabhängigen normalverteilten Zufallsvariablen.
+\vspace{3mm}
+\color{black}
+\small
+
+Zuerst schreiben wir die multivariate WDF $N\left(\upsilon;\mu,\sigma^2 I_n\right)$ nach der Definition einer WDF eines multivariaten normalverteilen Zufallsvektors auf, wobei wir anstelle des Kovarianzmatrixparameters $\Sigma$ den sphärischen Kovarianzmatrixparameter $\sigma^2 I_n$ einsetzen.
+
+Da der sphärische Kovarianzmatrixparameter eine Diagonalmatrix ist, entspricht dessen Determinante dem Produkt der Diagonaleinträge und der **Term vor der Exponantialfunktion** lässt sich umschreiben zu einem $n$-fachen Produkt der Normalisierungskonstante. 
+
+Der **Term der Exponentialfunktion** wird durch Matrixmultiplikation zu einem Term, der aus einer multiplikativen Konstante und einer Summe der quadrierten Differenzen zwischen $\upsilon_i$ und $y_i$ besteht. Mit der Eigenschaft von Exponentialfunktion \color{darkcyan}(i.e. $\exp(x+y) = \exp(x)\exp(y)$) \color{black} können wir die Exponentialfunktion umschreiben zu einem Produkt von Exponentialfunktionen des Terms. 
+
+Mit den Eigenschaften von Produkten können wir beide Produkte zusammenfassen und erhalten ein Produkt von univariaten Normalverteilungen.
+
+
+
+
