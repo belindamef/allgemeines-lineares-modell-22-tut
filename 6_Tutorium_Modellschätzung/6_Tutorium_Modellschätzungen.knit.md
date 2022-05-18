@@ -10,15 +10,12 @@ output:
 ---
 
 
-```{r, include = F}
-source("6_R_common.R")
-```
+
 
 #  {.plain}
 \center
-```{r, echo = FALSE, out.width = "20%"}
-knitr::include_graphics("6_Abbildungen/wtfi_otto.png")
-```
+
+\begin{center}\includegraphics[width=0.2\linewidth]{6_Abbildungen/wtfi_otto} \end{center}
 
 \vspace{2mm}
 
