@@ -31,7 +31,7 @@ Tutorium Allgemeines Lineares Modell
 BSc Psychologie SoSe 2022
 
 \vspace{2mm}
-\text{6. Termin: Normalverteilungen}
+\text{8. Termin (Teil 1): Modellschätzungen}
 
 \vspace{18mm}
 Belinda Fleischmann
@@ -42,6 +42,25 @@ Inhalte basieren auf [ALM Kursmaterialien](https://www.ipsy.ovgu.de/Institut/Abt
 
 
 
+
+
+
+
+# Wiederholung - Frequentistisches Weltbild
+
+\vspace{2mm}
+```{r, echo = FALSE, out.width = "70%"}
+knitr::include_graphics("6_Abbildungen/alm_5_frequentistische_inferenz.pdf")
+```
+
+
+\footnotesize
+
+* Wir nehmen an, dass wahre, aber unbekannte Parameter existieren.
+* Wir nehmen weiterhin an, dass probabilistische Prozesse existieren, die, gegeben dieser wahren, aber unbekannten Parameter, Datensätze generieren können. 
+* Für diese probabilistischen Prozesse gehen wir davon aus, dass ihnen bestimmte Verteilungen bzw. Wahrscheinlichkeitsdichten zugrundeliegen (z.B. Normalverteilung)
+* Wir verwenden erhobene Daten dafür, Parameterwerte zu schätzen. 
+* Dabei bilden die angenommenen Verteilungen bzw. Warhscheinlihckeitsdichten der probabilistischen Prozesse, die die Daten (so nehmen wir an) generiert haben, die Grundlage für die Parameterschätzung bzw. der Herleitung der Formeln, die wir dafür verwenden.  
 
 
 
@@ -89,6 +108,81 @@ und dass $\hat{\beta}$ ein unverzerrter Maximum Likelihood Schätzer von $\beta 
 
 
 
+# Allgemeine Theorie - Summer der Abweichungsquadrate
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkcyan} Beispiel für $\hat{\beta}$ bei ALM mit $n=5$ und $p=2$
+\vspace{3mm}
+
+\color{black}
+\footnotesize
+(vgl. Beispiel (2) für ALM aus Tut. 5, nach Aufg. 4)
+
+Wir betrachten das ALM
+
+\tiny
+\begin{align*}
+y \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X \in \mathbb{R}^{5 \times 2}, \beta \in \mathbb{R}^2, \sigma^2>0.
+\end{align*}
+
+\vspace{-3mm}
+
+\begin{align*}
+y = X \beta + \epsilon \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
+= \begin{pmatrix}x_{11}&x_{12}\\x_{21}&x_{22}\\x_{31}&x_{32}\\x_{41}&x_{42}\\x_{51}&x_{52}\end{pmatrix} 
+\begin{pmatrix}\beta_1 \\ \beta_2 \end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix}
+= \begin{pmatrix}x_{11} \beta_1 + x_{12} \beta_2 + \epsilon_1 \\ x_{21} \beta_1 + x_{22} \beta_2 +\epsilon_2 \\ x_{31} \beta_1 + x_{32} \beta_2 +\epsilon_3 \\ x_{41} \beta_1 + x_{42} \beta_2 +\epsilon_4 \\ x_{51} \beta_1 + x_{52} \beta_2 + \epsilon_5 \end{pmatrix}
+\end{align*}
+
+\footnotesize
+\vspace{2mm}
+Dann sieht Betaparameterschätzerformel ausgeschrieben wie folgt aus
+
+\tiny
+\begin{align*}
+\hat{\beta} := (X^TX)^{-1}X^Ty 
+= &\left (\begin{pmatrix}x_{11}&x_{21}&x_{31}&x_{41}& x_{51}\\x_{12}&x_{22}&x_{32}&x_{42}&x_{52}\end{pmatrix} 
+\begin{pmatrix}x_{11}&x_{12}\\x_{21}&x_{22}\\x_{31}&x_{32}\\x_{41}&x_{42}\\x_{51}&x_{52}\end{pmatrix} \right)^{-1} \\
+&\times \begin{pmatrix}x_{11}&x_{21}&x_{31}&x_{41}& x_{51}\\x_{12}&x_{22}&x_{32}&x_{42}&x_{52}\end{pmatrix}
+\begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
+\end{align*}
+
+
+
+
+
+
+# Allgemeine Theorie - Summer der Abweichungsquadrate
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkcyan} Beispiel für $\hat{\beta}$ bei ALM mit $n=5$ und $p=2$ \color{black} (fortgeführt)
+\vspace{3mm}
+
+\tiny
+\begin{align*}
+= & \begin{pmatrix}x_{11}^2+x_{21}^2+x_{31}^2+x_{41}^2+x_{51}^2 & 
+x_{11}x_{12}+x_{21}x_{22}+x_{31}x_{32}+x_{41}x_{42}+x_{51}x_{52} \\
+\\x_{12}x_{11}+x_{22}x_{21}+x_{32}x_{31}+x_{42}x_{41}+x_{52}x_{51} &
+x_{12}^2+x_{22}^2+x_{32}^2+x_{42}^2+x_{52}^2\end{pmatrix}^{-1} \\
+&\times \begin{pmatrix}x_{11}&x_{21}&x_{31}&x_{41}& x_{51}\\x_{12}&x_{22}&x_{32}&x_{42}&x_{52}\end{pmatrix}
+\begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} \\
+=& \hspace{2mm} \dots \\
+=& \hspace{2mm}\hat{\beta} = \begin{pmatrix}\hat{\beta_1}\\\hat{\beta_2}\end{pmatrix} \in \mathbb{R}^p
+\end{align*}
+
+\footnotesize
+\setstretch{1.5}
+\color{darkcyan}
+Wenn wir uns die Dimensionen der einzelnen Terme anschauen, wird klar, dass das Ergebnis am Ende $2\times 1$-dimensional ist. Im Detail: 
+
+
+* \color{darkcyan}Für den ersten Term ($X^TX$) halten wir fest, dass die Inverse $A^{-1}$ einer Matrix $A \in \mathbb{R}^{n\times n}$ die gleiche Größe hat wie die Matrix, also $A^{-1} \in \mathbb{R}^{n\times n}$. Entsprechend hat das Ergebnis des ersten Terms $2$ Zeilen und $2$ Spalten, i.e. $(2\times2)$ 
+* Für den zweiten Term ($X^Ty$) gilt $(2\times5)(5\times1)=(2\times1)$.
+* Somit ergibt sich insgesamt für $\hat{\beta}$ die Größe $(2\times2)(2\times1)=(2\times1)$. 
+
+
 
 
 
@@ -120,7 +214,6 @@ ein unverzerrter Schätzer von $\sigma^2 > 0$.
 
 
 
-
 # Allgemeine Theorie - Selbstkontrollfragen
 \vspace{3mm}
 \setstretch{1}
@@ -128,10 +221,67 @@ ein unverzerrter Schätzer von $\sigma^2 > 0$.
 \color{darkblue} 3.  Geben Sie die Beta- und Varianzparameterschätzer des ALM Szenarios von $n$ unabhängigen und identisch normalverteilten Zufallsvariablen wieder.
 
 \vspace{3mm}
+\color{darkcyan}
+\footnotesize
+Wir betrachten das Szenario von $n$ Unabhängige und identisch normalverteilte Zufallsvariablen mit Erwartungswertparameter $\mu \in \mathbb{R}$ und Varianzparameter $\sigma^2$. D.h., für jede Komponente des Datenvektors gilt $y_i \sim N(\mu,\sigma^2) \mbox{ für } i = 1,...,n$. Äquivalent dazu können wir das generative Modell schreiben als
+
+\tiny
+\begin{align*}
+y_i = \mu + \epsilon_i, \epsilon_i \sim N(0,\sigma^2) \mbox{ für } i = 1,...,n, \text{ mit unabhängigen }\epsilon_i
+\end{align*}
+
+\footnotesize
+In Matrixschreibweise: 
+
+\vspace{-3mm}
+\tiny
+\begin{align*}
+y \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X := 1_n \in \mathbb{R}^{n \times 1}, \beta := \mu \in \mathbb{R}^1, \sigma^2>0.
+\end{align*}
+
+\vspace{-3mm}
+
+\begin{align*}
+y = X \beta + \epsilon = X \mu + \epsilon
+\Leftrightarrow \begin{pmatrix}y_1\\ \vdots \\y_n\end{pmatrix} 
+= \begin{pmatrix}1\\\vdots\\1\end{pmatrix}
+\beta + \begin{pmatrix}\epsilon_1 \\ \vdots \\ \epsilon_n \end{pmatrix}
+= \begin{pmatrix}1\\ \vdots \\1\end{pmatrix}
+\mu + \begin{pmatrix}\epsilon_1 \\ \vdots \\ \epsilon_n \end{pmatrix}
+= \begin{pmatrix}\mu+\epsilon_1\\ \vdots \\ \mu+\epsilon_n\end{pmatrix} 
+\end{align*}
+
+\footnotesize
+Dann gilt für die Beta- und Varianzparameterschätzer
 \color{black}
+\begin{align*}
+\hat{\beta} = \frac{1}{n}\sum_{i=1}^n y_i =: \bar{y}
+\mbox{ und }
+\hat{\sigma}^2 = \frac{1}{n-1}\sum_{i=1}^n (y_i - \bar{y})^2 =: s^2_y.
+\end{align*}
+
+In diesem Szenario ist der Betaparameterschätzer mit dem Stichprobenmittel $\bar{y}$ der $y_1,...,y_n$ und der Varianzparameterschätzer mit der Stichprobenvarianz $s^2_y$ der $y_1,...,y_n$ identisch.
 
 
 
+# Allgemeine Theorie - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3.  Geben Sie die Beta- und Varianzparameterschätzer des ALM Szenarios von $n$ unabhängigen und identisch normalverteilten Zufallsvariablen wieder.
+
+\vspace{6mm}
+\footnotesize
+\setstretch{1.5}
+\color{darkcyan}
+Anmerkungen: 
+
+* \color{darkcyan} $\hat{\beta} := (X^T X)^{-1}X^T y$ ist wie wir im Theorem (Betaparameterschätzer) gelernt haben, ein erwartungstreuer Schätzer für $\beta \in \mathbb{R}^p$ des ALM. 
+* Weiterhin haben wir gelernt, dass im Szenario von $n$ u.i.(normal-)v. Zufallsvariablen gilt, dass $X:=I_n \in \mathbb{R}^n$, und somit $\hat{\beta} =: \bar{y}$ (siehe Herleitung auf VO-Folie 18). 
+* Entsprechend ist $\bar{y}$ ein erwartungstreuer Schätzer für $\beta$ im ALM Szenario von $n$ unabh. u.i.(normal-)v. Zufallsvariablen.
+* Analog ist $s^2_y$ ein erwartungstreuer Schätzer für  $\sigma^2$ im ALM Szenario von $n$ u.i.(normal-)v. Zufallsvariablen.  
+
+\vspace{14mm}
 
 
 
@@ -144,8 +294,46 @@ ein unverzerrter Schätzer von $\sigma^2 > 0$.
 
 
 \vspace{3mm}
-\color{black}
+\color{darkcyan}
+\footnotesize
+Wir betrachten das generative Modell der einfachen linearen Regression 
+\tiny
+\begin{align*}
+y_i = \beta_0 + \beta_1x_i + \varepsilon_i, \varepsilon_i \sim N(0,\sigma^2) \mbox{ für } i = 1,...,n.
+\end{align*}
 
+\footnotesize
+In Matrixschreibweise
+\tiny
+\begin{align*}
+y \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X \in \mathbb{R}^{n \times 2}, \beta \in \mathbb{R}^2, \sigma^2>0.
+\end{align*}
+\vspace{-3mm}
+
+\color{darkcyan}
+
+\vspace{-3mm}
+\begin{align*}
+y = X \beta + \epsilon \Leftrightarrow
+\begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} 
+= \begin{pmatrix}1&x_{1}\\\vdots&\vdots\\1&x_{n}\end{pmatrix} 
+\begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \vdots \\ \epsilon_n \end{pmatrix} 
+= \begin{pmatrix}\beta_0+x_{1}\beta_1+\epsilon_1\\\vdots\\\beta_0+x_{n}\beta_1+\epsilon_n\end{pmatrix} 
+\end{align*}
+
+\footnotesize
+Dann gilt für die Beta- und Varianzparameterschätzer
+\tiny
+\color{black}
+\begin{align*}
+\hat{\beta}
+= \begin{pmatrix} \hat{\beta}_0 \\ \hat{\beta}_1 \end{pmatrix}
+= \begin{pmatrix} \bar{y} - \frac{c_{xy}}{s_x^2}\bar{x} \\ \frac{c_{xy}}{s_x^2} \end{pmatrix}
+\mbox{ and }
+\hat{\sigma}^2 = \frac{1}{n-2}\sum_{i=1}^n (y_i - (\hat{\beta}_0 + \hat{\beta}_1x_i))^2,
+\end{align*}
+
+wobei $\bar{x}$ und $\bar{y}$ die Stichprobenmittel der $x_1,...,x_n$ und $y_1,...,y_n$, respektive, bezeichnen, $c_{xy}$ die Stichprobenkovarianz der $x_1, ...,x_n$ und $s_x^2$ die Stichprobenvarianz der $x_1,...,x_n$ bezeichnen.
 
 
 
@@ -162,35 +350,212 @@ ein unverzerrter Schätzer von $\sigma^2 > 0$.
 
 \vspace{3mm}
 \color{black}
+\footnotesize
+\setstretch{1.5}
+
+* \color{darkcyan} Sowohl die Betaparameter im ALM Szenario der einfachen linearen Regression, als auch die Parameter der Ausgleichsgerade aus Einheit (1) minimieren die Summe der quadrierten Abweichungen
+* \color{black} Der Unterschied beim Bestimmen der Parameter zwischen zwischen Ausgleichsgerade und ALM Szenario der einfachen linearen Regression ist, dass bei der Ausgleichsgerade keine Annahmen über die Verteilung der Zufallsfehler getroffen werden, im ALM schon.
 
 
 
 
 
 
-# Unabhängige und identisch normalverteilte Zufallsvariablen - Selbstkontrollfragen
+# Unabh. u. id. normalverteilte Zufallsvariablen - Selbstkontrollfragen
 \vspace{3mm}
 \setstretch{1}
-\large
+\normalsize
 \color{darkblue} 6.  Simulieren Sie die Unverzerrtheit des Varianzparameterschätzers im ALM Szenario von $n$ unabhängigen und identisch normalverteilten Zufallsvariablen in einem R Skript.
 
+\color{darkcyan}
+\footnotesize
+Wdhl.: Simulation der Schätzerunverzerrtheit von $\hat{\beta}$ 
+\vspace{1mm}
 
-\vspace{3mm}
 \color{black}
+\setstretch{1}
+\tiny
+
+```{r}
+library(MASS)
+# Modellformulierung
+n        = 12                                     # Anzahl von Datenpunkten
+p        = 1                                      # Anzahl von Betparametern
+X        = matrix(rep(1,n), nrow = n)             # Designmatrix
+I_n      = diag(n)                                # n x n Einheitsmatrix
+beta     = 2                                      # wahrer, aber unbekannter, Betaparameter
+sigsqr   = 1                                      # wahrer, aber unbekannter, Varianzparameter
+
+# Frequentistische Simulation
+n_sims     = 100                                  # Anzahl Realisierungen des n-dimensionalen ZVs (Anzahl Datensätze)
+beta_hats = rep(NaN,n_sims)                       # array für beta_hats nach allg. ALM Schätzerformel
+beta_hats_uiv = rep(NaN, n_sims)                  # array für beta_hats nach Schätzerformel für Szenario uiv. ZVen
+for(i in 1:n_sims){
+  y                = mvrnorm(1, X %*% beta, sigsqr*I_n) # eine Realisierung eines n-dimensionalen ZVs (1Datensatz)
+  beta_hats[i]     = solve(t(X) %*% X) %*% t(X) %*% y   # \hat{\beta} = (X^T)X^{-1}X^Ty 
+  beta_hats_uiv[i] = mean(y)}                           # \hat{\beta} = \bar{\beta}
+
+# Ausgabe
+cat("Wahrer, aber unbekannter, Betaparameter                                       : ", beta,
+    "\nGeschätzter Erwartungswert des Betaparameterschätzers nach allg. ALM Formel   : ", mean(beta_hats),
+    "\nGeschätzter Erwartungswert des Betaparameterschätzers nach Formel für uiv. ZV : ", mean(beta_hats_uiv))
+```
 
 
 
 
 
 
-
-# Einfache lineare Regression - Selbstkontrollfragen
+# Unabh. u. id. normalverteilte Zufallsvariablen - Selbstkontrollfragen
 \vspace{3mm}
 \setstretch{1}
-\large
-\color{darkblue} 7.  Simulieren Sie die Unverzerrtheit des Varianzparameterschätzers im ALM Szenario der einfachen linearen Regression in einem R Skript.
+\normalsize
+\color{darkblue} 6.  Simulieren Sie die Unverzerrtheit des Varianzparameterschätzers im ALM Szenario von $n$ unabhängigen und identisch normalverteilten Zufallsvariablen in einem R Skript.
 
+\vspace{1mm}
+\color{black}
+\footnotesize
+Simulation der Schätzerunverzerrtheit von $\hat{\sigma}^2$ 
+\vspace{2mm}
+
+\setstretch{1}
+\tiny
+```{r}
+library(MASS)                                      
+# Modellformulierung
+n        = 12                                 # Anzahl von Datenpunkten
+p        = 1                                  # Anzahl von Betaparametern
+X        = matrix(rep(1,n), nrow = n)         # Designmatrix
+I_n      = diag(n)                            # n x n Einheitsmatrix
+beta     = 2                                  # wahrer, aber unbekannter, Betaparameter
+sigsqr   = 1                                  # wahrer, aber unbekannter, Varianzparameter
+
+# Frequentistische Simulation
+n_sims     = 100                              # Anzahl Realisierungen des n-dimensionalen ZVs (Anzahl Datensätze)
+beta_hats = rep(NaN,n_sims)                   # array für beta_hats
+sigsqu_hats = rep(NaN,n_sims)                 # array für sigma^2_hats nach allg. ALM-Schätzformel
+sigsqu_hats_uiv = rep(NaN, n_sims)            # array für sigma^2_hats nach Schätzerformel für Szenario uiv. ZVen
+for(i in 1:n_sims){
+  y           = mvrnorm(1, X %*% beta, sigsqr*I_n)   # eine Realisierung eines n-dimensionalen ZVs (1 Datensatz)
+  beta_hats[i] = solve(t(X) %*% X) %*% t(X) %*% y    # \hat{\beta} = (X^T)X^{-1}X^Ty 
+  sigsqu_hats[i] =  (t(y - X %*% beta_hats[i]) %*%   # \frac{(y - X\hat{\beta})^T(y - X\hat{\beta})}{n - p}
+                     (y - X %*% beta_hats[i]))/(n-p)  
+  sigsqu_hats_uiv[i] = var(y)}                       # \hat{\simga}^2 = s^2_y
+
+# Ausgabe
+cat("Wahrer, aber unbekannter, Varianzparameter                                       : ", sigsqr,
+    "\nGeschätzter Erwartungswert des Varianzparameterschätzers nach allg. ALM Formel   : ", mean(sigsqu_hats),
+    "\nGeschätzter Erwartungswert des Varianzparameterschätzers nach Formel für uiv. ZV : ", mean(sigsqu_hats_uiv))
+```
+
+
+
+
+
+
+# Unabh. u. id. normalverteilte Zufallsvariablen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 6.  Simulieren Sie die Unverzerrtheit des Varianzparameterschätzers im ALM Szenario von $n$ unabhängigen und identisch normalverteilten Zufallsvariablen in einem R Skript.
 
 \vspace{3mm}
+\color{darkcyan}
+\small
+Achtung:
+
+* Das Bestimmen des Betaparameterschätzers $\hat{\beta}$ mit ```mean(y)``` und des Varianzparameterschätzers $\hat{\sigma}^2$ mit ```var(y)``` wird hier nur angeführt, um zu zeigen, dass es in diesem Szenario das gleiche ergibt wie über die allgemeine ALM-Formeln $(X^T)X^{-1}X^Ty$ und $\frac{(y - X\hat{\beta})^T(y - X\hat{\beta})}{n - p}$.
+* Wenn wir multidimensionale Datensätze und Modelle haben, wird das nicht mehr funktionieren. Daher empfiehlt es sich, immer die allgemeinen ALM-Formeln für Parameterschätzungen zu verwenden. 
+
+
+
+
+
+
+
+# Unabh. u. id. normalverteilte Zufallsvariablen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 7.  Simulieren Sie die Unverzerrtheit des Varianzparameterschätzers im ALM Szenario der einfachen linearen Regression in einem R Skript.
+
+\color{darkcyan}
+\footnotesize
+Wdhl.: Simulation der Schätzerunverzerrtheit von $\hat{\beta}$ 
+\vspace{1mm}
+
 \color{black}
+\setstretch{1}
+\tiny
+```{r, eval=T}
+library(MASS)
+
+# Modellformulierung
+n        = 12                                    # Anzahl von Datenpunkten
+p        = 2                                     # Anzahl von Betaparametern
+x        = 1:n                                   # Prädiktorwerte
+X        = matrix(c(rep(1,n),x), nrow = n)       # Designmatrix
+I_n      = diag(n)                               # n x n Einheitsmatrix
+beta     = matrix(c(0,1), nrow = p)              # wahre, aber unbekannte, Betaparameter
+sigsqr   = 1                                     # wahrer, aber unbekannter, Varianzparameter
+
+# Frequentistische Simulation
+n_sims     = 1e3                                 # Anzahl Realisierungen des n-dimensionalen ZVs (Anzahl Datensätze)
+beta_hats = matrix(rep(NaN,p*n_sims), nrow = p)  # array für beta_hats nach allg. ALM Schätzerformel
+for(i in 1:n_sims){
+  y                = mvrnorm(1, X %*% beta, sigsqr*I_n) # eine Realisierung eines n-dimensionalen ZVs (1 Datensatz)
+  beta_hats[,i]     = solve(t(X) %*% X) %*% t(X) %*% y  # \hat{\beta} = (X^T)X^{-1}X^Ty 
+}
+
+# Ausgabe
+cat("Wahrer, aber unbekannter, Betaparameter                                      : ", beta,
+    "\nGeschätzter Erwartungswert des Betaparameterschätzers nach allg. ALM Formel  : ", rowMeans(beta_hats))
+```
+
+
+
+
+
+
+
+# Unabh. u. id. normalverteilte Zufallsvariablen - Selbstkontrollfragen
+\vspace{3mm}
+\setstretch{1}
+\normalsize
+\color{darkblue} 7.  Simulieren Sie die Unverzerrtheit des Varianzparameterschätzers im ALM Szenario der einfachen linearen Regression in einem R Skript.
+
+\vspace{1mm}
+\color{black}
+\footnotesize
+Simulation der Schätzerunverzerrtheit von $\hat{\sigma}^2$ 
+\vspace{2mm}
+
+\setstretch{1}
+\tiny
+```{r, eval=T}
+library(MASS)
+# Modellformulierung
+n        = 12                                   # Anzahl von Datenpunkten
+p        = 2                                    # Anzahl von Betaparametern
+x        = 1:n                                  # Prädiktorwerte
+X        = matrix(c(rep(1,n),x), nrow = n)      # Designmatrix
+I_n      = diag(n)                              # n x n Einheitsmatrix
+beta     = matrix(c(0,1), nrow = p)             # wahre, aber unbekannte, Betaparameter
+sigsqr   = 1                                    # wahrer, aber unbekannter, Varianzparameter
+
+# Frequentistische Simulation
+n_sims     = 1e3                                # Anzahl Realisierungen des n-dimensionalen ZVs (Anzahl Datensätze)
+beta_hats = matrix(rep(NaN,p*n_sims), nrow = p) # array für beta_hats nach allg. ALM Schätzerformel
+sigsqu_hats = rep(NaN,n_sims)                   # array für sigma^2_hats nach allg. ALM-Schätzformel
+for(i in 1:n_sims){
+  y                = mvrnorm(1, X %*% beta, sigsqr*I_n) # eine Realisierung eines n-dimensionalen ZVs (1 Datensatz)
+  beta_hats[,i]     = solve(t(X) %*% X) %*% t(X) %*% y  # \hat{\beta} = (X^T)X^{-1}X^Ty 
+  sigsqu_hats[i] =  (t(y - X %*% beta_hats[,i]) %*%      # \frac{(y - X\hat{\beta})^T(y - X\hat{\beta})}{n - p}
+                     (y - X %*% beta_hats[,i]))/(n-p)}  
+
+# Ausgabe
+cat("Wahrer, aber unbekannter, Betaparameter                                      : ", sigsqr,
+    "\nGeschätzter Erwartungswert des Betaparameterschätzers nach allg. ALM Formel  : ", mean(sigsqu_hats))
+```
+
 
