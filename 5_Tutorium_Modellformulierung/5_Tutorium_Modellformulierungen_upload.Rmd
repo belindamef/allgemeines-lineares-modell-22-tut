@@ -31,7 +31,7 @@ Tutorium Allgemeines Lineares Modell
 BSc Psychologie SoSe 2022
 
 \vspace{2mm}
-\text{7. Termin: Modellformulierungen}
+\text{7. Termin: Normalverteilungen}
 
 \vspace{18mm}
 Belinda Fleischmann
@@ -316,7 +316,6 @@ Dann wird \eqref{eq:alm} \textit{Allgemeines Lineares Modell (ALM) in generative
 
 
 
-
 # Allgemeine Theorie - Selbstkontrollfragen
 \vspace{3mm}
 \setstretch{1}
@@ -330,38 +329,19 @@ $y$ sei ein $5$-dimensionalter Zufallsvektor mit Erwartungswertparameter $X\beta
 
 Beispiel 1: p = 1 (Wir haben nur einen Betaparameter $\beta$)
 
-\vspace{-3.5mm}
 
-\tiny
-\begin{align*}
-y \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X \in \mathbb{R}^{5 \times 1}, \beta \in \mathbb{R}^1, \sigma^2>0.
-\end{align*}
-
-\vspace{-3mm}
-
-\begin{align*}
-y &= X \beta + \epsilon \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
-= \begin{pmatrix}x_1\\x_2\\x_3\\x_4\\x_5\end{pmatrix} 
-\beta + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix}
-= \begin{pmatrix}x_1 \beta + \epsilon_1 \\ x_2 \beta +\epsilon_2 \\ x_3 \beta +\epsilon_3 \\ x_4 \beta +\epsilon_4 \\ x_5 \beta + \epsilon_5 \end{pmatrix}
-\end{align*}
+\color{darkcyan}
+(im Tutorium)
+\vspace{24mm}
 
 \footnotesize
+\color{black}
 Beispiel 2: p = 2 (Wir haben zwei Betaparameter $\beta_1$ und $\beta_2$)
 
-\tiny
-\begin{align*}
-y \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X \in \mathbb{R}^{5 \times 2}, \beta \in \mathbb{R}^2, \sigma^2>0.
-\end{align*}
+\color{darkcyan}
+(im Tutorium)
+\vspace{24mm}
 
-\vspace{-3mm}
-
-\begin{align*}
-y = X \beta + \epsilon \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
-= \begin{pmatrix}x_{11}&x_{12}\\x_{21}&x_{22}\\x_{31}&x_{32}\\x_{41}&x_{42}\\x_{51}&x_{52}\end{pmatrix} 
-\begin{pmatrix}\beta_1 \\ \beta_2 \end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix}
-= \begin{pmatrix}x_{11} \beta_1 + x_{12} \beta_2 + \epsilon_1 \\ x_{21} \beta_1 + x_{22} \beta_2 +\epsilon_2 \\ x_{31} \beta_1 + x_{32} \beta_2 +\epsilon_3 \\ x_{41} \beta_1 + x_{42} \beta_2 +\epsilon_4 \\ x_{51} \beta_1 + x_{52} \beta_2 + \epsilon_5 \end{pmatrix}
-\end{align*}
 
 
 
@@ -380,7 +360,7 @@ y = X \beta + \epsilon \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\en
 
 * Wir nennen $X\beta \in \mathbb{R}^n$ den \textit{deterministichen Modellaspekt} und $\varepsilon$ den \textit{probabilistischen Modellaspekt}.
 * *deterministisch* heißt hier, die Komponenten beinhalten keine Zufälligkeit, sondern sind vorgegeben bzw. im Rahmen der Modellformulierung festgelegt.
-* *probabilistisch* heißt hier, die Komponenten beinhalten Zufälligkeit. Realisierungen dieser Komponente können aus einer Normalverteilung gezogen werden. Der probabilistische Aspekt modelliert bei Normalverteilungen alle Einflussfaktoren auf $y$, die nicht durch den deterministischen Askept abgedeckt werden.
+* *probabilistisch* heißt hier, die Komponenten beinhalten Zufälligkeit. Realisierungen dieser Komponente können aus einer Normalverteilungne gezogen werden. Der probabilistische Aspekt modelliert bei Normalverteilungen alle Einflussfaktoren auf $y$, die nicht durch den deterministischen Askept abgedeckt werden.
 * \color{black}$y$ das Ergebnis der Addition deterministischer und probabilistischer Aspekte ist, ist es auch probabilistisch (i.e. zufällig).
 
 
@@ -438,7 +418,7 @@ Der Zufallsfehler modelliert also alle nicht durch den deterministischen Aspekt 
 
 Formal gilt $\epsilon\sim N(0_n,\sigma^2I_n)$, wobei der Erwartungswertparameter $0_n$ bedeutet, dass alle Komponenten $\epsilon_1,...,\epsilon_n$ den Erwartungswert $0$ haben, und der sphärische Kovarianzmatrixparameter $0_n,\sigma^2 I_n$, bedeutet, dass alle Komponenten die Varianz $\sigma^2$ haben und alle Kovarianzen gleich $0$ sind.
 
-* $\Rightarrow$ identisch verteilte Komponenten, weil alle Komponenten den Erwartungswert $0$ und den Varianzparameter $\sigma^2$ haben. 
+* $\Rightarrow$ identische verteilte Komponenten, weil alle Komponenten den Erwartungswert $0$ und Varianzparameter $\sigma^2$ haben. 
 * $\Rightarrow$ unabhängige Komponenten, weil alle nicht-digonal-Elemente, also alle Kovarianzen zwischen Komponenten gleich $0$ (vgl. Tutorium (4) Normalverteilungen - SKF 10)
 
 
@@ -510,7 +490,7 @@ $y \sim N(X\beta,\sigma^2I_n)$ mit $y_i \sim N(\mu_i,\sigma^2)$ für $i=1,...,n$
 Wir betrachten das Szenario von $n$ unabhängigen und identisch normalverteilten Zufallsvariabeln mit Erwartungswertparameter $\mu \in \mathbb{R}$ und Varianzparameter $\sigma^2$, mit $y_i \sim N(\mu,\sigma^2)$ für $i=1,...,n$.
 
 \color{darkcyan}
-Anmerkung: Während wir im Theorem zur Datenverteilung im ALM noch gesehen haben, dass die Komponenten $y_1,...,y_n$ jeweils "individuelle" Verteilungen $y_i \sim N(\mu_i,\sigma^2)$ mit "individuellen" $\mu_i$ haben, und somit nicht identisch verteilt sind, haben wir im Szenario **$n$ unabhängig und *identisch* verteilter Zufallsvariablen** nun nur noch ein $\mu$ gegeben, das für alle Komponenten $y_1,...,y_n$, also für alle $y_i$ gleich ist.
+Anmerkung: Während wir im Theorem zur Datenverteilung im ALM noch gesehen haben, dass die Komponenten $y_1,...,y_n$ jeweils "individuelle" Verteilungen $y_i \sim N(\mu_i,\sigma^2)$ mit "individuellen" $\mu_i$ haben, und somit nicht identisch verteilt sind, haben wir im Szenario $n$ unabhängig und *identisch* verteilter Zufallsvariablen nun nur noch ein $\mu$ gegeben, das für alle Komponenten $y_1,...,y_n$, also für alle $y_i$ gleich ist.
 
 In Matrixschreibweise: 
 
@@ -537,19 +517,10 @@ Wir betrachten das Szenario von $n=5$ unabhängigen und identisch normalverteilt
 \footnotesize
 In Matrixschreibweise: 
 
-\begin{align*}
-y \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X := 1_5 \in \mathbb{R}^{5 \times 1}, \beta := \mu \in \mathbb{R}^1, \sigma^2>0.
-\end{align*}
+\color{darkcyan}
+(im Tutorium)
 
-\begin{align*}
-y = X \beta + \epsilon = X \mu + \epsilon
-\Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
-= \begin{pmatrix}1\\1\\1\\1\\1\end{pmatrix}
-\beta + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix}
-= \begin{pmatrix}1\\1\\1\\1\\1\end{pmatrix}
-\mu + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix}
-= \begin{pmatrix}\mu+\epsilon_1\\\mu+\epsilon_2\\\mu+\epsilon_3\\\mu+\epsilon_4\\\mu+\epsilon_5\end{pmatrix} 
-\end{align*}
+\vspace{24mm}
 
 
 
@@ -562,39 +533,26 @@ y = X \beta + \epsilon = X \mu + \epsilon
 \color{darkblue} 11. Schreiben Sie das Szenario der einfachen linearen Regression als ALM in Matrixschreibweise.
 
 \vspace{3mm}
-\color{black}
 
-\tiny
-\begin{align*}
-y \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X \in \mathbb{R}^{n \times 2}, \beta \in \mathbb{R}^2, \sigma^2>0.
-\end{align*}
-\vspace{-3mm}
 
 \color{darkcyan}
+\footnotesize
+(im Tutorium)
 
-\vspace{-3mm}
-\begin{align*}
-y = X \beta + \epsilon \Leftrightarrow
-\begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} 
-= \begin{pmatrix}1&x_{1}\\\vdots&\vdots\\1&x_{n}\end{pmatrix} 
-\begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \vdots \\ \epsilon_n \end{pmatrix} 
-= \begin{pmatrix}\beta_0+x_{1}\beta_1+\epsilon_1\\\vdots\\\beta_0+x_{n}\beta_1+\epsilon_n\end{pmatrix} 
-\end{align*}
+\vspace{26mm}
 
 \small
 Beispiel mit $n=5$
-\tiny
-\begin{align*}
-y = X \beta + \epsilon \Leftrightarrow
-\begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
-= \begin{pmatrix}1&x_{1}\\1&x_{2}\\1&x_{3}\\1&x_{4}\\1&x_{5}\end{pmatrix} 
-\begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix} 
-= \begin{pmatrix}\beta_0+x_{1}\beta_1+\epsilon_1\\\beta_0+x_{2}\beta_1+\epsilon_2\\\beta_0+x_{3}\beta_1+\epsilon_3\\\beta_0+x_{4}\beta_1+\epsilon_4\\\beta_0+x_{5}\beta_1+\epsilon_5\end{pmatrix} 
-\end{align*}
+
+\footnotesize
+(im Tutorium)
 
 
 
-# Unabh. und id. normalverteilte Zufallsvariablen - Selbstkontrollfragen
+
+
+
+# Unabhängige und identisch normalverteilte Zufallsvariablen - Selbstkontrollfragen
 \vspace{3mm}
 \setstretch{1}
 \large
@@ -628,14 +586,11 @@ print(y[1:10,])                               # Ausgabe der ersten 10 Datensätz
 
 
 
-
-
-
 # Einfache lineare Regression - Selbstkontrollfragen
 \vspace{3mm}
 \setstretch{1}
 \large
-\color{darkblue} 13. Generieren Sie 100 Datensätze eines einfachen linearen Regressionsmodels 
+\color{darkblue} 13. Generieren Sie 100 Datensätze von eines einfachen linearen Regressionsmodels 
 mit 12 äquidistanten Werten der unabhängigen Variable im Intervall $[1,2]$, wobei 
 $x_1 := 1$ und $x_{12} := 2$ sein sollen.
 
@@ -644,15 +599,11 @@ $x_1 := 1$ und $x_{12} := 2$ sein sollen.
 \small
 Teil 1/2 - Ausformulierung
 
-\tiny
+\footnotesize
 
-\begin{align*}
-y \sim N(X\beta,\sigma^2I_12) \mbox{ mit } X \in \mathbb{R}^{n \times 2}, \beta \in \mathbb{R}^2, \sigma^2>0.
-\end{align*}
+\color{darkcyan}
+(im Tutorium)
 
-\begin{align*}
-y = X\beta +\epsilon \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\\y_6\\y_7\\y_8\\y_9\\y_{10}\\y_{11}\\y_{12}\end{pmatrix} = \begin{pmatrix}1&1.00\\1&1.09\\1&1.18\\1&1.27\\1&1.36\\1&1.45\\1&1.55\\1&1.64\\1&1.72\\1&1.82\\1&1.91\\1&2.00\end{pmatrix} \begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix} 
-\end{align*}
 
 
 
