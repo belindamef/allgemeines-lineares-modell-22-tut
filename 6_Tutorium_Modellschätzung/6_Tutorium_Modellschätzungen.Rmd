@@ -57,10 +57,10 @@ knitr::include_graphics("6_Abbildungen/alm_5_frequentistische_inferenz.pdf")
 \footnotesize
 
 * Wir nehmen an, dass wahre, aber unbekannte Parameter existieren.
-* Wir nehmen weiterhin an, dass probabilistische Prozesse existieren, die, gegeben dieser wahren, aber unbekannten Parameter, Datensätze generieren können. 
-* Für diese probabilistischen Prozesse gehen wir davon aus, dass ihnen bestimmte Verteilungen bzw. Wahrscheinlichkeitsdichten zugrundeliegen (z.B. Normalverteilung)
+* Wir nehmen weiterhin an, dass probabilistische Prozesse existieren, die - gegeben dieser wahren, aber unbekannten Parameter - Datensätze generieren können. 
+* Für diese probabilistischen Prozesse nehmen wir an, dass ihnen bestimmte Verteilungen bzw. Wahrscheinlichkeitsdichten zugrundeliegen (z.B. Normalverteilung)
 * Wir verwenden erhobene Daten dafür, Parameterwerte zu schätzen. 
-* Dabei bilden die angenommenen Verteilungen bzw. Warhscheinlihckeitsdichten der probabilistischen Prozesse, die die Daten (so nehmen wir an) generiert haben, die Grundlage für die Parameterschätzung bzw. der Herleitung der Formeln, die wir dafür verwenden.  
+* Dabei bilden die angenommenen Verteilungen bzw. Warhscheinlichkeitsdichten der probabilistischen Prozesse (die, wie wir annehmen, die Daten generiert haben), die Grundlage für Parameterschätzung und Modellevaluation.  
 
 
 
@@ -108,7 +108,7 @@ und dass $\hat{\beta}$ ein unverzerrter Maximum Likelihood Schätzer von $\beta 
 
 
 
-# Allgemeine Theorie - Summer der Abweichungsquadrate
+# Allgemeine Theorie - Summe der Abweichungsquadrate
 \vspace{3mm}
 \setstretch{1}
 \large
@@ -137,7 +137,7 @@ y = X \beta + \epsilon \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\en
 
 \footnotesize
 \vspace{2mm}
-Dann sieht Betaparameterschätzerformel ausgeschrieben wie folgt aus
+Dann sieht die Betaparameterschätzerformel ausgeschrieben wie folgt aus
 
 \tiny
 \begin{align*}
@@ -169,7 +169,7 @@ x_{12}^2+x_{22}^2+x_{32}^2+x_{42}^2+x_{52}^2\end{pmatrix}^{-1} \\
 &\times \begin{pmatrix}x_{11}&x_{21}&x_{31}&x_{41}& x_{51}\\x_{12}&x_{22}&x_{32}&x_{42}&x_{52}\end{pmatrix}
 \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} \\
 =& \hspace{2mm} \dots \\
-=& \hspace{2mm}\hat{\beta} = \begin{pmatrix}\hat{\beta_1}\\\hat{\beta_2}\end{pmatrix} \in \mathbb{R}^p
+=& \hspace{2mm} \begin{pmatrix}\hat{\beta_1}\\\hat{\beta_2}\end{pmatrix} = \hat{\beta} \in \mathbb{R}^p
 \end{align*}
 
 \footnotesize
@@ -180,7 +180,7 @@ Wenn wir uns die Dimensionen der einzelnen Terme anschauen, wird klar, dass das 
 
 * \color{darkcyan}Für den ersten Term ($X^TX$) halten wir fest, dass die Inverse $A^{-1}$ einer Matrix $A \in \mathbb{R}^{n\times n}$ die gleiche Größe hat wie die Matrix, also $A^{-1} \in \mathbb{R}^{n\times n}$. Entsprechend hat das Ergebnis des ersten Terms $2$ Zeilen und $2$ Spalten, i.e. $(2\times2)$ 
 * Für den zweiten Term ($X^Ty$) gilt $(2\times5)(5\times1)=(2\times1)$.
-* Somit ergibt sich insgesamt für $\hat{\beta}$ die Größe $(2\times2)(2\times1)=(2\times1)$. 
+* Somit ergibt sich insgesamt für $\hat{\beta}$ die Dimension $(2\times2)(2\times1)=(2\times1)$. 
 
 
 
@@ -225,11 +225,13 @@ ein unverzerrter Schätzer von $\sigma^2 > 0$.
 \footnotesize
 Wir betrachten das Szenario von $n$ Unabhängige und identisch normalverteilte Zufallsvariablen mit Erwartungswertparameter $\mu \in \mathbb{R}$ und Varianzparameter $\sigma^2$. D.h., für jede Komponente des Datenvektors gilt $y_i \sim N(\mu,\sigma^2) \mbox{ für } i = 1,...,n$. Äquivalent dazu können wir das generative Modell schreiben als
 
+\vspace{-3mm}
 \tiny
 \begin{align*}
 y_i = \mu + \epsilon_i, \epsilon_i \sim N(0,\sigma^2) \mbox{ für } i = 1,...,n, \text{ mit unabhängigen }\epsilon_i
 \end{align*}
 
+\vspace{-3mm}
 \footnotesize
 In Matrixschreibweise: 
 
@@ -464,8 +466,9 @@ cat("Wahrer, aber unbekannter, Varianzparameter                                 
 \small
 Achtung:
 
-* Das Bestimmen des Betaparameterschätzers $\hat{\beta}$ mit ```mean(y)``` und des Varianzparameterschätzers $\hat{\sigma}^2$ mit ```var(y)``` wird hier nur angeführt, um zu zeigen, dass es in diesem Szenario das gleiche ergibt wie über die allgemeine ALM-Formeln $(X^T)X^{-1}X^Ty$ und $\frac{(y - X\hat{\beta})^T(y - X\hat{\beta})}{n - p}$.
+* \color{darkcyan}Das Bestimmen des Betaparameterschätzers $\hat{\beta}$ mit ```mean(y)``` und des Varianzparameterschätzers $\hat{\sigma}^2$ mit ```var(y)``` wird hier nur angeführt, um zu zeigen, dass es in diesem Szenario das gleiche ergibt wie über die ALM-Schätzerformeln $\hat{\beta}=(X^T)X^{-1}X^Ty$ und $\hat{\sigma}^2=\frac{(y - X\hat{\beta})^T(y - X\hat{\beta})}{n - p}$.
 * Wenn wir multidimensionale Datensätze und Modelle haben, wird das nicht mehr funktionieren. Daher empfiehlt es sich, immer die allgemeinen ALM-Formeln für Parameterschätzungen zu verwenden. 
+
 
 
 

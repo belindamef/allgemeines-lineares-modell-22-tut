@@ -1,0 +1,1373 @@
+---
+fontsize: 8pt
+bibliography: 7_Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: yes
+    includes:
+      in_header: 7_header.tex
+---
+
+
+```{r, include = F}
+source("7_R_common.R")
+```
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%"}
+knitr::include_graphics("7_Abbildungen/wtfi_otto.png")
+```
+
+\vspace{2mm}
+
+\Huge
+Tutorium Allgemeines Lineares Modell
+\vspace{2mm}
+
+
+\normalsize
+BSc Psychologie SoSe 2022
+
+\vspace{2mm}
+\text{8. Termin (Teil 2): Modellevaluation}
+
+\vspace{18mm}
+Belinda Fleischmann
+
+\vspace{3mm}
+\scriptsize
+Inhalte basieren auf [ALM Kursmaterialien](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2022/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+
+
+# Wiederholung - Frequentistisches Weltbild
+
+\vspace{2mm}
+```{r, echo = FALSE, out.width = "70%"}
+knitr::include_graphics("7_Abbildungen/alm_5_frequentistische_inferenz.pdf")
+```
+
+
+\footnotesize
+
+* Wir nehmen an, dass wahre, aber unbekannte Parameter existieren.
+* Wir nehmen weiterhin an, dass probabilistische Prozesse existieren, die, gegeben dieser wahren, aber unbekannten Parameter, Datensätze generieren können. 
+* Für diese probabilistischen Prozesse gehen wir davon aus, dass ihnen bestimmte Verteilungen bzw. Wahrscheinlichkeitsdichten zugrundeliegen (z.B. Normalverteilung der Zufallsfehler)
+* Wir verwenden erhobene Daten dafür, Parameterwerte zu schätzen (Wir berechnen eine "Einschätzung", was der wahre Wert sein könnte, den wir nicht beobachten können). 
+* Dabei bilden die angenommenen Verteilungen bzw. Warhscheinlichkeitsdichten der probabilistischen Prozesse (die, wie wir annehmen, die Daten generiert haben), die Grundlage für Parameterschätzung und Modellevaluation.  
+
+
+
+# Wiederholung - Standardannahmen frequentistischer Inferenz
+\vspace{1mm}
+\footnotesize
+\setstretch{1.2}
+
+* Gegeben sei ein statistisches Modell $\mathbb{P}_\theta$, in dem probabilistische Prozesse definiert sind, die Datensätze generieren können. 
+* Es wird angenommen, dass ein vorliegender Datensatz eine der möglichen Realisierungen der Daten des Modells ist. Eine mögliche Realisierung wäre $y^{(1)}$,  $y^{(2)}$ wäre eine andere, $y^{(3)}$ wäre nochmals eine andere.
+* Aus frequentistischer Sicht kann man unendlich oft Datensätze basierend auf einem Modell generieren und zu jedem Datensatz Schätzer oder Statistiken auswerten, z.B. den Betaparameterschätzer (z.B. $\hat{\beta}^{(1)}$ für Datensatz $y^{(1)}$) 
+
+\scriptsize
+\begin{itemize}
+\item[] Datensatz (1) : $y^{(1)} = \left(y_1^{(1)}, y_2^{(1)}, ...,y_n^{(1)}\right)^T$  mit $\hat{\beta}^{(1)} = (X^TX)^{-1}X^Ty^{(1)}$
+\item[] Datensatz (2) : $y^{(2)} = \left(y_1^{(2)}, y_2^{(2)}, ...,y_n^{(2)}\right)^T$  mit $\hat{\beta}^{(2)} = (X^TX)^{-1}X^Ty^{(2)}$
+\item[] Datensatz (3) : $y^{(3)} = \left(y_1^{(3)}, y_2^{(3)}, ...,y_n^{(3)}\right)^T$  mit $\hat{\beta}^{(3)} = (X^TX)^{-1}X^Ty^{(3)}$
+\item[] Datensatz (4) : $y^{(4)} = \left(y_1^{(4)}, y_2^{(4)}, ...,y_n^{(4)}\right)^T$  mit $\hat{\beta}^{(4)} = (X^TX)^{-1}X^Ty^{(4)}$
+\item[] Datensatz (5) : $y^{(5)} = ...$
+\end{itemize}
+
+\footnotesize
+\setstretch{1.2}
+* Um die Qualität statistischer Methoden zu beurteilen betrachtet die frequentistische Statistik die Wahrscheinlichkeitsverteilungen von Schätzern und Statistiken unter Annahme der Datenverteilung (z.B. im ALM die Verteilung des Datenvektors $y = X \beta + \varepsilon$ mit $\varepsilon \sim N(0_n, \sigma^2I_n)$, und damit $y\sim N(x\beta,\sigma^2I_n)$, siehe Einheit (5) Theorem zu ALM Datenverteilung). 
+* Was ist zum Beispiel die Verteilung (möglicher) Betaparameterschätzer ($\hat{\beta}^{(1)}$, $\hat{\beta}^{(2)}$, $\hat{\beta}^{(3)}$, $\hat{\beta}^{(4)}$), ... also die Verteilung der Zufallsvariable $\hat{\beta} := (X^TX)^{-1}X^Ty$? 
+
+
+
+
+# Follow-up - Beispieldatensatz Anzahl Therapiestunden
+
+\footnotesize
+\setstretch{1.2}
+\color{darkcyan}Wir bestrachten das Beispiel aus Einheit (1). 
+
+* Wir stellen die Theorie auf, dass zwischen Anzahl Therapiestunden  und Symptomreduktion ein Zusammenhang besteht. 
+* Um diese Theorie zu unterstützen, wollen wir Daten (frequentistisch) statistisch analysieren.
+* Wir haben einen Datensatz mit 20 Datenpunkten vorliegen. Das heißt, $n=20$
+
+\vspace{2mm}
+
+\color{black}
+\tiny
+```{r, echo=F}
+# Einlesen des Beispieldatensatzes
+fname       = file.path(getwd(), "7_Daten", "1_Regression_Beispieldatensatz.csv")
+D           = read.table(fname, sep = ",", header = TRUE)
+
+# Tabelle
+knitr::kable(D, "pipe")
+knitr::include_graphics("7_Abbildungen/alm_7_beta_hat_1.pdf")
+```
+
+
+
+
+
+
+
+# Follow-up - Beispieldatensatz Anzahl Therapiestunden
+
+\footnotesize
+\setstretch{1.2}
+\color{darkcyan} Wie in (1) können wir Stichprobenstatistiken ausrechnen und Betaparameterschätzer der einfachen linearen Regression bestimmen. 
+
+\color{black}
+\vspace{2mm}
+\tiny
+```{r}
+# Stichprobenstatistiken
+n           = length(D$y_i)                                      # Anzahl Datenpunkte
+x_bar       = mean(D$x_i)                                        # Stichprobenmittel der x_i-Werte
+y_bar       = mean(D$y_i)                                        # Stichprobenmittel der y_i-Werte
+s2x         = var(D$x_i)                                         # Stichprobenvarianz der  x_i-Werte
+cxy         = cov(D$x_i, D$y_i)                                  # Stichprobenkovarianz der (x_i,y_i)-Werte
+
+# Parameteterschätzer (nach dem Theorem der ML Schätzung)
+beta_1_hat  = cxy/s2x                                            # \hat{\beta}_1, Steigungsparameter
+beta_0_hat  = y_bar - beta_1_hat*x_bar                           # \hat{\beta}_0, Offset Parameter
+sigsqr_hat  = (1/n)*sum((D$y_i-(beta_0_hat+beta_1_hat*D$x_i))^2) # Varianzparameter
+
+# Ausgabe
+cat("n:", n, "\nStichprobenmittel der x_i_-Werte:", x_bar, "\nStichprobenmittel der y_i-Werte:", 
+    y_bar, "\nStichprobenvarianz der x_i-Werte:", s2x, "\nStichprobenkovarianz der (x_i,y_i)-Werte:",
+    cxy, "beta_0_hat:"  , beta_0_hat, "\nbeta_1_hat:", beta_1_hat, "\nsigsqr_hat:", sqrt(sigsqr_hat))
+```
+
+
+
+# Anwendungsbeispiel -  Datensatz Anzahl Therapiestunden
+
+\footnotesize
+\setstretch{1.2}
+\color{darkcyan} Wenn wir die Parameterschätzer bestimmen, gehen wir implizit davon aus, dass ein *allgemeines lineares Modell* diese Daten, die wir beobachtet haben, generiert hat. Genauer gesagt, ein Spezialfall des ALM, nämlich die einfache lineare Regression diese Daten generiert hat. Entsprechend können wir die Parameterschätzer auch mit den Parameterschätzformeln des ALM bestimmen. 
+
+\color{black}
+\vspace{2mm}
+\tiny
+
+```{r}
+library(MASS)
+# Modellformulierung
+n        = length(D$y_i)                        # Anzahl von Datenpunkten
+p        = 2                                    # Anzahl von Betaparametern
+x        = D$x_i                                # Prädiktorwerte
+y        = D$y_i                                # Datenvektor
+X        = matrix(c(rep(1,n),x), nrow = n)      # Designmatrix
+I_n      = diag(n)                              # n x n Einheitsmatrix
+
+# Parameterschätzung
+beta_hat     = solve(t(X) %*% X) %*% t(X) %*% y   # \hat{\beta} = (X^T)X^{-1}X^Ty 
+sigsqu_hat =  (t(y - X %*% beta_hat) %*%      # \frac{(y - X\hat{\beta})^T(y - X\hat{\beta})}{n - p}
+                     (y - X %*% beta_hat))/(n-p)
+
+# Ausgabe
+cat("beta_0_hat:", beta_hat[1] , "\nbeta_1_hat:", beta_hat[2] ,                
+    "\nsigsqr_hat  : ", sigsqu_hat)
+```
+
+
+
+
+# Selbstkontrollfragen - Modellevaluation
+
+\footnotesize
+\setstretch{2}
+
+1. Geben Sie das Theorem zur Frequentistischen Verteilung des Betaparameterschätzers wieder. 
+2. Geben Sie die Verteilung des Betaparameterschätzers im Szenarion von $n$ u.i.v. Zufallsvariablen wieder.
+3. Geben Sie das Theorem zur Frequentistischen Verteilung des Varianzparameterschätzers wieder.
+4. Geben Sie die Verteilung des skalierten Varianzparameterschätzers bei $n$ u.i.v. Zufallsvariablen wieder.
+5. Skizzieren Sie die WDFen von $t$-Zufallsvariablen mit $2$, $10$ und $30$ Freiheitsgraden.
+6. Skizzieren Sie die WDFen von nichtzentralen $t$-Zufallsvariablen mit Nichtzentralitätsparametern $0$,$5$ und $15$.
+7. Geben Sie die Definition der T-Statistik wieder.
+8. Erläutern Sie die Definition der T-Statistik.
+9. Warum kann die T-Statistik als Signal-zu-Rauschen Verhältnis interpretiert werden.
+10. Geben Sie die Form der T-Statistik im Szenario von $n$ u.i.v. Zufallsvariablen wieder.
+11. Erläutern Sie den Zusammenhang der T-Statistik und Cohen’s $d$.
+12. Geben Sie die Definition der T-Teststatistik wieder.
+
+
+
+
+
+# Selbstkontrollfragen - Modellevaluation
+
+\footnotesize
+\setstretch{2}
+
+13. Erläutern Sie die Definition der T-Teststatistik.
+14. Geben Sie das Theorem zur Verteilung der T-Teststatistik wieder.
+15. Geben Sie die Definition eines vollständigem und eines reduzierten ALMs wieder.
+16. Geben Sie die Definition des Likelihood-Quotienten eines vollständigen und eines reduzierten ALMs wieder.
+17. Geben Sie das Theorem zu Likelihood-Quotient und Residualquadratsummendifferenz wieder.
+18. Definieren Sie die F-Statistik.
+19. Erläutern Sie den Zusammenhang zwischen F-Statistik und Likelihood-Quotient.
+20. Definieren Sie und erläutern Sie den Zähler der F-Statistik.
+21. Definieren Sie und erläutern Sie den Nenner der F-Statistik.
+22. Erläutern Sie die F-Statistik.
+23. Geben Sie das Theorem zur Verteilung der F-Statistik wieder.
+
+
+
+
+
+
+
+# Frequentistische Schätzerverteilungen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 1. Geben Sie das Theorem zur Frequentistischen Verteilung des Betaparameterschätzers wieder. 
+
+
+\vspace{3mm}
+\color{black}
+
+\footnotesize
+\begin{theorem}[Frequentistische Verteilung des Betaparameterschätzers]
+\justifying
+\normalfont
+Es sei
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM in generativer Form. Weiterhin sei
+\begin{equation}
+\hat{\beta} = (X^TX)^{-1}X^Ty
+\end{equation}
+der Betaparameterschätzer. Dann gilt
+\begin{equation}
+\hat{\beta} \sim N(\beta,\sigma^2(X^T X)^{-1}).
+\end{equation}
+\end{theorem}
+
+\color{darkcyan}
+\footnotesize
+Anmerkungen:
+
+* \color{darkcyan}Da es sich bei $\hat{\beta}$ um eine linear-affine Transformation von $y$ handelt, leitet sich die die hier angegeben Verteilung für $\hat{\beta}$ aus dem Theorem zur linearen Transformation von multivariaten Normalverteilung aus Einheit (4) ab. 
+* Im Spezifischen besagt das Theorem in diesem Fall, dass wenn $y \sim N(X\beta,\sigma^2I_n)$ und $\hat{\beta}= Ay + b$, dann gilt $\hat{\beta} \sim N(AX\beta+b,A\sigma^2I_nA^T)$, wobei $A=(X^TX)^{-1}X^T$ der Faktor der linearen-affinen Transformation ist.
+
+
+
+
+# Frequentistische Schätzerverteilungen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 2. Geben Sie die Verteilung des Betaparameterschätzers im Szenario von $n$ u.i.v. Zufallsvariablen wieder.
+
+
+\vspace{3mm}
+\color{black}
+
+\footnotesize
+\color{darkcyan}
+Das Szenario von $n$ u.i.v. Zufallsvariablen ist in Matrixschreibweise gegeben durch
+\begin{align*}
+y \sim N(X\beta,\sigma^2 I_n)
+\mbox{ mit }
+X := 1_n \in \mathbb{R}^{n\times 1},
+\beta := \mu \in \mathbb{R}
+\mbox{ und } \sigma^2 > 0,
+\end{align*}
+wobei der Betaparameterschätzer gegeben ist durch $\hat{\beta} = \bar{y}$. Durch Einsetzen von $\beta:=\mu$ und $X:=1_n$ in $\hat{\beta} \sim N(\beta,\sigma^2(X^T X)^{-1})$ (vlg. Theorem zur Frequentistischen Verteilung des Betaparameterschätzers), erhalten wir
+\color{black}
+\begin{align*}
+\bar{y} \sim N\left(\mu, \frac{\sigma^2}{n}\right).
+\end{align*}
+\color{darkcyan}
+Das Stichprobenmittel ($\bar{y}$) von $n$ u.i.v. Zufallsvariablen
+mit Erwartungswertparameter $\mu$ und Varianzparameter $\sigma^2$ ist also normalverteilt
+mit Erwartungswertparameter $\mu$ und Varianzparameter  $\sigma^2/n$. 
+
+
+
+# Frequentistische Schätzerverteilungen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 2. Geben Sie die Verteilung des Betaparameterschätzers im Szenario von $n$ u.i.v. Zufallsvariablen wieder.
+
+\color{darkcyan}
+\footnotesize
+Visualisierung von $N\left(\hat{\beta};\beta,\frac{\sigma^2}{n}\right)$ für $y \sim N(X\beta,\sigma^2 I_n)$ mit $\beta = \mu = 2$ und $\sigma^2=1$. Mit anderen Worten, wie sieht die Verteilung der Zufallvariable $\hat{\beta}$ aus, wenn wir aus der von uns angenommenen "wahren" Verteilung des Zufallsvektors $y \sim N(X\beta,\sigma^2 I_n)$ ganz viele Realisierungen generieren, (z.B. 10000 Realisierungen $y^{(1)},...,y^{(10000)}$), und für jede dieser Datensätze einen Betaparameter schätzen ($\hat{\beta}^{(1)}, ..., \hat{\beta}^{(10000)}$). 
+
+
+
+
+
+
+
+```{r, echo=FALSE}
+# Multivariate Normalverteilung
+library(MASS)
+
+# Modellformulierung
+n        = 12                                      # Anzahl von Datenpunkten
+p        = 1                                       # Anzahl von Betparametern
+X        = matrix(rep(1,n), nrow = n)              # Designmatrix
+I_n      = diag(n)                                 # n x n Einheitsmatrix
+beta     = 2                                       # wahrer, aber unbekannter, Betaparameter
+sigsqr   = 1                                       # wahrer, aber unbekannter, Varianzparameter
+
+# Frequentistische Simulation
+nsim     = 1e4                                     # Anzahl Realisierungen des n-dimensionalen ZVs
+beta_hat = rep(NaN,nsim)                           # \hat{\beta} Realisierungsarray
+for(i in 1:nsim){
+  y           = mvrnorm(1, X %*% beta, sigsqr*I_n) # eine Realisierung eines n-dimensionalen ZVs
+  beta_hat[i] = solve(t(X) %*% X) %*% t(X) %*% y   # \hat{\beta} = (X^T)X^{-1}X^Ty
+}
+```
+
+```{r, echo = F, eval = F}
+
+# figure setup
+dev.new()
+fig = par(
+family      = "sans",
+mfcol       = c(1,1),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(3,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1)
+
+# density
+b_hat_min  = 0.5
+b_hat_max  = 3.5
+b_hat_res  = 1e3
+b_hat      = seq(b_hat_min, b_hat_max, len = b_hat_res)
+p_beta_hat = dnorm(b_hat, beta, sqrt(sigsqr/n))
+
+# histogram
+hist(
+beta_hat,
+breaks = 50,
+col   = "gray90",
+prob  = TRUE,
+xlab  = "",
+ylab  = "",
+xlim  = c(0.5,3.5),
+ylim  = c(0,1.5),
+main  = "")
+
+# density
+lines(
+b_hat,
+p_beta_hat,
+lwd   = 2,
+col   = "darkorange")
+
+# print
+dev.copy2pdf(
+file   = file.path(getwd(), "7_Abbildungen", "alm_7_beta_hat_1.pdf"),
+width  = 5,
+height = 5)
+
+```
+
+
+
+
+
+
+
+
+\center
+\vspace{2mm}
+\color{orange}
+$N\left(\hat{\beta};\beta,\frac{\sigma^2}{n}\right)$
+\vspace{-3mm}
+```{r, echo = FALSE, out.width = "50%"}
+knitr::include_graphics("7_Abbildungen/alm_7_beta_hat_1.pdf")
+```
+\vfill
+
+
+
+
+
+
+# Frequentistische Schätzerverteilungen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3. Geben Sie das Theorem zur Frequentistischen Verteilung des Varianzparameterschätzers wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{theorem}[Frequentistische Verteilung des Varianzparameterschätzers]
+\normalfont
+\justifying
+Es sei
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM in generative Form. Weiterhin sei
+\begin{equation}
+\hat{\sigma}^2 = \frac{(y - X\hat{\beta})^T(y - X\hat{\beta})}{n-p}
+\end{equation}
+der Varianzparameterschätzer. Dann gilt
+\begin{equation}
+\frac{n-p}{\sigma^2}\hat{\sigma}^2 \sim \chi^2(n-p)
+\end{equation}
+\end{theorem}
+
+
+
+
+
+
+# Frequentistische Schätzerverteilungen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4. Geben Sie die Verteilung des skalierten Varianzparameterschätzers bei $n$ u.i.v. Zufallsvariablen wieder.
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\color{darkcyan}
+Wie in Aufg. 2, haben wir im Szenario von $n$ u.i.v. Zufallsvariablen
+\begin{align*}
+y \sim N(X\beta,\sigma^2 I_n)
+\mbox{ mit }
+X := 1_n \in \mathbb{R}^{n\times 1},
+\beta := \mu \in \mathbb{R}
+\mbox{ und } \sigma^2 > 0,
+\end{align*}
+wobei der Betaparameterschätzer gegeben ist durch $\hat{\beta}=\bar{y}$ und der Varianzparameterschätzer durch $\hat{\sigma}^2=s^2$. 
+Durch Einsetzen von $p=1$ in die Verteilung des skalierten Varianzparameterschätzers ($\frac{n-p}{\sigma^2}\hat{\sigma}^2$), wie im Theorem zur Frequentistischen Verteilung des Varianzparamterschätzers gegeben, erhalten wir
+
+\color{black}
+\begin{align*}
+\frac{n-1}{\sigma^2}\hat{\sigma}^2 \sim \chi^2(n-1)
+\end{align*}
+
+
+\color{darkcyan}
+Das ist identisch mit der in Einheit (11) Konfidenzintervalle von  Wahrscheinlichkeitstheorie und Frequentistische Inferenz gelernten U-Statistik. Wdhl.: Für den Fall von $n$ unabhängig und identisch
+normalverteilten Zufallsvariablen ist die U-Statistik definiert als
+\begin{align*}
+U := \frac{n-1}{\sigma^2}s^2,
+\end{align*}
+wobei
+\begin{align*}
+U \sim \chi^2(n-1).
+\end{align*}
+Offenbar ist $U$ für $p = 1$ mit der im obigen Theorem betrachten Zufallsvariable
+$\frac{n-p}{\sigma^2}\hat{\sigma}^2$ identisch.
+
+
+
+# Frequentistische Schätzerverteilungen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4. Geben Sie die Verteilung des skalierten Varianzparameterschätzers bei $n$ u.i.v. Zufallsvariablen wieder.
+\vspace{3mm}
+\color{black}
+
+```{r, eval=F, echo=F}
+# Libraries
+library(MASS)                                        # multivariate Normalverteilung
+library(matlib)                                      # Matrizenrechnung
+library(mvtnorm)
+
+# Modellformulierung
+n          = 12                                      # Anzahl von Datenpunkten
+p          = 1                                       # Anzahl von Betparametern
+X          = matrix(rep(1,n), nrow = n)              # Designmatrix
+I_n        = diag(n)                                 # n x n Einheitsmatrix
+beta       = 2                                       # wahrer,aber unbekannter,Betaparameter
+sigsqr     = 1                                       # wahrer,aber unbekannter,Varianzparameter
+
+# Frequentistische Simulation
+nsim       = 1e5                                     # Anzahl Realisierungen n-dimensionaler ZV
+beta_hat   = rep(NaN,nsim)                           # \hat{\beta} Realisierungsarray
+sigsqr_hat = rep(NaN,nsim)                           # \hat{\sigma}^2 Realisierungsarray
+for(i in 1:nsim){
+  y             = mvrnorm(1, X %*% beta, sigsqr*I_n) # eine Realisierung n-dimensionaler ZV
+  beta_hat[i]   = solve(t(X) %*% X) %*% t(X) %*% y      # \hat{\beta}    = (X^T)X^{-1}X^Ty
+  eps_hat       = y - X %*% beta_hat[i]               # \hat{\eps}     = y-X\hat{\beta}
+  sigsqr_hat[i] = (t(eps_hat) %*% eps_hat)/(n-p)      # \hat{\sigma}^2 =\hat{\eps}^T\hat{\eps}/(n-p)
+}
+U = ((n-p)/sigsqr)*sigsqr_hat                         # \chi^2 verteilte Zufallsvariable
+
+
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2.5,1,0),
+xaxs        = "i",
+yaxs        = "i",
+xpd         = TRUE,
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+
+# density
+xlimits     = c(0,30)
+ylimits     = c(0,.12)
+u_min  = xlimits[1]
+u_max  = xlimits[2]
+u_res  = 1e5
+u      = seq(u_min, u_max, len = u_res)
+p_u    = dchisq(u,n-p)
+
+# histogram
+hist(
+U,
+col   = "gray90",
+prob  = TRUE,
+xlab  = TeX("$((n-1)/\\sigma^2)\\hat{\\sigma}^2$"),
+ylab  = "",
+xlim  = xlimits,
+ylim  = ylimits,
+main   = "")
+
+# density
+lines(
+u,
+p_u,
+lwd   = 2,
+col   = "darkorange")
+
+# Speichern
+dev.copy2pdf(
+file        = file.path("7_Abbildungen/alm_7_sigsqr_hat_1_tut.pdf"),
+width       = 7,
+height      = 3.5)
+```
+
+\color{darkcyan}
+\footnotesize
+Visualisierung von $\chi^2(\frac{n-1}{\sigma^2}\hat{\sigma}^2;n-1)$ für $y \sim N(X\beta,\sigma^2 I_n)$ mit $\beta = \mu = 2$ und $\sigma^2=1$. Mit anderen Worten, wie sieht die Verteilung der skalierten Zufallvariable $\hat{\sigma^2}$, also $\frac{n-p}{\sigma}^2\hat{\sigma}^2$ aus, wenn wir aus der von uns angenommenen "wahren" Verteilung des Zufallsvektors $y \sim N(X\beta,\sigma^2 I_n)$ ganz viele Realisierungen generieren, (z.B. 10000 Realisierungen $y^{(1)},...,y^{(10000)}$), und für jede dieser Datensätze einen Varianzparameter schätzen ($\hat{\sigma}^{2(1)}, ..., \hat{\sigma}^{2(10000)}$). 
+
+\center
+\vspace{2mm}
+\color{orange}
+$\chi^2(\frac{n-p}{\sigma^2}\hat{\sigma}^2;n-1)$
+
+```{r, echo = FALSE, out.width="70%"}
+knitr::include_graphics("7_Abbildungen/alm_7_sigsqr_hat_1_tut.pdf")
+```
+
+
+
+
+
+
+
+# Frequentistische Schätzerverteilungen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Skizzieren Sie die WDFen von $t$-Zufallsvariablen mit $2$, $10$ und $30$ Freiheitsgraden.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+```{r, echo = F, eval = F}
+library(latex2exp)
+dev.new()                                                                        # new figure
+fig     = par(                                                                   # figure parameters
+            family     = "sans",                                                 # font family
+            pty        = "m",                                                    # square plots
+            bty        = "l",                                                    # plot box, o, l, 7, c, or ]
+            lwd        = 1,                                                      # line width
+            las        = 1,                                                      # 0: axis parallel, 1: horizontal, 2: axis perpendicular, 3: vertical
+            mgp        = c(2,1,0),                                               # margin line in mex unit
+            xaxs       = "i",                                                    # "internal" (tight) x-axis style
+            yaxs       = "i",                                                    # "internal" (tight) y-axis style
+            font.main  = 1,                                                      # title font type
+            cex        = 1.1,
+            cex.main   = 1.5                                                     # title  magnification factor
+)
+
+# t space
+t_min   = -5                                                                     # minimum t-value
+t_max   = 5                                                                      # maximum t-value
+t_res   = 1e3                                                                    # t-space resolution
+t       = seq(t_min,t_max, len = t_res)                                          # t-space
+
+# parameters of interest
+n       = c(2,10,30)                                                        # degrees of freedom
+
+
+# plotting
+matplot(t,
+        matrix(c(dt(t,n[1]),
+                 dt(t,n[2]),
+                 dt(t,n[3])),
+               ncol = 3),
+        type         = "l",                                                      # line plot
+        lty          = 1,                                                        # solid line
+        lwd          = 2,                                                        # line width
+        col          = c("gray10", "gray70", "gray90"),       # line colors
+        ylim         = c(0,.4),                                                  # y-axis limits
+        xlim         = c(t_min,t_max),                                           # x-axis limits
+        ylab         = " ",                                                      # y-axis label
+        xlab         = "t",                                                      # x-axis label
+        main         = TeX("$\\T(t;n)$"))                                        # main title
+
+legend( 2,                                                                       # x-ordinate
+        .4,                                                                      # y-ordinate
+        c("n = 2", "n = 10", "n = 30"),                        # legend text
+        lty         = 1,                                                         # line type
+        lwd         = 2,                                                         # line width
+        col         =   c("gray10", "gray70", "gray90"),     # line colors
+        bty         = "n",                                                       # no legend box
+        cex         = 1.1,                                                       # character expansion (fontsize)
+        y.intersp   = 1.6)                                                       # y-direction character spacing
+
+
+dev.copy2pdf(                                                                    # export to PDF
+    file   = file.path(getwd(), "7_Abbildungen", "alm_7_t_SKF5_wdf.pdf"),            # filename
+    width  = 6,                                                                  # PDF width
+    height = 5                                                                   # PDF height
+)
+```
+
+\vfill
+\vspace{2mm}
+```{r, echo = FALSE, out.width="60%"}
+knitr::include_graphics("7_Abbildungen/alm_7_t_SKF5_wdf.pdf")
+```
+\vspace{-3mm}
+\footnotesize
+\color{darkcyan}
+Anmerkungen:
+
+* \color{darkcyan}Die Verteilung ist um 0 symmetrisch
+* Steigendes $n$ verschiebt Wahrscheinlichkeitsmasse aus den Ausläufen zum Zentrum
+
+
+
+
+
+# Frequentistische Schätzerverteilungen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 6. Skizzieren Sie die WDFen von nichtzentralen $t$-Zufallsvariablen mit Nichtzentralitätsparametern $0$,$5$ und $15$.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+```{r, echo = F, eval = F}
+options(warn=-1)                                                                 # warning off
+t_min     = -5                                                                   # Minimum T-Wert
+t_max     = 30                                                                   # Maximum T-Wert
+t_res     = 1e3                                                                  # T-Wert Auflösung
+t         = seq(t_min, t_max, len = t_res)                                       # T-Raum
+delta     = c(0,5,15)                                                            # Nichtzentralitätsparameter
+n         = 30                                                            # Freiheitsgrade
+p         = cbind(
+            matrix(dt(t, n, delta[1]),nrow=length(t)),
+            matrix(dt(t, n, delta[2]),nrow=length(t)),
+            matrix(dt(t, n, delta[3]),nrow=length(t)))
+
+# Visualisierung
+dev.new()
+graphics.off()
+par(
+family      = "sans",
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+matplot(
+t,
+p,
+type        = "l",
+lty         = 1,
+col         = c("gray10", "gray50", "gray70"),
+lwd         = 2,
+xlab        = "T",
+ylab        = "",
+ylim        = c(0,.4),
+main        = TeX("$t(T;\\delta,n)$"))
+legend(
+18,
+.4,
+c(TeX("$\\delta = 0 , n = 30$"),
+  TeX("$\\delta = 5 , n = 30$"),
+  TeX("$\\delta = 15, n = 30$")),
+lty         = 1,
+col         = c("gray10", "gray50", "gray70"),
+lwd         = 2,
+bty         = "n",
+seg.len     = 1.75)
+fdir        =  file.path(getwd(), "7_Abbildungen")
+dev.copy2pdf(
+file        = file.path(fdir, "alm_7_nichtzentrale_t_verteilung_SKF_6.pdf"),
+width       = 7,
+height      = 4.5)
+```
+
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics("7_Abbildungen/alm_7_nichtzentrale_t_verteilung_SKF_6.pdf")
+```
+
+
+
+
+
+
+# T-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 7. Geben Sie die Definition der T-Statistik wieder.
+\vspace{3mm}
+\color{black}
+
+\footnotesize
+\begin{definition}[T-Statistik]
+Es sei
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM in generativer Form. Weiterhin seien
+\begin{equation}
+\hat{\beta} := (X^TX)^{-1}X^Ty \mbox{ und } \hat{\sigma}^2 := \frac{(y - X\hat{\beta})^T(y - X\hat{\beta})}{n-p}
+\end{equation}
+die Betaparameter- und Varianzparameterschätzer, respektive. Dann ist für einen
+\textit{Kontrastgewichtsvektor} $c \in \mathbb{R}^p$ die \textit{T-Statistik} definiert als
+\begin{equation}
+T := \frac{c^T\hat{\beta}}{\sqrt{\hat{\sigma}^2c^T(X^TX)^{-1}c}}.
+\end{equation}
+\end{definition}
+
+
+
+
+
+# T-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 8. Erläutern Sie die Definition der T-Statistik.
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\setstretch{1.5}
+* Die T-Statistik hängt durch die Parameterschätzer $\hat{\beta}$ und $\hat{\sigma}^2$ von den Daten $y$ ab.
+* Der Kontrastgewichtsvektor $c \in \mathbb{R}^p$ projiziert $\hat{\beta}$ auf einen Skalar $c^T\hat{\beta}$.
+* Intuitiv quantifiziert die T-Statistik das Verhältnis von geschätzte Effektstärke zur geschätzten stichprobenumfangskalierten Datenvariabilität
+\begin{align*}
+T = \frac{\mbox{Geschätzte Effektstärke}}{\mbox{Geschätzte stichprobenumfangskalierte Datenvariabilität}}
+\end{align*}
+ und repräsentiert damit ein Signal-zu-Rauschen Verhältnis (signal-to-noise ratio).
+
+
+
+
+
+
+# T-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 9. Warum kann die T-Statistik als Signal-zu-Rauschen Verhältnis interpretiert werden.
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\setstretch{1.5}
+* Im Zähler steht der Betaparameterschätzer, und im Nenner steht der Varianzparameterschätzer
+* Der Term $c^T\hat{\beta}$ quantifiziert den geschätzten Effekt (wie groß ist der Beitrag eines oder mehrerer Faktoren (je nachdem wie man den Kontrast definiert) zur Gesamtdatenvariabilität
+* $\sqrt{\hat{\sigma}^2c^T(X^TX)^{-1}c}$ quantifiziert die geschätzte stichprobenumfangskalierte Datenvariabilität
+* Der Effekt ist also das ("eigentliche") Signal, das laut dem formulierten Modell "übertragen" werden sollte und die Fehlervarianz ist das das "Restrauschen". 
+* Die T-Statistik bestimmt das Verhältnis von  Signal zu Rauschen und quantifiziert somit auch Unsicherheit. 
+
+
+
+
+
+
+# T-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 10. Geben Sie die Form der T-Statistik im Szenario von $n$ u.i.v. Zufallsvariablen wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+Beispiel (1) Unabhängige und identisch normalverteilte Zufallsvariablen
+\vspace{2mm}
+\footnotesize
+
+\color{darkcyan} Wir haben das ALM Szenario unabhängiger und identisch normalverteilter Zufallsvariablen
+\begin{align*}
+y \sim N(X\beta,\sigma^2 I_n)
+\mbox{ mit }
+X := 1_n \in \mathbb{R}^{n\times 1},
+\beta := \mu \in \mathbb{R}
+\mbox{ und } \sigma^2 > 0.
+\end{align*}
+Weiterhin sei $c := 1$. Dann gilt für die T-Statistik
+\color{black}
+\begin{align*}
+T
+= \frac{c^T\hat{\beta}}{\sqrt{\hat{\sigma}^2c^T(X^TX)^{-1}c}}
+= \frac{1^T\bar{y}}{\sqrt{s^2_y 1^T (1_n^T 1_n)^{-1}1}}
+= \sqrt{n}\frac{\bar{y}}{s_y}
+\end{align*}
+\color{darkcyan} was der Einstichproben-T-Teststatistik für den Fall $\mu_0 = 0$ entspricht (vgl.
+Einheit (13) Einstichproben-T-Tests in Wahrscheinlichkeitstheorie und Frequentistische
+Inferenz und Einheit (9) T-Tests in Allgemeines Lineares Modell). 
+
+
+
+
+
+# T-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 11. Erläutern Sie den Zusammenhang der T-Statistik und Cohen’s $d$.
+
+\vspace{3mm}
+\color{darkcyan}
+\footnotesize
+
+Die T-Statistik ist im ALM Szenario u.i.v. Zufallsvariablen gegeben durch
+\begin{align*}
+T
+= \frac{c^T\hat{\beta}}{\sqrt{\hat{\sigma}^2c^T(X^TX)^{-1}c}}
+= \frac{1^T\bar{y}}{\sqrt{s^2_y 1^T (1_n^T 1_n)^{-1}1}}
+= \sqrt{n}\frac{\bar{y}}{s_y}
+\end{align*}
+
+
+Die T-Statistik nimmt hohe Werte für hohe Werte von $\bar{y}$ (Effekt), kleine Werte von $s_y^2$ (Datenvariabilität) und hohe Werte von $n$ (Stichprobenumfang) an.
+
+\color{black}
+\textit{Cohen's $d$} als \textit{Effektstärkenmaß} ist gegeben als
+\begin{align*}
+d := \frac{\bar{y}}{s_y^2},
+\end{align*}
+so dass
+\begin{align*}
+T = \sqrt{n}d \mbox{ bzw. } d = \frac{1}{\sqrt{n}} T.
+\end{align*}
+Cohen's $d$ ist also ein Stichprobenumfangunabhängiges Signal-zu-Rauschen Verhältnis.
+
+
+
+
+
+
+
+# T-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 12. Geben Sie die Definition der T-Teststatistik wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{theorem}[T-Teststatistik, Teil 1/2]
+\normalfont
+\justifying
+Es sei
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das ALM in generativer Form. Weiterhin seien
+\begin{equation}
+\hat{\beta} := (X^TX)^{-1}X^Ty \mbox{ und } \hat{\sigma}^2 := \frac{(y - X\hat{\beta})^T(y - X\hat{\beta})}{n-p}
+\end{equation}
+die Betaparameter- und Varianzparameterschätzer, respektive. Schließlich sei für
+einen \textit{Kontrastgewichtsvektor} $c \in \mathbb{R}^p$ und
+einen \textit{Nullhypothesenbetaparameter} $\beta_0 \in \mathbb{R}^p$
+die \textit{T-Teststatistik} definiert als
+\begin{equation}
+T := \frac{c^T\hat{\beta} - c^T\beta_0}{\sqrt{\hat{\sigma}^2 c^T(X^TX)^{-1}c}}.
+\end{equation}
+\end{theorem}
+\vspace{-2mm}
+
+
+
+
+
+
+
+# T-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 13. Erläutern Sie die Definition der T-Teststatistik.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.5}
+
+* $T$ ist eine Funktion der Parameterschätzer und des Nullhypothesenbetaparameters $\beta_0$
+* Der Term $c^T\beta - c^T\beta_0$ misst den Abstand zwischen einem erechneten $\hat{\beta}$ und dem Nullhypothesenbetaparameter $\beta_0$
+* $T=0$, für $c^T\beta = c^T\beta_0$
+* $T\neq0$, für $c^T\beta \neq c^T\beta_0$
+
+
+
+
+
+
+
+# T-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 14. Geben Sie das Theorem zur Verteilung der T-Teststatistik wieder.
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{theorem}[T-Teststatistik, Teil 2/2]
+Dann gilt
+\begin{equation}
+T \sim t(\delta, n-p) \mbox{ mit } \delta := \frac{c^T\beta - c^T\beta_0}{\sqrt{\sigma^2 c^T(X^TX)^{-1}c}}
+\end{equation}
+\end{theorem}
+
+\color{darkcyan}
+\setstretch{1.5}
+\footnotesize
+
+Anmerkung:
+
+* $T$ ist eine Funktion der Parameterschätzer, $\delta$ ist eine Funktion der wahren, aber unbekannten, Parameter
+
+
+
+
+# F-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 15. Geben Sie die Definition eines vollständigen und eines reduzierten ALMs wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{definition}[Vollständiges und reduziertes Modell]
+Für $p > 1$ mit $p = p_1 + p_2$ seien
+\begin{equation}
+X := \begin{pmatrix} X_1 & X_2 \end{pmatrix}  \in \mathbb{R}^{n \times p}
+\mbox{ mit }
+X_1 \in \mathbb{R}^{n \times p_1}
+\mbox{ und }
+X_2 \in \mathbb{R}^{n \times p_2},
+\end{equation}
+sowie
+\begin{equation}
+\beta := \begin{pmatrix} \beta_1 \\ \beta_2 \end{pmatrix} \in \mathbb{R}^p
+\mbox{ mit }
+\beta_1 \in \mathbb{R}^{p_1}
+\mbox{ und }
+\beta_2 \in \mathbb{R}^{p_2}
+\end{equation}
+Partitionierungen einer $n \times p$ Designmatrix und eines $p$-dimensionalen
+Betaparametervektors. Dann nennen wir
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das \textit{vollständige Modell} und
+\begin{equation}
+y = X_1\beta_1 + \varepsilon_1 \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+das \textit{reduzierte Modell} und sprechen von einer \textit{Partionierung eines
+(vollständigen) Modells}.
+\end{definition}
+
+
+
+
+
+
+# F-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 16. Geben Sie die Definition des Likelihood-Quotienten eines vollständigen und eines reduzierten ALMs wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{definition}[Likelihood-Quotient von vollständigem und reduzierten Modell]
+Für $p = p_1 + p_2, p > 1$ sei eine Partitionierung eines vollständigen ALMs
+gegeben und $\sigma^2 > 0$ als bekannt voraussgesetzt. Weiterhin seien
+\begin{equation}
+L : \mathbb{R}^{p} \to \mathbb{R}_{>0}, \beta \mapsto L(\beta) := p_{\beta}(\upsilon) = N(\upsilon;X\beta,\sigma^2 I_n)
+\end{equation}
+und
+\begin{equation}
+L_1 : \mathbb{R}^{p_1} \to \mathbb{R}_{>0}, \beta_1 \mapsto L(\beta_1) :=  p_{\beta_1}(\upsilon) = N(\upsilon;X_1\beta_1,\sigma^2 I_n)
+\end{equation}
+die Likelihood-Funktionen von vollständigem und reduzierten Modell, respektive.
+Dann ist für einen Datenvektor $\upsilon \in \mathbb{R}^n$ der \textit{Likelihood-Quotient
+von vollständigem und reduziertem Modell} gegeben als
+\begin{equation}
+\qoppa:= \frac{\max_{\beta \in \mathbb{R}^p} p_{\beta}(\upsilon)}{\max_{\beta_1 \in \mathbb{R}^{p_1}} p_{\beta_1}(\upsilon)}
+ = \frac{\max_{\beta \in \mathbb{R}^p} L(\beta)}{\max_{\beta_1 \in \mathbb{R}^{p_1}} L_1(\beta_1)}
+ = \frac{L(\hat{\beta})}{L_1(\hat{\beta}_1)}
+\end{equation}
+\end{definition}
+
+
+
+
+
+
+# F-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 17. Geben Sie das Theorem zu Likelihood-Quotient und Residualquadratsummendifferenz wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{theorem}[Likelihood-Quotient und Residualquadratsummendifferenz]
+\normalfont
+\justifying
+Für $p = p_1 + p_2, p > 1$ sei eine Partitionierung eines vollständigen ALMs
+gegeben und $\sigma^2 > 0$ als bekannt voraussgesetzt. Weiterhin seien
+\begin{equation}
+\hat{\varepsilon}   := y - X\hat{\beta} \mbox{ und }
+\hat{\varepsilon}_1 := y - X_1\hat{\beta}_1
+\end{equation}
+die Residuenvektoren des vollständigen und es reduzierten Modells, respektive.
+Dann gilt
+\begin{equation}
+\ln \qoppa =
+\frac{\hat{\varepsilon}_1^T\hat{\varepsilon}_1 - \hat{\varepsilon}^T\hat{\varepsilon}}{2\sigma^2}
+\end{equation}
+\end{theorem}
+
+
+
+
+
+
+# F-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 18. Definieren Sie die F-Statistik.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{definition}[F-Statistik]
+Für $X \in \mathbb{R}^{n \times p}, \beta \in \mathbb{R}^p$ und $\sigma^2 > 0$
+sei ein ALM der Form
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+mit der Partitionierung
+\begin{equation}
+X      = \begin{pmatrix} X_1     & X_2      \end{pmatrix},
+X_1      \in \mathbb{R}^{n\times p_1},
+X_2      \in \mathbb{R}^{n\times p_2},
+\mbox{ und }
+\beta := \begin{pmatrix} \beta_1 \\ \beta_2 \end{pmatrix},
+\beta_1 \in \mathbb{R}^{p_1},
+\beta_2 \in \mathbb{R}^{p_2},
+\end{equation}
+mit $p = p_1 + p_2$ gegeben. Weiterhin seien mit
+\begin{equation}
+\hat{\beta}_1 := (X_1^TX_1)^{-1}X_1^Ty \mbox{ und } \hat{\beta} := (X^TX)^{-1}X^Ty
+\end{equation}
+die Residuenvektoren
+\begin{equation}
+\hat{\varepsilon}_1 := y - X_1\hat{\beta}_1 \mbox{ und } \hat{\varepsilon} := y - X\hat{\beta}
+\end{equation}
+definiert. Dann ist die F-Statistik definiert als
+\begin{equation}
+F := \frac{\frac{\hat{\varepsilon}_1^T\hat{\varepsilon}_1 - \hat{\varepsilon}^T\hat{\varepsilon}}{p_2}}{\frac{\hat{\varepsilon}^T\hat{\varepsilon}}{n-p}}
+\end{equation}
+\end{definition}
+
+
+
+
+
+
+# F-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 19. Erläutern Sie den Zusammenhang zwischen F-Statistik und Likelihood-Quotient.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.5}
+
+* Die F-Statistik und der Likelihood-Quotient sind nicht das gleich, messen aber intuitiv das gleiche. 
+* Beide Größen messen, wie viel wahrscheinlicher es ist, bestimmte Daten zu beobachten unter dem vollständigen als unter dem reduzierten Modell. 
+* Anders ausgedrückt messen beide Größen, inwieweit das Hinzunehmen des Regressors $p_2$ (so wie im vollständigen) die Erklärung der Daten im Vergleich zum reduzierten Modell verbessert.
+
+
+
+
+
+# F-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 20. Definieren Sie und erläutern Sie den Zähler der F-Statistik.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.5}
+
+Für den Nenner der F-Statistik gilt
+\begin{align*}
+\frac{\hat{\varepsilon}^T\hat{\varepsilon}}{n-p} = \hat{\sigma}^2,
+\end{align*}
+wobei $\hat{\sigma}^2$ hier der aufgrund des vollständigen Modells geschätzte
+Schätzer von $\sigma^2$ ist. Werden die Daten tatsächlich unter dem reduzierten Modell
+generiert, so kann das vollständige Modell dies durch $\hat{\beta}_{2} \approx 0_{p_2}$
+abbilden und erreicht eine ähnliche $\sigma^2$ Schätzung wie das reduzierte Modell.
+Werden die Daten de-facto unter dem vollständigem Modell generiert, so ist
+$\hat{\varepsilon}^T\hat{\varepsilon}/(n-p)$ ein besserer Schätzer von $\sigma^2$
+als $\hat{\varepsilon}^T_1\hat{\varepsilon_1}/(n-p)$, da sich für diesen Datenvariabilität,
+die nicht durch die $p_1$ Regressoren in $X_1$ erklärt wird, in der Schätzung von $\sigma^2$
+widerspiegeln würde. Der Nenner der F-Statistik ist also in beiden Fällen der sinnvollere
+Schätzer von $\sigma^2$.
+
+
+
+
+
+
+# F-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 21. Definieren Sie und erläutern Sie den Nenner der F-Statistik.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\setstretch{1.5}
+Der Zähler der F-Statistik
+\begin{align*}
+\frac{\hat{\varepsilon}_1^T\hat{\varepsilon}_1 - \hat{\varepsilon}^T\hat{\varepsilon}}{p_2}
+\end{align*}
+misst, inwieweit die $p_2$ Regressoren in $X_2$ die Residualquadratsumme reduzieren und zwar
+im Verhältnis zur Anzahl dieser Regressoren. Das heißt, dass bei gleicher Größe der
+Residualquadratsummenreduktion (und gleichem Nenner) ein größerer $F$ Wert resultiert,
+wenn diese durch weniger zusätzliche Regressoren resultiert, also $p_2$ klein ist (und vice versa).
+Im Sinne der Anzahl der Spalten von $X$ und der entsprechenden Komponenten von $\beta$
+favorisiert die $F$-Statistik also weniger "komplexe" Modelle.
+
+
+
+
+# F-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 22. Erläutern Sie die F-Statistik.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\setstretch{1.5}
+Die F-Statistik misst die Residualquadratsummenreduktion
+durch die $p_2$ Regressoren in $X_2$ gegenüber den  $p_1$ Regressoren in $X_1$
+pro Datenvariabilitäts ($\sigma^2$)- und Regressor ($p_2$)-Einheit.
+
+
+
+
+
+
+
+
+# F-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 23. Geben Sie das Theorem zur Verteilung der F-Statistik wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{theorem}[F-Statistik]
+\justifying
+\normalfont
+Für $X \in \mathbb{R}^{n \times p}, \beta \in \mathbb{R}^p$ und $\sigma^2 > 0$
+sei ein ALM der Form
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+mit der Partitionierung
+\begin{equation}
+X      = \begin{pmatrix} X_1     & X_2      \end{pmatrix},
+X_1      \in \mathbb{R}^{n\times p_1},
+X_2      \in \mathbb{R}^{n\times p_2},
+\mbox{ und }
+\beta := \begin{pmatrix} \beta_1 \\ \beta_2 \end{pmatrix},
+\beta_1 \in \mathbb{R}^{p_1},
+\beta_2 \in \mathbb{R}^{p_2},
+\end{equation}
+mit $p = p_1 + p_2$ gegeben. Schließlich sei
+\begin{equation}
+K := \begin{pmatrix} 0_{p_1} \\ 1_{p_2} \end{pmatrix} \in \mathbb{R}^p
+\end{equation}
+ein Kontrastgewichtsvektor. Dann gilt
+\begin{equation}
+F \sim f(\delta, n, n-p) \mbox{ mit } \delta := \frac{K^T\beta \left(K^T(X^TX)^{-1}K\right)^{-1}K^T \beta}{\sigma^2}
+\end{equation}
+\end{theorem}
+
+
+
+
+
+
+# TODO
+\color{red}
+\tiny
+Beispiel F-Statistik mit 5 Spalten? Video 2:45:00
+
+
+\color{black}
+\footnotesize
+
+Wir haben das generative ALM
+\vspace{-2mm}
+\begin{align*}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{align*}
+\vspace{-2mm}
+
+in Matrixschreibweise
+\vspace{-2mm}
+\begin{align*}
+y \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X \in \mathbb{R}^{n \times p}, \beta \in \mathbb{R}^p \sigma^2 > 0
+\end{align*}
+\vspace{-4mm}
+
+mit der Partitionierung
+\vspace{-2mm}
+\begin{align*}
+X      = \begin{pmatrix} X_1     & X_2      \end{pmatrix},
+X_1      \in \mathbb{R}^{n\times p_1},
+X_2      \in \mathbb{R}^{n\times p_2},
+\text{ und }
+\beta := \begin{pmatrix} \beta_1 \\ \beta_2 \end{pmatrix},
+\beta_1 \in \mathbb{R}^{p_1},
+\beta_2 \in \mathbb{R}^{p_2}
+\end{align*}
+\vspace{-4mm}
+
+mit $p=p_1+p_2$.
+
+Ausgeschrieben sieht das für ein Beispiel mit $p_1=1$ und $p_2=1$ wie folgt aus:
+
+\begin{align*}
+X_1 = \begin{pmatrix}x_{1,1}\\\vdots\\x_{1,n}\end{pmatrix},
+X_2 = \begin{pmatrix}x_{2,1}\\\vdots\\x_{2,n}\end{pmatrix}
+\end{align*}
+
+\begin{align*}
+y = X \beta + \varepsilon \Leftrightarrow
+\begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} 
+= \begin{pmatrix}x_{1,1}&x_{2,1}\\\vdots&\vdots\\x_{1n}&x_{2n}\end{pmatrix} 
+\begin{pmatrix}\beta_1 \\ \beta_2 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\ \vdots \\ \varepsilon_n \end{pmatrix} 
+= \begin{pmatrix}x_{1,1}\beta_1+x_{2,1}\beta_2+\varepsilon_1\\\vdots\\x_{1,n}\beta_1+x_{2,n}\beta_2+\varepsilon_n\end{pmatrix} 
+\end{align*}
+
+
+# TODO
+\color{black}
+\footnotesize
+
+Die Residuenvektoren
+\begin{align*}
+\hat{\varepsilon}_1 := y - X_1\hat{\beta}_1 \mbox{ und } \hat{\varepsilon} := y - X\hat{\beta}
+\end{align*}
+sehen dann ausgeschrieben so aus: 
+
+\begin{align*}
+\hat{\varepsilon}_1 := y - X_1\hat{\beta}_1
+\Leftrightarrow
+\begin{pmatrix}\hat{\varepsilon}_{1,1}\\\vdots\\\hat{\varepsilon}_{1,n}\end{pmatrix}
+= \begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} 
+- \begin{pmatrix}x_{1,1}\\\vdots\\x_{1,n}\end{pmatrix} 
+\hat{\beta}_1
+= \begin{pmatrix}y_1-x_{1,1}\hat{\beta}_1\\\vdots\\y_n-x_{1,n}\hat{\beta}_1\end{pmatrix} 
+\end{align*}
+
+und
+
+\begin{align*}
+\hat{\varepsilon} := y - X_1 \hat{\beta}
+\Leftrightarrow
+\begin{pmatrix}\hat{\varepsilon}_{1}\\\vdots\\\hat{\varepsilon}_{n}\end{pmatrix}
+= \begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} 
+- \begin{pmatrix}x_{1,1}&x_{2,1}\\\vdots&\vdots\\x_{1,n}&x_{2,n}\end{pmatrix} 
+\begin{pmatrix}\hat{\beta}_1\\\hat{\beta}_2\end{pmatrix}
+= \begin{pmatrix}y_1-x_{1,1}\hat{\beta}_1-x_{2,1}\hat{\beta}_2\\\vdots\\y_n-x_{1,n}\hat{\beta}_1-x_{2,n}\hat{\beta}_2\end{pmatrix} 
+\end{align*}
+
+\color{red}
+Anmerkung: 
+
+* \color{red}$\hat{\varepsilon}_1$ ist hier nicht das gleiche wie  $\varepsilon_1$
+* Konsistenz epsilon und varepsilon checken!
+
+
+
+
