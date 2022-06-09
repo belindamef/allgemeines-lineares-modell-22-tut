@@ -42,6 +42,13 @@ Inhalte basieren auf [ALM Kursmaterialien](https://www.ipsy.ovgu.de/Institut/Abt
 
 
 
+# Orga
+
+
+* (8) Tutorium - Studiendesign am Montag, den 13.06.2022 \@zoom
+* (9) Tutorium - T-Tests am Donnerstag, den 16.06.2022 in Präsenz
+* Fragestunde zur Klausurvorbereitung 11./12./13.07.2002 ??
+
 
 # Wiederholung - Frequentistisches Weltbild
 
@@ -89,6 +96,7 @@ knitr::include_graphics("7_Abbildungen/alm_5_frequentistische_inferenz.pdf")
 
 # Follow-up - Beispieldatensatz Anzahl Therapiestunden
 
+\vspace{3mm}
 \footnotesize
 \setstretch{1.2}
 \color{darkcyan}Wir bestrachten das Beispiel aus Einheit (1). 
@@ -119,6 +127,7 @@ knitr::include_graphics("7_Abbildungen/alm_7_beta_hat_1.pdf")
 
 # Follow-up - Beispieldatensatz Anzahl Therapiestunden
 
+\vspace{1mm}
 \footnotesize
 \setstretch{1.2}
 \color{darkcyan} Wie in (1) können wir Stichprobenstatistiken ausrechnen und Betaparameterschätzer der einfachen linearen Regression bestimmen. 
@@ -137,21 +146,20 @@ cxy         = cov(D$x_i, D$y_i)                                  # Stichprobenko
 # Parameteterschätzer (nach dem Theorem der ML Schätzung)
 beta_1_hat  = cxy/s2x                                            # \hat{\beta}_1, Steigungsparameter
 beta_0_hat  = y_bar - beta_1_hat*x_bar                           # \hat{\beta}_0, Offset Parameter
-sigsqr_hat  = (1/n)*sum((D$y_i-(beta_0_hat+beta_1_hat*D$x_i))^2) # Varianzparameter
 
 # Ausgabe
 cat("n:", n, "\nStichprobenmittel der x_i_-Werte:", x_bar, "\nStichprobenmittel der y_i-Werte:", 
     y_bar, "\nStichprobenvarianz der x_i-Werte:", s2x, "\nStichprobenkovarianz der (x_i,y_i)-Werte:",
-    cxy, "beta_0_hat:"  , beta_0_hat, "\nbeta_1_hat:", beta_1_hat, "\nsigsqr_hat:", sqrt(sigsqr_hat))
+    cxy, "beta_0_hat:"  , beta_0_hat, "\nbeta_1_hat:", beta_1_hat)
 ```
 
 
 
 # Anwendungsbeispiel -  Datensatz Anzahl Therapiestunden
-
+\vspace{1mm}
 \footnotesize
 \setstretch{1.2}
-\color{darkcyan} Wenn wir die Parameterschätzer bestimmen, gehen wir implizit davon aus, dass ein *allgemeines lineares Modell* diese Daten, die wir beobachtet haben, generiert hat. Genauer gesagt, ein Spezialfall des ALM, nämlich die einfache lineare Regression diese Daten generiert hat. Entsprechend können wir die Parameterschätzer auch mit den Parameterschätzformeln des ALM bestimmen. 
+\color{darkcyan} Wenn wir die Parameterschätzer bestimmen, gehen wir implizit davon aus, dass ein *allgemeines lineares Modell* diese Daten, die wir beobachtet haben, generiert hat. Genauer gesagt, ein Spezialfall des ALM nämlich die einfache lineare Regression diese Daten generiert hat. Entsprechend können wir die Parameterschätzer auch mit den Parameterschätzformeln des ALM bestimmen. 
 
 \color{black}
 \vspace{2mm}
@@ -169,12 +177,9 @@ I_n      = diag(n)                              # n x n Einheitsmatrix
 
 # Parameterschätzung
 beta_hat     = solve(t(X) %*% X) %*% t(X) %*% y   # \hat{\beta} = (X^T)X^{-1}X^Ty 
-sigsqu_hat =  (t(y - X %*% beta_hat) %*%      # \frac{(y - X\hat{\beta})^T(y - X\hat{\beta})}{n - p}
-                     (y - X %*% beta_hat))/(n-p)
 
 # Ausgabe
-cat("beta_0_hat:", beta_hat[1] , "\nbeta_1_hat:", beta_hat[2] ,                
-    "\nsigsqr_hat  : ", sigsqu_hat)
+cat("beta_0_hat:", beta_hat[1] , "\nbeta_1_hat:", beta_hat[2])
 ```
 
 
@@ -1276,11 +1281,7 @@ F \sim f(\delta, n, n-p) \mbox{ mit } \delta := \frac{K^T\beta \left(K^T(X^TX)^{
 
 
 
-# TODO
-\color{red}
-\tiny
-Beispiel F-Statistik mit 5 Spalten? Video 2:45:00
-
+# Beispiel - vollständiges und reduziertes Modell
 
 \color{black}
 \footnotesize
@@ -1330,7 +1331,7 @@ y = X \beta + \varepsilon \Leftrightarrow
 \end{align*}
 
 
-# TODO
+# Beispiel - vollständiges und reduziertes Modell
 \color{black}
 \footnotesize
 
@@ -1362,11 +1363,9 @@ und
 = \begin{pmatrix}y_1-x_{1,1}\hat{\beta}_1-x_{2,1}\hat{\beta}_2\\\vdots\\y_n-x_{1,n}\hat{\beta}_1-x_{2,n}\hat{\beta}_2\end{pmatrix} 
 \end{align*}
 
-\color{red}
 Anmerkung: 
 
-* \color{red}$\hat{\varepsilon}_1$ ist hier nicht das gleiche wie  $\varepsilon_1$
-* Konsistenz epsilon und varepsilon checken!
+* $\hat{\varepsilon}_1$ ist hier nicht das gleiche wie  $\varepsilon_1$
 
 
 
