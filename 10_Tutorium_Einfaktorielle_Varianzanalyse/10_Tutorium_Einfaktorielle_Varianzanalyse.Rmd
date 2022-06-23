@@ -1135,9 +1135,9 @@ D           = read.table(fname, sep = ",", header = TRUE)
 
 # Datenselektion
 A           = data.frame(                          # neuer Dataframe
-              F2F = D$Duration[D$Condition == "F2F"],   # F2F BDI Daten
-              ONL = D$Duration[D$Condition == "ONL"],   # ONL BDI Daten
-              WLC = D$Duration[D$Condition == "WLC"])   # WLC BDI Daten
+              F2F = D$Duration[D$Condition == "F2F"],   # F2F Duration Daten
+              ONL = D$Duration[D$Condition == "ONL"],   # ONL Duration Daten
+              WLC = D$Duration[D$Condition == "WLC"])   # WLC Duration Daten
 
 # Deskriptive Statistiken
 groupmeans  = colMeans(A)                          # Gruppenmittelwerte
@@ -1210,9 +1210,7 @@ knitr::include_graphics("10_Abbildungen/alm_10_aov_1_barplot.pdf")
 \footnotesize
 \setstretch{1.3}
 
-* \justifying n F2F und ONLINE Gruppen wurden im Mittel ähnlich hohe Reduktionen der BDI-Werte gemessen, während in der WLC Gruppe im Mittel eine leichte Erhöhung der BDI-Werte gemessen wurde. 
-* Beide Therapieformen, F2F und ONLINE scheinen einen Effekt auf die BDI-Werte zu haben. 
-* Dieses Resultat wird dadurch unterstützt, dass in der Kontrollgruppe im Mittel kein Effekt auf die BDI-Werte gemessen wurde.
+* \justifying In allen 3 Gruppen war die Therapiedauer im Mittel ähnlich hoch. 
 
 
 # Anwendungsbeispiel - \textcolor{darkblue}{SKF 25} - EVA F-Test (manuell)
@@ -1224,9 +1222,9 @@ knitr::include_graphics("10_Abbildungen/alm_10_aov_1_barplot.pdf")
 \setstretch{.9}
 ```{r}
 # Datengruppen
-y_1        = D$Duration[D$Condition == "F2F"]               # BDI Differenzwerte in der F2F Gruppe
-y_2        = D$Duration[D$Condition == "ONL"]               # BDI Differenzwerte in der ONL Gruppe
-y_3        = D$Duration[D$Condition == "WLC"]               # BDI Differenzwerte in der ONL Gruppe
+y_1        = D$Duration[D$Condition == "F2F"]          # Therapiedauer in der F2F Gruppe
+y_2        = D$Duration[D$Condition == "ONL"]          # Therapiedauer in der ONL Gruppe
+y_3        = D$Duration[D$Condition == "WLC"]          # Therapiedauer in der WLC Gruppe
 
 # Modellformulierung
 p          = 3                                         # drei Gruppen
@@ -1257,9 +1255,9 @@ p_value    = 1 - pf(Eff, p-1, n-p)                     # p-Wert
 alpha_0    = 0.05                                      # Signifikanzlevel
 k_alpha_0  = qf(1-alpha_0,p-1 ,n-p)                    # kritischer Wert
 if(Eff >= k_alpha_0){                                  # Test 1_{F >= k_alpha_0}
-    phi = 1                                                 # Ablehnen von H_0
+    phi = 1                                            # Ablehnen von H_0
 } else {
-    phi = 0                                                 # Nicht Ablehnen von H_0
+    phi = 0                                            # Nicht Ablehnen von H_0
 }
 ```
 
@@ -1274,7 +1272,7 @@ if(Eff >= k_alpha_0){                                  # Test 1_{F >= k_alpha_0}
 ```{r}
 
 # Ausgabe
-cat("DFB         :" , DFB,
+cat("DFB        :" , DFB,
     "\nDFW       :", DFW,
     "\nSQB       :", SQB,
     "\nSQW       :", SQW,
@@ -1300,7 +1298,7 @@ cat("DFB         :" , DFB,
 \vspace{1mm}
 ```{r, echo = T}
 # Benutzung von R's aov Funktion und Ausgabe
-res.aov = aov(D$BDI ~ D$Condition, data = D)
+res.aov = aov(D$Duration ~ D$Condition, data = D)
 summary(res.aov)
 ```
 
@@ -1312,4 +1310,4 @@ summary(res.aov)
 \vspace{2mm}
 \small
 
-Basierend auf dem F-Test können wir die Nullhypothese ablehnen, dass keine Unterschiede zwischen Gruppen bestehen. 
+Basierend auf dem F-Test können wir die Nullhypothese, dass keine Unterschiede zwischen Gruppen bestehen \textcolor{darkcyan}{(modellformal, dass alle $\alpha_i$ für $i=2,...,p$ = 0 sind)}, nicht ablehnen. 

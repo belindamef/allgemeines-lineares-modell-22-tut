@@ -2575,13 +2575,13 @@ knitr::kable(D[c(1:20, 41:60),],
 
 ```{r, eval = F}
 # Histogrammparameter
-h           = 1                               # gewünschte Klassenbreite
-b_0         = min(D$BDI)                      # b_0
-b_k         = max(D$BDI)                      # b_0
+h           = 5                               # gewünschte Klassenbreite
+b_0         = min(D$Age)                      # b_0
+b_k         = max(D$Age)                      # b_0
 k           = ceiling((b_k - b_0)/h)          # Anzahl der Klassen
 b           = seq(b_0, b_k, by = h)           # Klassen [b_{j-1}, b_j[
-ylimits     = c(0,.25)                        # y-Achsenlimits
-xlimits     = c(-2,14)                        # x-Achsenlimits
+ylimits     = c(0,.05)                         # y-Achsenlimits
+xlimits     = c(18,90)                        # x-Achsenlimits
 therapie    = c("F2F" , "ONL")                # Therapiebedingungen
 labs        = c("Face-to-Face",               # Abbildungslabel
                 "Online")
@@ -2602,12 +2602,12 @@ cex.main    = 1)                              # Titeltextvergrößerungsfaktor
 # Iteration über Therapiebedingungen
 for(i in 1:2){
   hist(
-  D$BDI[D$Condition == therapie[i]],          # Werte von Therapiebedingung i
+  D$Age[D$Condition == therapie[i]],          # Werte von Therapiebedingung i
   breaks    = b,                              # Histogrammklassen
   freq      = F,                              # normierte relative Häufigkeit
   xlim      = xlimits,                        # x-Achsenlimits
   ylim      = ylimits,                        # y-Achsenlimits
-  xlab      = TeX("BDI"),                     # x-Achsenbeschriftung
+  xlab      = TeX("Age"),                     # x-Achsenbeschriftung
   ylab      = "",                             # y-Achsenbeschriftung
   main      = labs[i])                        # Titelbeschriftung
 }
@@ -2659,7 +2659,7 @@ S             = data.frame(                         # Dataframeerzeugung
 
 # Iterationen über Therapiebedingungen
 for(i in 1:ntp){
-  data        = D$BDI[D$Condition == tp[i]]         # Daten
+  data        = D$Age[D$Condition == tp[i]]         # Daten
   S$n[i]      = length(data)                        # Stichprobengröße
   S$Max[i]    = max(data)                           # Maxima
   S$Min[i]    = min(data)                           # Minima
@@ -2709,8 +2709,8 @@ print.AsIs(S)
 # Dateneinlesen
 fname      = file.path(getwd(), "9_Daten", "data_9_t_tests.csv")  # Dateiname
 D          = read.table(fname, sep = ",", header = TRUE)          # Dataframe
-y_1        = D$BDI[D$Condition == "F2F"]                          # BDI Differenzwerte in der F2F Gruppe
-y_2        = D$BDI[D$Condition == "ONL"]                          # BDI Differenzwerte in der ONL Gruppe
+y_1        = D$Age[D$Condition == "F2F"]                          # BDI Differenzwerte in der F2F Gruppe
+y_2        = D$Age[D$Condition == "ONL"]                          # BDI Differenzwerte in der ONL Gruppe
 
 # Modellformulierung
 n_1        = length(y_1)                                          # Anzahl Datenpunkte Gruppe 1 (F2F)
@@ -2796,10 +2796,8 @@ paste(varphi[3])
 \setstretch{1.5}
 * Die Wahrscheinlichkeit, dass wir die Nullhypothese ablehnen würden, obwohl sie zutrifft liegt über dem von uns definierten Signifikanzlevel $\alpha_0=0.05$
 * Im Sinne von Hypothesentests lehnen wir die Nullhypothese nicht ab. 
-* Die Differenz zwischen den BDI Differenswerten in der F2F und der ONLINE Gruppe ist "nicht signifikant" nicht null. 
-* Im Rahmen der frequentistischen Inferenz wird die Schlussfolgerung gezogen, dass die post-BDI-Werte in in den beiden Gruppen sich nicht signifikant unterscheiden. 
-* Bei einem Signifikanzniveau von $0.05$ nehmen wir an, dass wir in höchstens $0.05 \times 100$, also 5 von 100 Fällen die Nullhypothese fälschlich ablehnen würden. 
-
+* Die Differenz zwischen dem Alter in der F2F und der ONLINE Gruppe ist "nicht signifikant" nicht null. 
+* Im Rahmen der frequentistischen Inferenz wird die Schlussfolgerung gezogen, dass sich das Alter in den beiden Gruppen sich nicht signifikant unterscheiden. 
 
 
 
