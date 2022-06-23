@@ -1102,7 +1102,7 @@ S             = data.frame(                         # Dataframeerzeugung
 
 # Iterationen über Therapiebedingungen
 for(i in 1:ntp){
-  data        = D$DurationI[D$Condition == tp[i]]         # Daten
+  data        = D$Duration[D$Condition == tp[i]]    # Daten
   S$n[i]      = length(data)                        # Stichprobengröße
   S$Max[i]    = max(data)                           # Maxima
   S$Min[i]    = min(data)                           # Minima
@@ -1152,9 +1152,9 @@ lwd         = 1,                                   # Liniendicke
 las         = 1)                                   # Horizontale Achsenbeschriftung
 x = barplot(                                       # Ausgabe der x-Ordinaten (?barplot für Details)
 groupmeans,
-ylim        = c(10,30),
+ylim        = c(0,30),
 col         = "gray90",
-ylab        = "BDI",
+ylab        = "Duration",
 xlab        = "Condition")
 arrows(                                            # für Details siehe ?arrows
 x0          = x,                                   # arrow start x-ordinate
