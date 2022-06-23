@@ -7,6 +7,7 @@ output:
     keep_tex: yes
     includes:
       in_header: 8_header.tex
+classoption: t    
 ---
 
 
@@ -31,7 +32,7 @@ Tutorium Allgemeines Lineares Modell
 BSc Psychologie SoSe 2022
 
 \vspace{2mm}
-\text{9. Termin: Studiendesign}
+\text{(8) Studiendesign}
 
 \vspace{18mm}
 Belinda Fleischmann
@@ -43,5 +44,500 @@ Inhalte basieren auf [ALM Kursmaterialien](https://www.ipsy.ovgu.de/Institut/Abt
 
 
 
-# Follow-up
+# Selbstkontrollfragen
+\footnotesize
+\setstretch{1.6}
+1. Erläutern Sie die Begriffe der empirischen Studie, der theoretischen Studie, und der Methodenstudie.
+2. Erläutern Sie die Begriffe der unabhängigen Variable, der abhängigen Variable, und der experimentellen Einheit.
+3. Erläutern Sie die Begriffe der diskreten Variable und der kontinuierlichen Variable.
+4. Erläutern Sie die Begriffe der randomisierten und der nicht-randomisierten kontrollierten Studie.
+5. Erläutern Sie die Begriffe des Quasiexperiments und der Korrelationsstudie.
+6. Nennen Sie drei Charakteristika randomisierter kontrollierter Studien.
+7. Erläutern Sie die Begriffe des faktoriellen und des parametrischen Studiendesigns.
+8. Erläutern Sie die Begriffe des Between-Group Designs und des Within-Group Designs.
+9. Erläutern Sie die Begriffe des Studiendesigns mit Randomisierung bzw. mit Wiederholungsmessung.
+10. Erläutern Sie den Begriff des randomisierten einfaktoriellen Studiendesigns.
+11. Diskutieren Sie Vor- und Nachteile von No-Treatment und Placebo-Treatment Kontrollgruppen.
+12. Diskutieren Sie Vor- und Nachteile von Zwei-Treatment Vergleichen ohne und mit Placebo-Kontrollgruppe.
+13. Erläutern Sie Vor- und Nachteile von reinen Posttest-Designs und Pre- und Posttest Designs.
+14. Erläutern Sie die Begriffe des mehrfaktoriellen Studiendesigns, des Crossed Designs, und des Nested Designs.
+15. Erläutern Sie den Begriff des randomisierten zweifaktoriellen Studiendesigns mit Crossed Design.
+16. Wieviele Faktoren mit jeweils wie vielen Leveln hat ein 3 x 4 x 2 Design?
+17. Wieviele experimentelle Bedingungen hat ein 3 x 4 x 2 Design?
+18. Erläutern Sie die Begriffe des Haupteffektes und der Interaktion am Beispiel eines 2 x 2 Studiendesigns.
 
+
+
+
+
+# Grundbegriffe
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 1. Erläutern Sie die Begriffe der empirischen Studie, der theoretischen Studie, und der Methodenstudie.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+Eine **empirische Studie** ist gekennzeichnet durch systematische
+Datenerhebung und/oder Datenanalyse und dient der vorläufigen Beantwortung inhaltlicher
+Forschungsfragen. Im Rahmen quantitativer empirischen Studien werden Aspekte der
+Wirklichkeit variiert und gemessen und so als Werte von **Variablen**
+repräsentiert.
+
+Weitere wichtige und wertvolle Studientypen sind zum Beispiel
+**theoretische Studien**, die der Weiterentwicklung
+von wissenschaftlichen Theorien und Modellen dienen, und
+**Methodenstudien**, die der Weiterentwicklung der
+wissenschaftlichen Methoden dienen.
+
+
+
+
+
+# Grundbegriffe
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 2. Erläutern Sie die Begriffe der unabhängigen Variable, der abhängigen Variable, und der experimentellen Einheit.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+**Unabhängige Variable (UV)**
+
+Etwas, das in einer Studie variiert wird, um seine Auswirkung auf abhängige Variablen zu studieren.
+
+\vspace{3mm}
+**Abhängige Variable (AV)**
+
+Etwas, das in einer Studie erfasst wird, um die Auswirkungen der unabhängigen Variablen zu studieren.
+
+\vspace{3mm}
+**Experimentelle Einheit (EE)**
+
+Etwas, das der UV ausgesetzt wird und an dem die AV bestimmt wird.
+
+
+
+
+
+
+
+# Grundbegriffe
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3. Erläutern Sie die Begriffe der diskreten Variable und der kontinuierlichen Variable.
+
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+Diskrete und kontinuierliche Variablen sind *numerische Variablentypen*
+
+\vspace{3mm}
+**Diskrete (kategoriale) Variablen** sind Variablen, die nur eine endliche Anzahl
+an verschiedenen Werten annehmen und meist durch ganze Zahlen repräsentiert sind.
+
+\vspace{3mm}
+**Kontinuierliche Variablen** sind Variablen, die unendlich viele Werte annehmen
+können und meist durch die reellen Zahlen repräsentiert sind.
+
+\vspace{3mm}
+Die Einordnung einer Variable als diskret oder kontinuierlich ist eine Modellierungsannahme.
+
+
+
+
+
+# Grundbegriffe
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4. Erläutern Sie die Begriffe der randomisierten und der nicht-randomisierten kontrollierten Studie.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+**Randomisierte kontrollierte Studie (Experiment)**
+
+* Die Experimentelle Einheiten werden den Versuchsbedingungen zufällig zugeordnet
+* Beispiel: Online Psychotherapie vs. Klassische Psychotherapie bei Depression
+
+\vspace{1mm}
+**Nicht-randomisierte kontrollierte Studie (Quasiexperiment)**
+
+* Untersuchung natürlicher bzw. bereits bestehender Gruppen
+* Beispiel: Online Psychotherapie bei Depression vs. Schizophrenie
+
+
+
+
+
+
+# Grundbegriffe
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Erläutern Sie die Begriffe des Quasiexperiments und der Korrelationsstudie.
+
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+\vspace{1mm}
+**Nicht-randomisierte kontrollierte Studie (Quasiexperiment)**
+
+* Untersuchung natürlicher bzw. bereits bestehender Gruppen
+* Beispiel: Online Psychotherapie bei Depression vs. Schizophrenie
+
+\vspace{1mm}
+**Analyse eines bestehenden Datensatzes (Korrelationstudie)**
+
+* Nicht-randomisierte, nicht kontrollierte Studie
+* Beobachtungsstudie ohne Intervention
+* Beispiel: Analyse von Paneldaten
+
+
+
+
+# Grundbegriffe
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 6. Nennen Sie drei Charakteristika randomisierter kontrollierter Studien.
+
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+
+* Vorhandensein einer kausaltheoretischen Hypothese vor Versuchsbeginn
+* Gute Manipulierbarkeit von unabhängigen Variablen
+* Explizite Operationalisierung der untersuchten Konstrukte
+* Kontrollierbarkeit möglichst vieler Versuchsbedingungen
+* Typisch für bereits gut erschlossene Gegenstandsbereiche
+
+
+
+
+# Grundbegriffe
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 7. Erläutern Sie die Begriffe des faktoriellen und des parametrischen Studiendesigns.
+
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+**Faktorielle Studiendesigns**
+
+* Kategoriale unabhängige Variable (Faktor genannt)
+* Die Werte der unabhängigen Variablen werden Level genannt
+* Einfaktorielle oder mehrfaktoriell
+
+**Parametrische Studiendesigns**
+
+* Kontinuierliche unabhängige Variable
+* Die Werte der unabhängigen Variablen werden oft Level genannt
+* Meist einfaktoriell
+
+
+
+
+
+# Grundbegriffe
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 8. Erläutern Sie die Begriffe des Between-Group Designs und des Within-Group Designs.
+
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+**Between-Group Designs | Studiendesigns mit Randomisierug**
+
+* \small Gesamtgruppe wird zufällig auf experimentelle Bedingungen aufgeteilt
+* Einfaktoriell, mehrfaktoriell
+* Häufig in der klinischen Forschung verwendet
+
+**Within-Group Designs | Studiendesigns mit Wiederholungsmessung**
+
+* \small Eine Gesamtgruppe wird sämtlichen experimentellen Bedingungen unterzogen
+* Einfaktoriell, mehrfaktoriell, parametrisch
+* Häufig in der psychologischen Grundlagenforschung verwendet
+
+
+
+
+
+
+# Grundbegriffe
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 9. Erläutern Sie die Begriffe des Studiendesigns mit Randomisierung bzw. mit Wiederholungsmessung.
+
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+**Between-Group Designs | Studiendesigns mit Randomisierug**
+
+* \small Gesamtgruppe wird zufällig auf experimentelle Bedingungen aufgeteilt
+* Einfaktoriell, mehrfaktoriell
+* Häufig in der klinischen Forschung verwendet
+
+**Within-Group Designs | Studiendesigns mit Wiederholungsmessung**
+
+* \small Eine Gesamtgruppe wird sämtlichen experimentellen Bedingungen unterzogen
+* Einfaktoriell, mehrfaktoriell, parametrisch
+* Häufig in der psychologischen Grundlagenforschung verwendet
+
+
+
+
+
+# Randomisierte einfaktorielle Studiendesigns
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 10. Erläutern Sie den Begriff des randomisierten einfaktoriellen Studiendesigns.
+
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+* Gesamtgruppe wird zufällig auf experimentelle Bedingungen aufgeteilt
+* Eine unabhängige Variable mit zwei oder mehr Leveln
+* Populäres Designs in der klinischen Forschung
+* Varianten:
+\begin{itemize}
+\item[o] \small Treatment- und Kontrollgruppe
+\item[o] Treatment- und Placebogruppe
+\item[o] Zwei Treatmentgruppen (und Kontrollgruppe)
+\item[o] Pretest-Posttest Designs
+\end{itemize}
+
+
+# Randomisierte einfaktorielle Studiendesigns
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 11. Diskutieren Sie Vor- und Nachteile von No-Treatment und Placebo-Treatment Kontrollgruppen.
+
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+Sowohl mit *No-Treatment Kontrollgruppen*, als auch mit *Placebo-Treatment-Kontrollgruppen* können die Bedingungen *Treatment* vs. *kein Treatment* verglichen werden. Während bei No-Treatment Kontrollgruppen nicht ausgeschlossen werden kann, dass ein gemessener Effekt von etwas anderem als der Therapie X, z.B. zwischenmenschliche Interaktion, verursacht wurde, werden mit eine Placebo-Treatment-Kontrollgruppe studieninduzierten Effekte (Placeboeffekte) kontrolliert. Jedoch ist es in manchen Fällen ethisch nicht vertretbar,  Proband:innen "nur" ein Placebo-Treatment anzubieten. Eine ethisch vertretbarere Lösung ist in manchen Fällen die Zuteiltung der Kontrollgruppe in eine Warteliste. Dabei erhält die Kontrollgruppe erst zu einem späteren Zeitpunkt eine Behandlung, wodurch zum Messzeitpunkt selbst der Vergleich zwischen Treatment vs. kein Treatment möglich ist.
+
+
+
+
+
+
+# Randomisierte einfaktorielle Studiendesigns
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 12. Diskutieren Sie Vor- und Nachteile von Zwei-Treatment Vergleichen ohne und mit Placebo-Kontrollgruppe.
+
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+Der Vorteil von *Zwei-Treatment Vergleichen mit Placebo-Kontrollgruppe* ist, dass neben dem Vergleich eines Standartreatments A mit einem neuen Treatment B auch Aussagen über die Effektivität des Standardtreatments möglich sind. Jedoch kann es in manchen Fällen ethisch nicht vertretbar sein,  Proband:innen "nur" ein Placebo-Treatment anzubieten. 
+
+
+
+
+
+# Randomisierte einfaktorielle Studiendesigns
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 13. Erläutern Sie Vor- und Nachteile von reinen Posttest-Designs und Pre- und Posttest Designs.
+
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+Während bei *reinen Posttest-Designs* keine Aussagen über Pre-Treatment Gruppenunterschiede oder Dropout Charakteristika möglich sind, können diese bei *Pre-Posttest Designs* untersucht werden. Pre-Posttest Designs fokussieren auf Treatment-induzierte Verbesserungen bzw. Verschlechterungen, da bereits vor Treatment vorliegende Gruppenunterschiede von den gemessenen Post-Treatment-Effekten subtrahiert werden können. Der Nachteil von Pre-Posttest Designs ist, dass durch die wiederholte Datenerhebung (z.B. milhilfe von Fragebögen oder kognitiven Tests) Testeffekte auftreten können (z.B. Lernen, Gewöhnung, Ermüdung). Generell sind Messwiederholungen auch mit höherem Zeit- und Kostenaufwand verbunden. 
+
+
+
+
+
+# Randomisierte mehrfaktorielle Studiendesigns
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 14. Erläutern Sie die Begriffe des mehrfaktoriellen Studiendesigns, des Crossed Designs, und des Nested Designs.
+
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+In **Mehrfaktorielle Studiendesigns** werden mehrere experimentelle Faktoren in einem Versuchsplan kombiniert.
+
+In einem **Crossed Design** wird jedes Level jedes Faktors mit allen Leveln aller Faktoren kombiniert.
+
+In **Nested Designs** werden einige Level eines Faktors nicht mit allen anderen Faktorleveln kombiniert.
+
+Prototypisch sind *zweifaktorielle* Studiendesigns mit *crossed design*.
+
+
+
+
+
+# Randomisierte mehrfaktorielle Studiendesigns
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 15. Erläutern Sie den Begriff des randomisierten zweifaktoriellen Studiendesigns mit Crossed Design.
+
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+In einem **randomisierten zweifaktoriellen Studiendesign mit crossed design** wird eine univariate abhängige Variable an individuellen experimentellen Einheiten bestimmt. Das Design beinhaltet zwei diskrete unabhängige Variablen, die mindestens zweistufig sind. Die unabhängigen Variablen werden \textit{Faktoren} genannt. Die Stufen der Faktoren werden \textit{Level} genannt. Jedes Level eines Faktors wird mit allen Level des anderen Faktors kombiniert.
+
+
+
+
+
+# Randomisierte mehrfaktorielle Studiendesigns
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 16. Wieviele Faktoren mit jeweils wie vielen Leveln hat ein 3 x 4 x 2 Design?
+
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+3 Faktoren
+
+* Faktor A mit Level 1, 2, 3
+* Faktor B mit Level 1, 2, 3, 4
+* Faktor C mit Level 1, 2
+
+
+
+# Randomisierte mehrfaktorielle Studiendesigns
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 17. Wieviele experimentelle Bedingungen hat ein 3 x 4 x 2 Design?
+
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.5}
+\small
+
+Anzahl Bedingungen: 24
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+A1, B1 C1 & A1, B2, C1 & A1, B3, C1 & A1, B4, C1 \\
+\hline
+A2, B1 C1 & A2, B2, C1 & A2, B3, C1 & A2, B4, C1 \\
+\hline
+A3, B1 C1 & A3, B2, C1 & A3, B3, C1 & A3, B4, C1 \\
+\hline
+\end{tabular} 
+\end{table}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+A1, B1 C2 & A1, B2, C2 & A1, B3, C2 & A1, B4, C2 \\
+\hline
+A2, B1 C2 & A2, B2, C2 & A2, B3, C2 & A2, B4, C2 \\
+\hline
+A3, B1 C2 & A3, B2, C2 & A3, B3, C2 & A3, B4, C2 \\
+\hline
+\end{tabular} 
+\end{table}
+
+
+# Randomisierte mehrfaktorielle Studiendesigns
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 18. Erläutern Sie die Begriffe des Haupteffektes und der Interaktion am Beispiel eines 2 x 2 Studiendesigns.
+
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.1}
+\footnotesize
+
+\justifying
+
+ **Haupteffekte**
+
+* \justifying Intuitiv spricht man vom Vorliegen eines \textit{Haupteffekts von Faktor A},
+wenn sich die Gruppenmittelwerte zwischen Level 1 und Level 2 von Faktor A,
+jeweils gemittelt über die zwei Level von Faktor B, unterscheiden.
+
+* Intuitiv spricht man vom Vorliegen eines \textit{Haupteffekts von Faktor B},
+wenn sich die Gruppenmittelwerte zwischen Level 1 und Level 2 von Faktor B,
+jeweils gemittelt über die zwei Level von Faktor A, unterscheiden.
+
+**Interaktionen**
+
+*  \justifying Intuitiv spricht man vom Vorliegen einer \textit{Interaktion der Faktoren A
+und B}, wenn der Unterschied der Gruppenmittelwerte von Faktor A zwischen Level 1 und
+2 unterschiedlich für Level 1 und Level 2 von Faktor B ausgeprägt ist bzw. wenn
+der Unterschied der Gruppenmittelwerte von Faktor B zwischen Level 1 und
+2 unterschiedlich für Level 1 und Level 2 von Faktor A ausgeprägt ist.
+
+Intuitiv beziehen sich Haupteffekte also auf (marginale) Unterschiede (Differenzen),
+während sich Interaktionen auf Unterschiede von Unterschieden (Differenzen von
+Differenzen) beziehen.
+
+Das Vorhandensein einer Interaktion besagt lediglich, dass sich die Unterschiede
+der Gruppenmittelwerte zwischen den Leveln eines experimentellen Faktors in Abhängigkeit
+von den Leveln des anderen experimentellen Faktors ändern. Es macht aber keine
+Aussage darüber, warum dies so ist. Haupteffekte und Interaktionen sind lediglich
+Datenmuster, keine mechanistischen wissenschaftlichen Theorien.

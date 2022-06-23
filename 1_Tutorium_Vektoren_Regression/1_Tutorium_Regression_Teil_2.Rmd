@@ -31,7 +31,7 @@ Tutorium Allgemeines Lineares Modell
 BSc Psychologie SoSe 2022
 
 \vspace{2mm}
-\text{3. Termin: Regression (Teil 2)}
+\text{3. Termin: (1) Regression (Teil 2)}
 
 \vspace{18mm}
 Belinda Fleischmann

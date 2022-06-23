@@ -1,0 +1,1315 @@
+---
+fontsize: 8pt
+bibliography: 10_Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: yes
+    includes:
+      in_header: 10_header.tex
+classoption: t    
+---
+
+
+```{r, include = F}
+source("10_R_Common.R")
+```
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%"}
+knitr::include_graphics("10_Abbildungen/wtfi_otto.png")
+```
+
+\vspace{2mm}
+
+\Huge
+Tutorium Allgemeines Lineares Modell
+\vspace{2mm}
+
+
+\normalsize
+BSc Psychologie SoSe 2022
+
+\vspace{2mm}
+\center
+12. Termin \text{(10) Einfaktorielle Varianzanalyse}
+
+\vspace{18mm}
+Belinda Fleischmann
+
+\vspace{3mm}
+\scriptsize
+Inhalte basieren auf [ALM Kursmaterialien](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2022/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+
+
+# Selbstkontrollfragen
+\footnotesize
+\begin{enumerate}
+\itemsep1mm
+\item Erläutern Sie das Anwendungsszenario einer einfaktoriellen Varianzanalyse (EVA).
+\item Geben Sie die Definition des EVA Modells in Erwartungswertparameterdarstellung wieder.
+\item Geben Sie die strukturelle Form des EVA Modells in Effektdarstellung wieder.
+\item Erläutern Sie die Motivation für die Reparameterisierung des EVA Modells
+\item Welche Bedeutung haben die Parameter $\mu_0,\alpha_2,...,\alpha_p$ in der Effektparameterdarstellung des EVA Modells?
+\item Warum gibt es bei $p$ Gruppen eines EVA Szenarios nur die $p-1$ Effektparameter $\alpha_2,...,\alpha_p$?
+\item Geben Sie die Designmatrixform des EVA Modells in Effektdarstellung wieder.
+\item Formulieren Sie die Designmatrix eines EVA Modells mit $n_i = 3$ und $p = 2$.
+\item Formulieren Sie die Designmatrix eines EVA Modells mit $n_i = 2$ und $p = 5$.
+\item Geben Sie das Theorem zur Betaparameterschätzung im EVA Modell wieder.
+\item Mit welchen deskriptiven Statistiken werden die Parameter $\mu_0,\alpha_2,...,\alpha_p$ eines EVA Modells geschätzt? 
+\item Geben Sie das Theorem zur Quadratsummenzerlegung bei einfaktorieller Varianzanalyse wieder.
+\item Erläutern Sie die Begriffe Total Sum of Squares, Between Sum of Squares, Within Sum of Squares der EVA.
+\item Geben Sie die Definition des Effektstärkenmaßes $\eta^2$ an.
+\end{enumerate}
+
+# Selbstkontrollfragen
+\footnotesize
+\begin{enumerate}
+\itemsep1mm
+\setcounter{enumi}{14}
+\justifying
+\item Wann nimmt das Effektstärkenmaß $\eta^2$ der EVA seinen Minimalwert an und wie lautet dieser?
+\item Wann nimmt das Effektstärkenmaß $\eta^2$ der EVA seinen Maximalwert an und wie lautet dieser?
+\item Geben Sie das Theorem zur F-Teststatistik der EVA wieder.
+\item Erläutern Sie die Begriffe Mean Between Sum of Squares und Mean Within Sum of Squares der EVA.
+\item Geben Sie das Theorem zum Zusammenhang von Effektstärkenmaß $\eta^2$  und F-Teststatistik der EVA wieder.
+\item Geben Sie die Definition des EVA F-Test wieder.
+\item Erläutern sie die Null- und Alternativhypothesen des EVA F-Tests.
+\item Geben Sie das Theorem zur Testumfangkontrolle der EVA wieder.
+\item Skizzieren Sie den Beweis zur Testumfangkontrolle der EVA.
+\item Geben Sie den p-Wert zum F-Test der EVA wieder.
+\item Betrachten Sie die Daten zur Therapiedauer der Patient:innen in der Face-to-Face,
+Online, und Waitlist Control Gruppe im Beispieldatensatz. Erstellen Sie ein Balkendiagramme 
+der Gruppenmittelwerte und Gruppenstandardabweichungen und erläutern Sie dieses. 
+Führen Sie zu diesen Daten einen EVA F-Test mit $\alpha := 0.05$ durch. 
+Dokumentieren Sie ihre Ergebnisse. Was folgern Sie aus den sich ergebenen Resultaten?
+\end{enumerate}
+
+
+
+
+
+# Anwendungsszenario - \textcolor{darkblue}{SKF 1}
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 1. Erläutern Sie das Anwendungsszenario einer einfaktoriellen Varianzanalyse (EVA).
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+Im Anwendungsszenario einer einfaktoriellen Varianzanalyse betrachten wir **zwei oder mehr Gruppen** (Stichprobe) randomisierter experimenteller Einheiten. Wir nehmen an, dass die Datenpunkte unabhängig und identisch normalverteilte Realisierungen von ZVen ($y_i \sim N(\mu_i,\sigma^2)$) sind, wobei $\mu_i$ und $\sigma^2$ unbekannt sind. 
+
+Wir sind daran interessiert die *Unsicherheit*, die mit dem inferentiellen Testen der Nullhypothese identischer Gruppenerwartungswerte verbunden ist, im Sinne eines Hypothesentests zu *quantifizieren*.
+
+$\Rightarrow$ Generalisierung des Zweistichproben-T-Tests bei unabhängigen Stichproben mit einfacher Nullhypothese für mehr als zwei Stichproben (bzw. Gruppen)
+
+
+
+
+# Modellformulierung - \textcolor{darkblue}{SKF 2} - EVA Modell Erwartungswertparameterdarstellung
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 2. Geben Sie die Definition des EVA Modells in Erwartungswertparameterdarstellung wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{definition}[EVA Modell in Erwartungswertparameterdarstellung]
+\justifying
+$y_{ij}$ mit $i= 1,...,p$ und $j = 1,...,n_i$ seien Zufallsvariablen, die
+die Datenpunkte eines EVA Szenarios modellieren. Dann hat das
+\textit{EVA Modell in Erwartungswertparameterdarstellung} die strukturelle Form
+\begin{equation}
+y_{ij} = \mu_i + \varepsilon_{ij}
+\mbox{ mit } \varepsilon_{ij} \sim N(0,\sigma^2)
+\mbox{ u.i.v. für } i = 1,...,p, j = 1,...,n_i \mbox{ mit } \mu_i \in \mathbb{R}, \sigma^2 > 0.
+\end{equation}
+und die Datenverteilungsform
+\begin{equation}\label{eq:aov_1_klassisch}
+y_{ij} \sim N(\mu_i,\sigma^2) \mbox{ u.i.v. für } i = 1,...,p, j = 1,...,n_i \mbox{ mit } \mu_i \in \mathbb{R}, \sigma^2 > 0.
+\end{equation}
+Wenn $n_i := m$ für alle $i = 1,...,p$ heißt das EVA Szenario \textit{balanciert}.
+\end{definition}
+
+
+
+
+# Modellformulierung - \textcolor{darkblue}{SKF 3} - EVA Modell Effektdarstellung (strukt. Form)
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 3. Geben Sie die strukturelle Form des EVA Modells in Effektdarstellung wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\setstretch{1.3}
+\begin{theorem}[EVA Modell in Effektdarstellung mit Referenzgruppe I]
+\justifying
+\normalfont
+Gegeben sei das EVA Modell in Erwartungswertparameterdarstellung. Dann können die
+Zufallsvariablen, die die Datenpunkte des EVA Szenarios modellieren, äquivalent in
+der \textbf{strukturellen Form}
+\begin{align}
+\begin{split}
+y_{1j} & = \mu_0 + \varepsilon_{1j} \quad\quad\,\,  \mbox{ mit }  \varepsilon_{1j} \sim N(0,\sigma^2) \mbox{ u.i.v. für } j = 1,...,n_1              \\
+y_{ij} & = \mu_0 + \alpha_i + \varepsilon_{ij}      \mbox{ mit } \varepsilon_{ij} \sim N(0,\sigma^2) \mbox{ u.i.v. für } i = 2,...,p, j = 1,...,n_i
+\end{split}
+\end{align}
+mit
+\begin{align*}
+\alpha_i := \mu_i - \mu_1 \mbox{ für } i = 2,...,p.
+\end{align*}
+\end{theorem}
+
+
+
+
+
+# Modellformulierung - Vollständiges Theorem EVA Modell
+\footnotesize
+\setstretch{1.3}
+\begin{theorem}[EVA Modell in Effektdarstellung mit Referenzgruppe I]
+\justifying
+\normalfont
+Gegeben sei das EVA Modell in Erwartungswertparameterdarstellung. Dann können die
+Zufallsvariablen, die die Datenpunkte des EVA Szenarios modellieren, äquivalent in
+der strukturellen Form
+\begin{align}\label{eq:aov_1_effekt_1}
+\begin{split}
+y_{1j} & = \mu_0 + \varepsilon_{1j} \quad\quad\,\,  \mbox{ mit }  \varepsilon_{1j} \sim N(0,\sigma^2) \mbox{ u.i.v. für } j = 1,...,n_1              \\
+y_{ij} & = \mu_0 + \alpha_i + \varepsilon_{ij}      \mbox{ mit } \varepsilon_{ij} \sim N(0,\sigma^2) \mbox{ u.i.v. für } i = 2,...,p, j = 1,...,n_i
+\end{split}
+\end{align}
+mit
+\begin{align*}
+\alpha_i := \mu_i - \mu_1 \mbox{ für } i = 2,...,p
+\end{align*}
+und in der entsprechenden Datenverteilungsform
+\begin{align}\label{eq:aov_1_effekt_2}
+\begin{split}
+y_{1j} & \sim N(\mu_0,\sigma^2)  \quad\quad\,\, \mbox{ u.i.v. für } j = 1,...,n_i \mbox{ mit } \mu_1 \in \mathbb{R}, \sigma^2 > 0 \\
+y_{ij} & \sim N(\mu_0 + \alpha_i,\sigma^2)      \mbox{ u.i.v. für } i = 2,..., p, j = 1,...,n_i \mbox{ mit } \alpha_i \in \mathbb{R}, \sigma^2 > 0 \\
+\end{split}
+\end{align}
+geschrieben werden. Wir nennen \eqref{eq:aov_1_effekt_1} und \eqref{eq:aov_1_effekt_2}
+strukturelle und Datenverteilungsform des \textit{EVA Modells in Effektdarstellung
+mit Referenzgruppe}.
+\end{theorem}
+\vspace{-2mm}
+
+
+
+# Modellformulierung - \textcolor{darkblue}{SKF 4} - Motivation Reparameterisierung
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 4. Erläutern Sie die Motivation für die Reparameterisierung des EVA Modells.
+
+\vspace{3mm}
+\color{black}
+\setstretch{1.1}
+\footnotesize
+\justifying
+\begin{itemize}
+\item \justifying Die Reparameterisierung des EVA Modells ist in Konsistenz mit mehrfaktoriellen Varianzanalysemodellen. 
+\item \textbf{Kernidee} der Reparameterisierung ist es, den Erwartungswertparameter jeder Gruppe $i$ als Summe eines \textit{gruppenübergreifenden Erwartungswertparameters} $\mu_0\in\mathbb{R}$ und jeweiliger \textit{gruppenspezifischer Effektparameter} $\alpha_i\in\mathbb{R}$ zu modellieren
+\begin{align}\label{eq:uber}
+\mu_i := \mu_0 + \alpha_i \mbox{ für } i = 1,...,p,
+\end{align}
+wobei jedes gruppenspezifische $\alpha_i$ den Unterschied (die Differenz) zwischen jedem gruppenspezifischen Erwartungswertparameter $\mu_i$ und dem gruppenübergreifenden Erwartungswertparameter
+$\mu_0$ modelliert.
+\item \textbf{Nachteil} hierbei ist, dass das in \eqref{eq:uber} dargestellte EVA Modell überparametrisiert ist
+\begin{itemize}
+  \item \footnotesize \justifying Aus $p$ geschätzten Erwartungswerparametern ($\mu_i$ für $i = 1,...,p$) müssten $p+1$ Betaparameter ($\beta=(\mu_0, \alpha_i,...,\alpha_p)^T$) geschätzt werden. 
+  \item Die Darstellung ist \textit{nicht eindeutig}, da die gleichen Werte für gruppenspezifische Erwartungswertparameter $\mu_i$ durch verschiedene Werte der Effektparameter $\alpha_i$ und gruppensübergreifenden Erwartungswertparameter $\mu_0$ dargestellt werden können.
+\end{itemize}
+\item Um dieses Problem zu umgehen, wird die \textbf{Nebenbedingung $\alpha_1 := 0$} eingeführt, wodurch sich ergibt, dass
+\begin{align*}
+\begin{split}
+\mu_1 & := \mu_0                                        \\
+\mu_i & := \mu_0 + \alpha_i \mbox{ für } i= 2,...,p  .
+\end{split}
+\end{align*}
+\item Dadurch wird die erste Gruppe zur \textbf{Referenzgruppe} und die \textit{gruppenspezifischen Effektparameter} $\alpha_i\in\mathbb{R}$ modellieren die Differenz zwischen dem Erwartungswertparameter der $i$ten Gruppe und dem Erwartungswertparameter der ersten Gruppe ($\alpha_i = \mu_i - \mu_0 = \mu_i - \mu_1 \mbox{ für } i = 1,...,p$)
+\end{itemize}
+
+
+
+# Modellformulierung - \textcolor{darkblue}{SKF 5} - Bedeutung Betaparameter
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 5. Welche Bedeutung haben die Parameter $\mu_0,\alpha_2,...,\alpha_p$ in der Effektparameterdarstellung des EVA Modells?
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.2}
+
+* $\mu_0$ ist der Erwartungswertparameter der Referenzgruppe \textcolor{darkcyan}{(da, $\alpha_1 := 0$, und somit $\mu_1 := \mu_0 + \alpha_1 = \mu_0$)}
+* die \textit{gruppenspezifischen Effektparameter} $\alpha_i\in\mathbb{R}$ für $i=2,...,p$ modellieren die Differenzen zwischen dem Erwartungswertparameter der $i$ten Gruppe und dem Erwartungswertparameter der Referenzgruppe ($\alpha_i = \mu_i - \mu_0 = \mu_i - \mu_1 \mbox{ für } i = 1,...,p$)
+
+
+
+
+
+
+# Modellformulierung - \textcolor{darkblue}{SKF 6} - Begründung für $p-1$ Effektparameter
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 6. Warum gibt es bei $p$ Gruppen eines EVA Szenarios nur die $p-1$ Effektparameter $\alpha_2,...,\alpha_p$?
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.5}
+
+* Durch die **Nebenbedingung** $\alpha_1:=0$ gilt $\mu_1 := \mu_0 + \alpha_1 = \mu_0$. 
+* Dadurch ist der Effekt in der ersten Gruppe durch den Erwartungswertparameter $\mu_0$ repräsentiert. 
+
+
+
+
+
+# Modellformulierung - \textcolor{darkblue}{SKF 7} - Designmatrixform des EVA Modells
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 7. Geben Sie die Designmatrixform des EVA Modells in Effektdarstellung wieder.
+
+\color{black}
+\footnotesize
+\vspace{2mm}
+\begin{theorem}[EVA Modell in Effektdarstellung mit Referenzgruppe II]
+\justifying
+\normalfont
+Gegeben sei die strukturelle Form des EVA Modells in Effektdarstellung mit Referenzgruppe.
+Dann hat dieses Modell die Designmatrixform
+\begin{align*}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2 I_n), n := \sum_{i=1}^p n_i
+\end{align*}
+\begin{align*}
+\renewcommand{\arraystretch}{.8}
+y
+:=
+\begin{pmatrix*}[c]
+y_{11} 	\\ 	\vdots 	\\ y_{1n_1}
+\\
+y_{21} 	\\ 	\vdots 	\\ y_{2n_2}
+\\		\\ 	\vdots 	\\
+\\
+y_{p1} 	\\ 	\vdots 	\\ y_{pn_p}
+\end{pmatrix*}
+\in \mathbb{R}^n, \,
+X :=
+\begin{pmatrix}
+1 		    & 	0		   &          & 	0 	  	    \\
+\vdots 	  &  	\vdots &	\cdots	& 	\vdots 	    \\
+1 		    & 	0		   &	        & 	0 		      \\
+1 		    & 	1		   &	        & 	0 		      \\
+\vdots 	  & 	\vdots &	\cdots	& 	\vdots 	    \\
+1 		    & 	1 		 &			    & 	0 	      	\\
+ 		      & 			   &			    & 	 		        \\
+\vdots 	  & 	\vdots &	\cdots	& 	\vdots 	    \\
+ 		      &  			   &			    & 	 		        \\
+1 		    & 	0		   &			    & 	1 		      \\
+\vdots 	  & 	\vdots &	\cdots	& 	\vdots 	    \\
+1 		    & 	0 	 	 &			    & 	1 		      \\
+\end{pmatrix}
+\in \mathbb{R}^{n \times p},\,
+\beta :=
+\begin{pmatrix}
+\mu_0 		\\
+\alpha_2	\\
+\vdots		\\
+\alpha_p
+\end{pmatrix}
+\in \mathbb{R}^{p}
+\mbox{ und }
+\sigma^2 > 0.
+\end{align*}
+\end{theorem}
+\vspace{-2mm}
+
+
+
+
+
+
+# Modellformulierung - \textcolor{darkblue}{SKF 8} - Bsp. Designmatrix mit $n_i:=3$ und $p=2$
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 8. Formulieren Sie die Designmatrix eines EVA Modells mit $n_i = 3$ und $p = 2$.
+
+\vspace{3mm}
+\color{darkcyan}
+\footnotesize
+
+Es seien
+\begin{align*}
+p = 2 \mbox{ und } n_i := 3 \mbox{ für } i = 1,...,p \mbox{, also } n = 6.
+\end{align*}
+Dann gilt
+\begin{align*}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_{6},\sigma^2 I_{6})
+\end{align*}
+mit
+\footnotesize
+\begin{align*}
+y :=
+\begin{pmatrix}
+y_{11} 	\\
+y_{12} 	\\
+y_{13}  \\
+y_{21} 	\\
+y_{22} 	\\
+y_{23}  
+\end{pmatrix},
+\,
+\color{black}
+X :=
+\begin{pmatrix}
+1  & 	0	 \\
+1  &  0  \\
+1  & 	0	 \\
+1  & 	1	 \\
+1  & 	1  \\
+1  & 	1  \\
+\end{pmatrix}
+\in \mathbb{R}^{6 \times 2},
+\,
+\color{darkcyan}
+\beta :=
+\begin{pmatrix}
+\mu_0 		\\
+\alpha_2	\\
+\end{pmatrix}
+\in \mathbb{R}^{2}
+\mbox{ und }
+\sigma^2 > 0.
+\end{align*}
+
+
+
+
+
+
+
+# Modellformulierung - \textcolor{darkblue}{SKF 9} - Bsp. Designmatrix mit $n_i:=2$ und $p=5$
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 9. Formulieren Sie die Designmatrix eines EVA Modells mit $n_i = 2$ und $p = 5$.
+
+\vspace{3mm}
+\color{darkcyan}
+\footnotesize
+
+Es seien
+\begin{align*}
+p = 5 \mbox{ und } n_i := 2 \mbox{ für } i = 1,...,p \mbox{, also } n = 10.
+\end{align*}
+Dann gilt
+\begin{align*}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_{10},\sigma^2 I_{10})
+\end{align*}
+mit
+\footnotesize
+\begin{align*}
+y :=
+\begin{pmatrix}
+y_{11} 	\\
+y_{12} 	\\
+y_{21} 	\\
+y_{22} 	\\
+y_{31} 	\\
+y_{32} 	\\
+y_{41} 	\\
+y_{42} 	\\
+y_{51} 	\\
+y_{52}
+\end{pmatrix},
+\,
+\color{black}
+X :=
+\begin{pmatrix}
+1  & 	0	 &  0	 &  0  &  0 \\
+1  & 	0	 &  0	 &  0  &  0 \\
+1  & 	1	 &	0  & 	0  &  0 \\
+1  & 	1  &	0  & 	0  &  0 \\
+1	 & 	0	 &	1  & 	0  &  0 \\
+1  &	0  &  1	 & 	0  &  0 \\
+1  & 	0	 &  0  & 	1  &  0 \\
+1  & 	0  &	0	 & 	1  &  0 \\
+1  & 	0	 &  0  & 	0  &  1 \\
+1  & 	0  &	0	 & 	0  &  1 \\
+\end{pmatrix}
+\in \mathbb{R}^{10 \times 5},
+\,
+\color{darkcyan}
+\beta :=
+\begin{pmatrix}
+\mu_0 		\\
+\alpha_2	\\
+\alpha_3	\\
+\alpha_4	\\
+\alpha_5	\\
+\end{pmatrix}
+\in \mathbb{R}^{5}
+\mbox{ und }
+\sigma^2 > 0.
+\end{align*}
+
+
+
+
+
+# Modellschätzung - \textcolor{darkblue}{SKF 10} - Betaparameterschätzung
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 10. Geben Sie das Theorem zur Betaparameterschätzung im EVA Modell wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{theorem}[Betaparameterschätzung im EVA Modell]
+\justifying
+\normalfont
+Gegeben sei die Designmatrixform des EVA in Effektdarstellung mit Referenzgruppe
+Dann ergibt sich für den Betaparameterschätzer
+\begin{equation}
+\hat{\beta}
+:= \begin{pmatrix} \hat{\mu}_0 \\ \hat{\alpha}_2        \\ \vdots \\ \hat{\alpha}_p \end{pmatrix}
+= \begin{pmatrix} \bar{y}_1   \\ \bar{y}_2 - \bar{y}_1 \\ \vdots \\ \bar{y}_p - \bar{y}_1  \end{pmatrix}
+\end{equation}
+wobei
+\begin{equation}
+\bar{y}_i := \frac{1}{n_i}\sum_{j=1}^{n_i}y_{ij}
+\end{equation}
+das Stichprobenmittel der $i$ten Gruppe bezeichent.
+\end{theorem}
+
+
+
+
+
+# Modellschätzung - \textcolor{darkblue}{SKF 11} -  Betaparameterschätzer-Komponenten
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 11. Mit welchen deskriptiven Statistiken werden die Parameter $\mu_0,\alpha_2,...,\alpha_p$ eines EVA Modells geschätzt? 
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.3}
+Gegeben, dass die erste Gruppe die Referenzgruppe ist, wird 
+
+* der Erwartungswertparameter der ersten Gruppe durch das Stichprobenmittel der ersten Gruppe geschätzt, und 
+* die Effektparameter jeder Gruppe $i$ durch die Differenz des Stichprobenmittels der $i$ten und der ersten Gruppe geschätzt.
+
+
+
+
+
+# Modellevaluation - \textcolor{darkblue}{SKF 12} - Quadratsummenzerlegung
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 12. Geben Sie das Theorem zur Quadratsummenzerlegung bei einfaktorieller Varianzanalyse wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\footnotesize
+\setstretch{1}
+\begin{theorem}[Quadratsummenzerlegung bei einfaktorieller Varianzanalyse]
+\justifying
+\normalfont
+Für $i = 1,...,p$ und $j = 1,...,n_i$ sei $y_{ij}$ die $j$te Datenvariable in der
+$i$ten Gruppe eines EVA Szenarios. Weiterhin seien
+\center
+\vspace{1mm}
+\begin{tabular}{ll}
+$\bar{y} := \frac{1}{n}\sum_{i=1}^p \sum_{j=1}^{n_i} y_{ij}$         & das \textit{Gesamtstichprobenmittel}  \\\\
+$\bar{y}_i =\frac{1}{n_i}\sum_{j=1}^{n_i} y_{ij}$                    & das \textit{$i$te Stichprobenmittel}  \\\\
+\end{tabular}
+\vspace{1mm}
+\flushleft
+sowie
+
+\center
+\vspace{1mm}
+\begin{tabular}{ll}
+$\mbox{SQT} := \sum_{i=1}^p \sum_{j=1}^{n_i} (y_{ij}-\bar{y})^{2}$   & die \textit{Total Sum of Squares}   \\\\
+$\mbox{SQB} := \sum_{i=1}^p n_i(\bar{y}_i-\bar{y})^{2}$              & die \textit{Between Sum of Squares} \\\\
+$\mbox{SQW} := \sum_{i=1}^p \sum_{j=1}^{n_i} (y_{ij}-\bar{y}_i)^{2}$ & die \textit{Within Sum of Squares}  \\\\
+\end{tabular}
+\vspace{1mm}
+\flushleft
+Dann gilt
+\begin{equation}
+\mbox{SQT} = \mbox{SQB} + \mbox{SQW}.
+\end{equation}
+\end{theorem}
+\vspace{-2mm}
+
+\color{darkcyan}
+Bemerkung
+\vspace{-2mm}
+
+* \color{darkcyan} \justifying In Analogie zur Quadratsummenzerlegung bei einer Ausgleichsgerade
+(vgl. Einheit (3) Korrelation) wird die *Within Sum of Squares* auch als
+*Residual Sum of Squares* bezeichnet.
+
+
+
+
+# Modellevaluation - \textcolor{darkblue}{SKF 13} - SQT, SQB und SQW
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 13. Erläutern Sie die Begriffe Total Sum of Squares, Between Sum of Squares, Within Sum of Squares der EVA.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.5}
+
+\textbf{Total Sum of Squares (SQT)}
+Variabilität aller Daten um das Stichprobenmittel, definiert als die Summe der quadrierten Abstände zwischen allen Datenpunkten zum Gesamtstichprobenmittel.
+
+\textbf{Between Sum of Squares (SQB)}
+Variabilität der Daten zwischen Gruppen, definiert als die Summe der quadrierten Abstände zwischen allen gruppenspezifischen Stichprobenmitteln zum Gesamtstichprobenmittel. Mit anderen Worten, quantifiziert die SQB, inwieweit die gruppenspezifischen Stichprobenmittel voneinander abweichen.  
+
+
+\textbf{Within Sum of Squares (SQW)}
+Variabilität der Daten innerhalb der Gruppen, definiert als die Summe der quadrierten Abstände zwischen gruppenspezifischen Datenpunkten zu gruppenspezifischen Stichprobenmitteln. Mit anderen Worten, quantifiziert die SQW, inwieweit die einzelnen Datenpunkte innerhalb einer Gruppe um dem gruppenspezifischen Stichprobenmittel streuen.  
+
+
+
+
+
+# Modellevaluation - \textcolor{darkblue}{SKF 14} - Effektstärkenmaß 
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 14. Geben Sie die Definition des Effektstärkenmaßes $\eta^2$ an.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.2}
+\begin{definition}[Effektstärkenmaß $\eta^2$]
+\justifying
+Für ein EVA Szenario seien die Between Sum of Squares $\mbox{SQB}$ und die
+Total Sum of Squares $\mbox{SQT}$ definiert wie oben. Dann ist das \textit{Effektstärkenmaß}
+$\eta^2$ definiert als
+\begin{equation}
+\eta^2 := \frac{\mbox{SQB}}{\mbox{SQT}}
+\end{equation}
+\end{definition}
+\vspace{-1mm}
+\color{darkcyan}Bemerkungen
+
+* \color{darkcyan} $\eta^2$ ist analog zum Bestimmtheitsmaß $R^2$ der Regression definiert.
+* $\eta^2$ gibt den Anteil der Varianz zwischen den Gruppen an der Gesamtvarianz der Daten an.
+
+
+
+
+
+
+# Modellevaluation - \textcolor{darkblue}{SKF 15} - Effektstärkenmaß Minima
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 15. Wann nimmt das Effektstärkenmaß $\eta^2$ der EVA seinen Minimalwert an und wie lautet dieser?
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.3}
+\textcolor{darkcyan}{Mit dem Theorem zur Quadratsummenzerlegung bei EVA gilt}
+\begin{align*}
+\mbox{SQB} & = 0 \Rightarrow \mbox{SQT} = \mbox{SQW und } \eta^2 = 0
+\end{align*}
+
+\color{darkcyan}
+$\eta^2$ nimmt seinem **Minimalwert** an, wenn _keine Variabilität der Daten zwischen Gruppen_ besteht, also $\mbox{SQB}=0$. Mit anderen Worten, wenn die gruppenspezifischen Stichprobenmittel nicht voneinander abweichen, und die gesamte Variabilität der Daten auf die **Variabilität der Daten innerhalb der Gruppen** zurückzuführen ist. 
+
+
+
+
+# Modellevaluation - \textcolor{darkblue}{SKF 16} - Effektstärkenmaß Minima
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 16. Wann nimmt das Effektstärkenmaß $\eta^2$ der EVA seinen Maximalwert an und wie lautet dieser?
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.3}
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\textcolor{darkcyan}{Mit dem Theorem zur Quadratsummenzerlegung bei EVA gilt}
+\begin{align*}
+\mbox{SQW} & = 0 \Rightarrow \mbox{SQT} = \mbox{SQB und } \eta^2 = 1
+\end{align*}
+
+\color{darkcyan}
+$\eta^2$ nimmt seinem **Maximalwert** an, wenn _keine Variabilität der Daten innerhalb der Gruppen_ besteht, also $\mbox{SQW}=0$. Mit anderen Worten, wenn die Datenpunkte innerhalb der Gruppen nicht von den gruppenspezifischen Stichprobenmittel abweichen, und die gesamte Variabilität der Daten auf die **Variabilität der Daten zwischen den Gruppen** zurückzuführen ist. 
+
+
+
+
+
+# Modellevaluation - \textcolor{darkblue}{SKF 17} - F-Teststatistik
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 17. Geben Sie das Theorem zur F-Teststatistik der EVA wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{theorem}[F-Teststatistik]
+\justifying
+\normalfont
+Es sei
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+die Designmatrixform der Effektdarstellung mit Referenzgruppe des EVA Modells und
+im Sinne der Definition der F-Statistik (vgl. Einheit (7) Modellevaluation) sei
+dieses Modell partioniert mit $p_1 := 1$ und $p_2 := p - 1$. Weiterhin seien
+
+\center
+\vspace{1mm}
+\begin{tabular}{ll}
+$\mbox{MSB} := \frac{\mbox{SQB}}{p-1}$        & die \textit{Mean Between Sum of Squares} \\\\
+$\mbox{MSW} := \frac{\mbox{SQW}}{n-p}$        & die \textit{Mean Within  Sum of Squares} \\\\
+\end{tabular}
+
+\flushleft
+respektive. Dann gilt
+\begin{equation}
+F = \frac{\mbox{MSB}}{\mbox{MSW}}.
+\end{equation}
+\end{theorem}
+
+\color{darkcyan}
+Bemerkungen
+\vspace{-1mm}
+
+* \color{darkcyan} Die F-Teststatistik der EVA ist ein Speialfall der allgemeinen F-Teststatistik zum Vergleich eines vollständigen Modells mit einem reduzierten Modell (vgl.(7) Modellevaluation)
+* $p_1 := 1$ impliziert, dass das reduzierte Modell die Designmatrix $X_1 := 1_n$ hat.
+* $p_1 := 1$ impliziert zudem, dass das reduzierte Modell den Betaparameter $\beta := \mu_0$ hat.
+* $p_1 := 1$ impliziert damit auch, dass das reduzierte Modell keine Effektparameter hat.
+* Die Zahl $p-1$ wird auch als "Between Freiheitsgrade" bezeichnet.
+* Die Zahl $n-p$ wird auch als "Within  Freiheitsgrade" bezeichnet.
+
+
+
+
+
+# Modellevaluation - \textcolor{darkblue}{SKF 18} - MSB und MSW
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 18. Erläutern Sie die Begriffe Mean Between Sum of Squares und Mean Within Sum of Squares der EVA.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.5}
+
+\textbf{Mean Between Sum of Squares (MSB)} sind die SQB geteilt durch Anzahl der Gruppen minus 1.
+
+\textbf{Mean Within Sum of Squares (MSW)} sind die SQW geteilt durch die Anzahl der Datenpunkte minus die Anzahl der Gruppen.  
+
+
+# Modellevaluation - \textcolor{darkblue}{SKF 19} - Zusammenhang $\eta^2$  und F-Teststatistik
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 19. Geben Sie das Theorem zum Zusammenhang von Effektstärkenmaß $\eta^2$  und F-Teststatistik der EVA wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{theorem}[Effektstärkenmaß $\eta^2$ und F-Teststatistik]
+\justifying
+\normalfont
+Für ein EVA Szenario mit $p$ Gruppen und Gesamtdatenpunktanzahl $n$ seien das 
+Effektstärkenmaß $\eta^2$ und die $F$-Teststatistik wie oben definiert. Dann gilt
+\begin{equation}
+\eta^2 = \frac{F(p-1)}{F(p-1) + (n-p)}
+\end{equation}
+\end{theorem}
+
+\color{darkcyan}
+Bemerkungen
+
+* \color{darkcyan} Das Verhältnis von $F$ und $\eta^2$ ist analog zum Verhältnis von $T$ und Cohen's $d$.
+* Die gleichzeitige Angabe von $F$ und $\eta^2$ ist redundant.
+
+
+
+
+
+
+
+# Modellevaluation - \textcolor{darkblue}{SKF 20} - F-Test in EVA
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 20. Geben Sie die Definition des EVA F-Test wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\begin{definition}[Einfaktorielle Varianzanalyse F-Test]
+\justifying
+Gegeben sie das Modell der einfaktoriellen Varianzanalyse sowie die zusammengesetzten
+Null- und Alternativhypothesen
+\begin{equation}
+H_0 : \alpha_i = 0 \mbox{ für alle } i = 2,...,p \Leftrightarrow \Theta_0 := \mathbb{R} \times \{0_{p-1}\}
+\end{equation}
+und
+\begin{equation}
+H_1 : \alpha_i \neq 0 \mbox{ für mindestens ein } i = 2,...,p \Leftrightarrow \Theta_1 := \mathbb{R}^p \setminus \mathbb{R} \times \{0_{p-1}\}
+\end{equation}
+respektive. Weiterhin sei die F-Teststatistik definiert durch
+\begin{equation}
+F = \frac{\mbox{MSB}}{\mbox{MSW}}
+\end{equation}
+mit der Mean Sum of Squares Between $\mbox{MSB}$ und der Mean Sum of Square Within
+$\mbox{MSW}$ definiert wie oben. Dann ist der \textit{einfaktoriellen Varianzanalyse F-Test (EVA F-Test)} 
+definiert als der kritische Wert-basierte Test
+\begin{equation}
+\phi(y) := 1_{\{F \ge k\}} :=
+\begin{cases}
+1 & F \ge k \\
+0 & F < k
+\end{cases}.
+\end{equation}
+\end{definition}
+
+
+
+
+
+
+# Modellevaluation - \textcolor{darkblue}{SKF 21} - Null- und Alternativhypothesen
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 21. Erläutern sie die Null- und Alternativhypothesen des EVA F-Tests.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.2}
+
+Die \textbf{Nullhypothese}
+\begin{align*}
+H_0 : \alpha_i = 0 \mbox{ für alle } i = 2,...,p \Leftrightarrow \Theta_0 := \mathbb{R} \times \{0_{p-1}\}
+\end{align*}
+beschreibt ein (hypothetisches Echte-Welt-) Szenario, in dem *alle* gruppenspezifischen Effektparameter $a_i$ gleich $0$ sind und sich somit die gruppenspezifischen Erwartungswertparameter $\mu_i$ nicht unterscheiden, da sie alle gleich $\mu_0$ sind (weil $\mu_i = \mu_0 +  \alpha_i$)
+
+Die \textbf{Alternativhypothese}
+\begin{align*}
+H_1 : \alpha_i \neq 0 \mbox{ für mindestens ein } i = 2,...,p \Leftrightarrow \Theta_1 := \mathbb{R}^p \setminus \mathbb{R} \times \{0_{p-1}\}
+\end{align*}
+beschreibt ein (hypothetisches Echte-Wet-) Szenario, in dem *mindestens ein* gruppenspezifischer Effektparameter $a_i$ nicht $0$ ist und somit *mindestens ein* gruppenspezifiscer Erwartungswertparameter $\mu_i$ nicht gleich $\mu_0$ ist. 
+
+
+
+# Modellevaluation - \textcolor{darkblue}{SKF 22} - Testumfangkontrolle
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 22. Geben Sie das Theorem zur Testumfangkontrolle der EVA wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+\begin{theorem}[Testumfangkontrolle]
+\justifying
+\normalfont
+$\phi$ sei der F-Test zur einfaktoriellen Varianzanalyse. Dann ist $\phi$ ein
+Level-$\alpha_0$-Test mit Testumfang $\alpha_0$, wenn der kritische Wert definiert
+ist durch
+\begin{equation}
+k_{\alpha_0} := \varphi^{-1}(1-\alpha_0;p-1, n-p),
+\end{equation}
+wobei $\varphi^{-1}(\cdot; p-1, n-p)$ die inverse KVF der $f$-Verteilung mit
+Freiheitsgradparametern $p-1$ und $n-p$ ist.
+\end{theorem}
+
+\color{darkcyan}
+Beispiel:
+\center
+Wahl von $k_{\alpha_0} := \varphi^{-1}(1 - \alpha_0; p-1, n-p)$ mit $p = 3, n =12$ $\alpha_0 := 0.05$ und Ablehnungsbereich
+
+```{r,echo = F, eval= F}
+par(
+family      = "sans",
+mfcol       = c(1,2),
+pty         = "m",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2,1,0),
+xaxs        = "i",
+yaxs        = "i",
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+
+# Parameter
+p           = 3                                                                  # Anzahl Gruppen
+m           = 12                                                                 # Anzahl experimenteller Einheiten pro Gruppe
+n           = p*m                                                                # Gesamtstichprobengröße
+alpha_0     = 0.05                                                               # Signifikanzlevel
+k_alpha_0   = qf(1 - alpha_0, p-1,n-p)                                           # kritischer Wert
+eff         = seq(0,6,length=1e4 )                                               # F-Statistikwerte
+Peff        = pf(eff,p-1,n-p)                                                    # F-Statistik KVF für H_0
+peff        = df(eff,p-1,n-p)                                                    # F-Statistik WDF für H_0
+
+# KVF Perspektive
+plot(                                                                            # original density function
+eff,
+Peff,
+type        = "l",
+xlab        = " ",
+ylab        = " ",
+ylim        = c(0,1),
+main        = TeX("$\\varphi(F;2,33)$"))
+
+lines(
+k_alpha_0,
+0,
+type        = "p",
+pch         = 16,
+xpd         = TRUE)
+
+lines(
+min(eff),
+1 - alpha_0,
+type        = "p",
+pch         = 16,
+xpd         = TRUE)
+
+arrows(
+x0          = min(eff),
+y0          = 1 - alpha_0,
+x1          = k_alpha_0,
+y1          = 1 - alpha_0,
+col         = "darkorange",
+angle       = 45,
+length      = .1)
+
+arrows(
+x0          = k_alpha_0,
+y0          = 1-alpha_0,
+x1          = k_alpha_0,
+y1          = 0,
+col         = "darkorange",
+angle       = 45,
+length      = .1)
+
+text(k_alpha_0-.5, .1 , TeX("$\\k_{\\alpha_0}$"), xpd = TRUE)
+text(1      , 1 , TeX("$1 - \\alpha_0$"), xpd = TRUE)
+
+# WDF Perspektive
+plot(
+eff,
+peff,
+type        = "l",
+ylab        = " ",
+xlab        = " ",
+ylim        = c(0,.4),
+main        = TeX("$f(F;2,33)$"))
+
+polygon(
+c(eff[eff  >= k_alpha_0] , max(eff), k_alpha_0),
+c(peff[eff >= k_alpha_0],       0, 0),
+col = "gray90",
+border = NA)
+
+
+lines(
+seq(k_alpha_0, max(eff), len = 1e2),
+rep(0,1e2),
+type        = "l",
+lwd         = 5,
+col         = "darkorange")
+
+lines(
+k_alpha_0,
+0,
+type        = "p",
+pch         = 16,
+xpd         = TRUE)
+
+text( k_alpha_0-.5,.03, TeX("$\\k_{\\alpha_0}$") , xpd = TRUE)
+text( 5, .05, TeX("$P(F >= k_{\\alpha_0}) = \\alpha_0$"), xpd = TRUE, cex = 1, col = "gray50")
+
+# PDF Speicherung
+dev.copy2pdf(
+file        = file.path(getwd(), "10_Abbildungen", "alm_10_eva_testumfang.pdf"),
+width       = 8,
+height      = 4)
+
+```
+```{r, echo = FALSE, out.width = "70%"}
+knitr::include_graphics("10_Abbildungen/alm_10_eva_testumfang.pdf")
+```
+
+
+
+
+
+# Modellevaluation - \textcolor{darkblue}{SKF 23} - Skizze Beweis Testumfangkontrolle
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 23. Skizzieren Sie den Beweis zur Testumfangkontrolle der EVA.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.2}
+
+* \justifying Wir wollen zeigen, dass der Test $\phi$ den Testumfang $\alpha_0$ hat, wenn wir einen kritischen Wert wählen von
+\begin{align*}
+k_{\alpha_0} := \varphi^{-1}(1-\alpha_0;p-1, n-p)
+\end{align*}
+* Mit dem kritischen Wert wollen wir kontrollieren, dass, falls die Nullhypothese zutrifft, der Testumfang höchstens $\alpha_0$ ist, anders ausgedrückt, die Testgütefunktion $q_\phi(\beta) := \mathbb{P}_{\beta}(\phi = 1)$ \textcolor{darkcyan}{(i.e. Wlkt Nullhypothese Ablehnen)} im Definitionsbereich der Nullhypothesenparameter höchstens den Wert $\alpha_0$ annimmt. 
+* Der Test $\phi$ lehnt die Nullhypothese ab, wenn $F \geq k$, wodurch sich der Ablehnungsbereich $[k,\infty[$.
+* Da die F-Teststatistik nach einer nichtzentralen $f$-Verteilung verteilt ist (formal $F \sim f(\delta, p-1,n-p)$), ergibt sich für die funktionale Form der Testgütefunktion \textcolor{darkcyan}{$\mathbb{P}_{\beta}(\phi = 1) = 1 - \varphi(k;\delta,p-1,n-p)$}, also **1 minus den Wert der KVF der \underline{nichtzentralen} $f$-Verteilung an der Stelle $k$ und mit Nichtzentralitätsparameter $\delta$ und Freiheitsgradparametern $p-1$ und $n-p$**.
+* Mit der Form des Nichtzentralitätsparameters, \color{darkcyan} (vgl. (7) Modellevaluation) gegeben durch
+\begin{align*}
+\delta = \frac{1}{\sigma^2}K^T\beta\left(K^T(X^TX)^{-1}K\right)^{-1}K^T\beta
+\end{align*}
+\color{black} ergibt sich unter der Nullhypothese, dass der Nichtzentralitätsparameter $\delta$ gleich $0$ ist, wodurch die F-Teststatistik zentral-$f$-verteilt wäre.  
+* Wenn wir also *den F-Wert*, bzw. *die Stelle* $k$ suchen, an dem die **KVF der \underline{zentralen} $f$-Verteilung mit Freiheitsgradparametern $p-1$ und $n-p$** den Wert $1-\alpha_0$ annimmt, können wir die Inverse der KVF der zentralen $f$-Verteilung mit an "der Stelle" $1-\alpha_0$ Freiheitsgradparametern $p-1$ und $n-p$ verwenden, also $\varphi^{-1}(1-\alpha_0;p-1, n-p)$.
+
+
+
+
+# Modellevaluation - \textcolor{darkblue}{SKF 24} - p-Wert
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 24. Geben Sie den p-Wert zum F-Test der EVA wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.5}
+
+Der p-Wert ist das kleinste Signifikanzlevel $\alpha_0$, bei welchem man die Nullhypothese basierend auf einem vorliegenden Wert $f$ der Teststatistik ablehnen würde. Formal,
+\begin{align*}
+\mbox{p-Wert} = \mathbb{P}(F \ge f) = 1 - \varphi(f; p-1, n-p).
+\end{align*}
+
+
+
+
+
+# Anwendungsbeispiel - \textcolor{darkblue}{SKF 25}
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 25. Betrachten Sie die Daten zur Therapiedauer der Patient:innen in der **Face-to-Face**,
+**Online**, und **Waitlist Control** Gruppe im Beispieldatensatz. Erstellen Sie ein *Balkendiagramme* 
+der Gruppenmittelwerte und Gruppenstandardabweichungen und erläutern Sie dieses. 
+Führen Sie zu diesen Daten einen *EVA F-Test* mit $\alpha := 0.05$ durch. 
+Dokumentieren Sie ihre Ergebnisse. Was *folgern* Sie aus den sich ergebenen Resultaten?
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+# Anwendungsbeispiel - \textcolor{darkblue}{SKF 25} - Dateneinlesen
+\vspace{2mm}
+\small
+\textcolor{darkblue}{Daten einlesen}
+
+\setstretch{.9}
+\tiny
+\vspace{1mm}
+
+```{r}
+fname       = file.path(getwd(), "10_Daten", "10_Einfaktorielle_Varianzanalyse_Daten.csv")
+D           = read.table(fname, sep = ",", header = TRUE)
+```
+
+
+\vspace{-1mm}
+
+```{r, echo = F}
+# table visualization
+knitr::kable(D[c(1:10, 41:50, 81:90),2:8],
+             align      = "ccc",
+             "pipe")
+```
+
+
+
+
+# Anwendungsbeispiel - \textcolor{darkblue}{SKF 25} - Deskriptive Statistiken
+\vspace{2mm}
+\small
+\textcolor{darkblue}{Deskriptive Statistiken}
+\tiny
+\setstretch{1}
+\vspace{1mm}
+
+```{r, echo = T}
+# Initialisierung eines Dataframes
+tp            = c("F2F", "ONL", "WLC")                     # Therapiebedingungen
+ntp           = length(tp)                          # Anzahl Therapiebedingungen
+S             = data.frame(                         # Dataframeerzeugung
+                n         = rep(NaN,ntp),           # Stichprobengrößen
+                Max       = rep(NaN,ntp),           # Maxima
+                Min       = rep(NaN,ntp),           # Minima
+                Median    = rep(NaN,ntp),           # Mediane
+                Mean      = rep(NaN,ntp),           # Mittelwerte
+                Var       = rep(NaN,ntp),           # Varianzen
+                Std       = rep(NaN,ntp),           # Standardabweichungen
+                row.names = tp)                     # Therapiebedingungen
+
+# Iterationen über Therapiebedingungen
+for(i in 1:ntp){
+  data        = D$DurationI[D$Condition == tp[i]]         # Daten
+  S$n[i]      = length(data)                        # Stichprobengröße
+  S$Max[i]    = max(data)                           # Maxima
+  S$Min[i]    = min(data)                           # Minima
+  S$Median[i] = median(data)                        # Mediane
+  S$Mean[i]   = mean(data)                          # Mittelwerte
+  S$Var[i]    = var(data)                           # Varianzen
+  S$Std[i]    = sd(data)                            # Standardabweichungen
+}
+
+# Ausgabe
+print.AsIs(S)
+```
+
+
+
+
+
+# Anwendungsbeispiel - \textcolor{darkblue}{SKF 25} - Balkendiagramm
+\vspace{2mm}
+\small
+\textcolor{darkblue}{Balkendiagramm}
+\vspace{1mm}
+\tiny
+\setstretch{.8}
+
+```{r, eval = F}
+# Datenselektion
+fname       = file.path(getwd(), "10_Daten", "10_Einfaktorielle_Varianzanalyse_Daten.csv")
+D           = read.table(fname, sep = ",", header = TRUE)
+
+# Datenselektion
+A           = data.frame(                          # neuer Dataframe
+              F2F = D$Duration[D$Condition == "F2F"],   # F2F BDI Daten
+              ONL = D$Duration[D$Condition == "ONL"],   # ONL BDI Daten
+              WLC = D$Duration[D$Condition == "WLC"])   # WLC BDI Daten
+
+# Deskriptive Statistiken
+groupmeans  = colMeans(A)                          # Gruppenmittelwerte
+groupstds   = apply(A,2,sd)                        # Gruppenstandardabweichungen
+
+# Balkendiagramm
+par(                                               # für Details siehe ?par
+family      = "sans",                              # Serif-freier Fonttyp
+pty         = "m",                                 # Maximale Abbildungsregion
+bty         = "l",                                 # L förmige Box
+lwd         = 1,                                   # Liniendicke
+las         = 1)                                   # Horizontale Achsenbeschriftung
+x = barplot(                                       # Ausgabe der x-Ordinaten (?barplot für Details)
+groupmeans,
+ylim        = c(10,30),
+col         = "gray90",
+ylab        = "BDI",
+xlab        = "Condition")
+arrows(                                            # für Details siehe ?arrows
+x0          = x,                                   # arrow start x-ordinate
+y0          = groupmeans - groupstds,              # arrow start y-ordinate
+x1          = x,                                   # arrow end   x-ordinate
+y1          = groupmeans + groupstds,              # arrow end   y-ordinate
+code        = 3,                                   # Pfeilspitzen beiderseits
+angle       = 90,                                  # Pfeilspitzenwinkel -> Linie
+length      = 0.05)                                # Linielänge
+
+# PDF Speicherung
+dev.copy2pdf(
+file        = file.path(getwd(), "10_Abbildungen", "alm_10_aov_1_barplot.pdf"),
+width       = 7,
+height      = 4)
+
+```
+
+
+
+
+
+
+# Anwendungsbeispiel - \textcolor{darkblue}{SKF 25} - Bankendiagramm
+\vspace{2mm}
+\small
+\textcolor{darkblue}{Balkendiagramm}
+\vspace{1mm}
+\center
+Gruppenmittelwerte $\pm$ Gruppenstandardabweichungen
+
+\tiny
+\setstretch{1}
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics("10_Abbildungen/alm_10_aov_1_barplot.pdf")
+```
+\vspace{-2mm}
+```{r}
+# Ausgabe
+print.AsIs(S)
+```
+
+# Anwendungsbeispiel - \textcolor{darkblue}{SKF 25} - Deskriptive Zusammenfassung
+\vspace{2mm}
+\small
+\textcolor{darkblue}{Deskriptive Stats Zusammenfassung}
+\vspace{1mm}
+\setstretch{1}
+```{r, echo = FALSE, out.width = "80%"}
+knitr::include_graphics("10_Abbildungen/alm_10_aov_1_barplot.pdf")
+```
+\vspace{-2mm}
+\footnotesize
+\setstretch{1.3}
+
+* \justifying n F2F und ONLINE Gruppen wurden im Mittel ähnlich hohe Reduktionen der BDI-Werte gemessen, während in der WLC Gruppe im Mittel eine leichte Erhöhung der BDI-Werte gemessen wurde. 
+* Beide Therapieformen, F2F und ONLINE scheinen einen Effekt auf die BDI-Werte zu haben. 
+* Dieses Resultat wird dadurch unterstützt, dass in der Kontrollgruppe im Mittel kein Effekt auf die BDI-Werte gemessen wurde.
+
+
+# Anwendungsbeispiel - \textcolor{darkblue}{SKF 25} - EVA F-Test (manuell)
+\vspace{2mm}
+\small
+\textcolor{darkblue}{Modellformulierung, -schätzung und -evaluation}
+\vspace{1mm}
+\tiny
+\setstretch{.9}
+```{r}
+# Datengruppen
+y_1        = D$Duration[D$Condition == "F2F"]               # BDI Differenzwerte in der F2F Gruppe
+y_2        = D$Duration[D$Condition == "ONL"]               # BDI Differenzwerte in der ONL Gruppe
+y_3        = D$Duration[D$Condition == "WLC"]               # BDI Differenzwerte in der ONL Gruppe
+
+# Modellformulierung
+p          = 3                                         # drei Gruppen
+m          = length(y_1)                               # balancierters Design mit n_i = 40
+n          = p*m                                       # Datenvektordimension
+y          = matrix(c(y_1, y_2, y_3), nrow = n)        # Datenvektor
+Xt         = cbind(                                    # Designmatrix vollständiges Modell
+             matrix(1, nrow = n, ncol = 1),
+             kronecker(diag(p),
+                       matrix(1, nrow = m, ncol = 1)))
+X          = Xt[,-2]
+X_1        = X[,1]                                     # Designmatrix reduziertes Modell
+
+# F-Teststatistikevaluation
+beta_hat   = solve(t(X) %*% X) %*% t(X) %*% y          # Betaparameterschätzer vollständiges Modell
+beta_hat_1 = solve(t(X_1) %*% X_1) %*% t(X_1) %*% y    # Betaparameterschätzer reduziertes Modell
+eps_hat    = y - X %*% beta_hat                        # Residuenvektor vollständiges Modell
+eps_hat_1  = y - X_1 %*% beta_hat_1                    # Residuenvektor reduziertes Modell
+SQT        = t(eps_hat_1) %*% eps_hat_1                # Sum of Squares Total
+SQW        = t(eps_hat)   %*% eps_hat                  # Sum of Squares Within
+SQB        = SQT - SQW                                 # Sum of Squares Between
+DFB        = p - 1                                     # Between Degrees of Freedom
+DFW        = n - p                                     # Within  Degrees of Freedom
+MSB        = SQB/DFB                                   # Mean Sum of Squares Between
+MSW        = SQW/DFW                                   # Mean Sum of Squares Within
+Eff        = MSB/MSW                                   # F-Teststatistik
+p_value    = 1 - pf(Eff, p-1, n-p)                     # p-Wert
+alpha_0    = 0.05                                      # Signifikanzlevel
+k_alpha_0  = qf(1-alpha_0,p-1 ,n-p)                    # kritischer Wert
+if(Eff >= k_alpha_0){                                  # Test 1_{F >= k_alpha_0}
+    phi = 1                                                 # Ablehnen von H_0
+} else {
+    phi = 0                                                 # Nicht Ablehnen von H_0
+}
+```
+
+
+# Anwendungsbeispiel - \textcolor{darkblue}{SKF 25} - EVA F-Test (manuell) - Resultat
+\vspace{2mm}
+\small
+\textcolor{darkblue}{Resultat}
+\vspace{1mm}
+\tiny
+\setstretch{.9}
+```{r}
+
+# Ausgabe
+cat("DFB         :" , DFB,
+    "\nDFW       :", DFW,
+    "\nSQB       :", SQB,
+    "\nSQW       :", SQW,
+    "\nMSB       :", MSB,
+    "\nMSW       :", MSW,
+    "\nF         :", Eff,
+    "\nalpha_0   : ", alpha_0,
+    "\nk_alpha_0 : ", k_alpha_0,
+    "\nphi       :", phi,
+    "\np         :", paste(p_value))
+```
+
+
+
+# Anwendungsbeispiel - \textcolor{darkblue}{SKF 25} - EVA F-Test (mit ```aov()```)
+\vspace{2mm}
+\small
+\textcolor{darkblue}{F-Test mit R-Funktion ``aov()```}
+\vspace{1mm}
+\tiny
+
+\tiny
+\vspace{1mm}
+```{r, echo = T}
+# Benutzung von R's aov Funktion und Ausgabe
+res.aov = aov(D$BDI ~ D$Condition, data = D)
+summary(res.aov)
+```
+
+
+
+
+
+# Anwendungsbeispiel - \textcolor{darkblue}{SKF 25} - Folgerung
+\vspace{2mm}
+\small
+
+Basierend auf dem F-Test können wir die Nullhypothese ablehnen, dass keine Unterschiede zwischen Gruppen bestehen. 

@@ -31,7 +31,7 @@ Tutorium Allgemeines Lineares Modell
 BSc Psychologie SoSe 2022
 
 \vspace{2mm}
-\text{4. Termin: Korrelation}
+\text{4. Termin: (2) Korrelation}
 
 \vspace{18mm}
 Belinda Fleischmann

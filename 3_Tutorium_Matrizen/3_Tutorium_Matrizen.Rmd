@@ -31,7 +31,7 @@ Tutorium Allgemeines Lineares Modell
 BSc Psychologie SoSe 2022
 
 \vspace{2mm}
-\text{5. Termin: Matrizen}
+\text{5. Termin: (3) Matrizen}
 
 \vspace{18mm}
 Belinda Fleischmann

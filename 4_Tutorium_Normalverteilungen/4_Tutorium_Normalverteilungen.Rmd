@@ -31,7 +31,7 @@ Tutorium Allgemeines Lineares Modell
 BSc Psychologie SoSe 2022
 
 \vspace{2mm}
-\text{6. Termin: Normalverteilungen}
+\text{6. Termin: (4) Normalverteilungen}
 
 \vspace{18mm}
 Belinda Fleischmann

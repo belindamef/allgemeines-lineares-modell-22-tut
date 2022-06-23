@@ -31,7 +31,7 @@ Tutorium Allgemeines Lineares Modell
 BSc Psychologie SoSe 2022
 
 \vspace{2mm}
-\text{7. Termin: Modellformulierungen}
+\text{7. Termin: (5) Modellformulierungen}
 
 \vspace{18mm}
 Belinda Fleischmann
@@ -270,7 +270,7 @@ knitr::include_graphics("5_Abbildungen/alm_5_frequentistische_inferenz.pdf")
 \footnotesize
 
 * Im Rahmen der Frquentistischen Inferenz gehen wir davon aus, dass es in der **Realität** (Welt) wahre, aber unbekannte Parameterwerte gibt (z.B. ein Wert, der den Zusammenhang zwischen zwei Variablen beschreibt).
-* Eine **Modellformulierung** drückt eine Theorie über die Realität (Welt) formal aus. So ist beispielsweise $y = X\beta+\epsilon,\epsilon \sim N(0_n, \sigma^2 I_n)$ eine Modellformulierung, die einen linearer Zusammenhang zwischen x und y behauptet.
+* Eine **Modellformulierung** drückt eine Theorie über die Realität (Welt) formal aus. So ist beispielsweise $y = X\beta+\varepsilon,\varepsilon \sim N(0_n, \sigma^2 I_n)$ eine Modellformulierung, die einen linearer Zusammenhang zwischen x und y behauptet.
 * Im Rahmen der **Modellschätzung** werden Parameterwerte basierend auf erhobenen **Daten** geschätzt. 
 * Es wird angenommen, dass ein vorliegender Datensatz eine der möglichen Realisierungen der Daten des Modells ist. Aus frequentistischer Sicht kann man unendlich oft Datensätze basierend auf einem Modell generieren und zu jedem Datensatz Schätzer oder Statistiken auswerten.
 * Im Rahmen der **Modellevaluation** werden z.B. Konfidenzintervalle bestimmt und Hypothentests durchgeführt, um die Güte der Modelle zu bewerten. 
@@ -340,10 +340,10 @@ y \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X \in \mathbb{R}^{5 \times 1}, \beta \
 \vspace{-3mm}
 
 \begin{align*}
-y &= X \beta + \epsilon \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
+y &= X \beta + \varepsilon \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
 = \begin{pmatrix}x_1\\x_2\\x_3\\x_4\\x_5\end{pmatrix} 
-\beta + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix}
-= \begin{pmatrix}x_1 \beta + \epsilon_1 \\ x_2 \beta +\epsilon_2 \\ x_3 \beta +\epsilon_3 \\ x_4 \beta +\epsilon_4 \\ x_5 \beta + \epsilon_5 \end{pmatrix}
+\beta + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4 \\ \varepsilon_5 \end{pmatrix}
+= \begin{pmatrix}x_1 \beta + \varepsilon_1 \\ x_2 \beta +\varepsilon_2 \\ x_3 \beta +\varepsilon_3 \\ x_4 \beta +\varepsilon_4 \\ x_5 \beta + \varepsilon_5 \end{pmatrix}
 \end{align*}
 
 \footnotesize
@@ -357,10 +357,10 @@ y \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X \in \mathbb{R}^{5 \times 2}, \beta \
 \vspace{-3mm}
 
 \begin{align*}
-y = X \beta + \epsilon \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
+y = X \beta + \varepsilon \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
 = \begin{pmatrix}x_{11}&x_{12}\\x_{21}&x_{22}\\x_{31}&x_{32}\\x_{41}&x_{42}\\x_{51}&x_{52}\end{pmatrix} 
-\begin{pmatrix}\beta_1 \\ \beta_2 \end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix}
-= \begin{pmatrix}x_{11} \beta_1 + x_{12} \beta_2 + \epsilon_1 \\ x_{21} \beta_1 + x_{22} \beta_2 +\epsilon_2 \\ x_{31} \beta_1 + x_{32} \beta_2 +\epsilon_3 \\ x_{41} \beta_1 + x_{42} \beta_2 +\epsilon_4 \\ x_{51} \beta_1 + x_{52} \beta_2 + \epsilon_5 \end{pmatrix}
+\begin{pmatrix}\beta_1 \\ \beta_2 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4 \\ \varepsilon_5 \end{pmatrix}
+= \begin{pmatrix}x_{11} \beta_1 + x_{12} \beta_2 + \varepsilon_1 \\ x_{21} \beta_1 + x_{22} \beta_2 +\varepsilon_2 \\ x_{31} \beta_1 + x_{32} \beta_2 +\varepsilon_3 \\ x_{41} \beta_1 + x_{42} \beta_2 +\varepsilon_4 \\ x_{51} \beta_1 + x_{52} \beta_2 + \varepsilon_5 \end{pmatrix}
 \end{align*}
 
 
@@ -436,7 +436,7 @@ Im Sinne des zentralen Grenzwertsatzes ist die Summe vieler unabhängiger Zufall
 
 Der Zufallsfehler modelliert also alle nicht durch den deterministischen Aspekt des Modells erklären Einflüsse, die aufaddiert als normalverteilt angenommen werden. 
 
-Formal gilt $\epsilon\sim N(0_n,\sigma^2I_n)$, wobei der Erwartungswertparameter $0_n$ bedeutet, dass alle Komponenten $\epsilon_1,...,\epsilon_n$ den Erwartungswert $0$ haben, und der sphärische Kovarianzmatrixparameter $0_n,\sigma^2 I_n$, bedeutet, dass alle Komponenten die Varianz $\sigma^2$ haben und alle Kovarianzen gleich $0$ sind.
+Formal gilt $\varepsilon\sim N(0_n,\sigma^2I_n)$, wobei der Erwartungswertparameter $0_n$ bedeutet, dass alle Komponenten $\varepsilon_1,...,\varepsilon_n$ den Erwartungswert $0$ haben, und der sphärische Kovarianzmatrixparameter $0_n,\sigma^2 I_n$, bedeutet, dass alle Komponenten die Varianz $\sigma^2$ haben und alle Kovarianzen gleich $0$ sind.
 
 * $\Rightarrow$ identisch verteilte Komponenten, weil alle Komponenten den Erwartungswert $0$ und den Varianzparameter $\sigma^2$ haben. 
 * $\Rightarrow$ unabhängige Komponenten, weil alle nicht-digonal-Elemente, also alle Kovarianzen zwischen Komponenten gleich $0$ (vgl. Tutorium (4) Normalverteilungen - SKF 10)
@@ -542,13 +542,13 @@ y \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X := 1_5 \in \mathbb{R}^{5 \times 1}, 
 \end{align*}
 
 \begin{align*}
-y = X \beta + \epsilon = X \mu + \epsilon
+y = X \beta + \varepsilon = X \mu + \varepsilon
 \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
 = \begin{pmatrix}1\\1\\1\\1\\1\end{pmatrix}
-\beta + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix}
+\beta + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4 \\ \varepsilon_5 \end{pmatrix}
 = \begin{pmatrix}1\\1\\1\\1\\1\end{pmatrix}
-\mu + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix}
-= \begin{pmatrix}\mu+\epsilon_1\\\mu+\epsilon_2\\\mu+\epsilon_3\\\mu+\epsilon_4\\\mu+\epsilon_5\end{pmatrix} 
+\mu + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4 \\ \varepsilon_5 \end{pmatrix}
+= \begin{pmatrix}\mu+\varepsilon_1\\\mu+\varepsilon_2\\\mu+\varepsilon_3\\\mu+\varepsilon_4\\\mu+\varepsilon_5\end{pmatrix} 
 \end{align*}
 
 
@@ -574,22 +574,22 @@ y \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X \in \mathbb{R}^{n \times 2}, \beta \
 
 \vspace{-3mm}
 \begin{align*}
-y = X \beta + \epsilon \Leftrightarrow
+y = X \beta + \varepsilon \Leftrightarrow
 \begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} 
 = \begin{pmatrix}1&x_{1}\\\vdots&\vdots\\1&x_{n}\end{pmatrix} 
-\begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \vdots \\ \epsilon_n \end{pmatrix} 
-= \begin{pmatrix}\beta_0+x_{1}\beta_1+\epsilon_1\\\vdots\\\beta_0+x_{n}\beta_1+\epsilon_n\end{pmatrix} 
+\begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\ \vdots \\ \varepsilon_n \end{pmatrix} 
+= \begin{pmatrix}\beta_0+x_{1}\beta_1+\varepsilon_1\\\vdots\\\beta_0+x_{n}\beta_1+\varepsilon_n\end{pmatrix} 
 \end{align*}
 
 \small
 Beispiel mit $n=5$
 \tiny
 \begin{align*}
-y = X \beta + \epsilon \Leftrightarrow
+y = X \beta + \varepsilon \Leftrightarrow
 \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
 = \begin{pmatrix}1&x_{1}\\1&x_{2}\\1&x_{3}\\1&x_{4}\\1&x_{5}\end{pmatrix} 
-\begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix} 
-= \begin{pmatrix}\beta_0+x_{1}\beta_1+\epsilon_1\\\beta_0+x_{2}\beta_1+\epsilon_2\\\beta_0+x_{3}\beta_1+\epsilon_3\\\beta_0+x_{4}\beta_1+\epsilon_4\\\beta_0+x_{5}\beta_1+\epsilon_5\end{pmatrix} 
+\begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4 \\ \varepsilon_5 \end{pmatrix} 
+= \begin{pmatrix}\beta_0+x_{1}\beta_1+\varepsilon_1\\\beta_0+x_{2}\beta_1+\varepsilon_2\\\beta_0+x_{3}\beta_1+\varepsilon_3\\\beta_0+x_{4}\beta_1+\varepsilon_4\\\beta_0+x_{5}\beta_1+\varepsilon_5\end{pmatrix} 
 \end{align*}
 
 
@@ -651,7 +651,7 @@ y \sim N(X\beta,\sigma^2I_12) \mbox{ mit } X \in \mathbb{R}^{n \times 2}, \beta 
 \end{align*}
 
 \begin{align*}
-y = X\beta +\epsilon \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\\y_6\\y_7\\y_8\\y_9\\y_{10}\\y_{11}\\y_{12}\end{pmatrix} = \begin{pmatrix}1&1.00\\1&1.09\\1&1.18\\1&1.27\\1&1.36\\1&1.45\\1&1.55\\1&1.64\\1&1.72\\1&1.82\\1&1.91\\1&2.00\end{pmatrix} \begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix} 
+y = X\beta +\varepsilon \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\\y_6\\y_7\\y_8\\y_9\\y_{10}\\y_{11}\\y_{12}\end{pmatrix} = \begin{pmatrix}1&1.00\\1&1.09\\1&1.18\\1&1.27\\1&1.36\\1&1.45\\1&1.55\\1&1.64\\1&1.72\\1&1.82\\1&1.91\\1&2.00\end{pmatrix} \begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4 \\ \varepsilon_5 \end{pmatrix} 
 \end{align*}
 
 

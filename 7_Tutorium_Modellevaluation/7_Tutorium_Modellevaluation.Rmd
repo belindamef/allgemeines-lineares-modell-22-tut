@@ -31,7 +31,7 @@ Tutorium Allgemeines Lineares Modell
 BSc Psychologie SoSe 2022
 
 \vspace{2mm}
-\text{8. Termin (Teil 2): Modellevaluation}
+\text{9. Termin: (7) Modellevaluation}
 
 \vspace{18mm}
 Belinda Fleischmann
@@ -42,12 +42,15 @@ Inhalte basieren auf [ALM Kursmaterialien](https://www.ipsy.ovgu.de/Institut/Abt
 
 
 
-# Orga
 
+# Motivation
 
-* (8) Tutorium - Studiendesign am Montag, den 13.06.2022 \@zoom
-* (9) Tutorium - T-Tests am Donnerstag, den 16.06.2022 in Präsenz
-* Fragestunde zur Klausurvorbereitung 11./12./13.07.2002 ??
+\center
+```{r, echo = FALSE, out.width = "45%"}
+knitr::include_graphics("7_Abbildungen/this_is_useless.jpeg")
+knitr::include_graphics("7_Abbildungen/after_a_while.jpeg")
+```
+
 
 
 # Wiederholung - Frequentistisches Weltbild
@@ -146,11 +149,14 @@ cxy         = cov(D$x_i, D$y_i)                                  # Stichprobenko
 # Parameteterschätzer (nach dem Theorem der ML Schätzung)
 beta_1_hat  = cxy/s2x                                            # \hat{\beta}_1, Steigungsparameter
 beta_0_hat  = y_bar - beta_1_hat*x_bar                           # \hat{\beta}_0, Offset Parameter
+sigsqr_hat  = (1/n)*sum((D$y_i-(beta_0_hat+beta_1_hat*D$x_i))^2) # sigsqu_hat (ML-Schätzer)
+sigsqr_hat_unbiased  = (1/(n-1))*sum((D$y_i-(beta_0_hat+beta_1_hat*D$x_i))^2) # sigsqu_hat (unverzerrt)
 
 # Ausgabe
 cat("n:", n, "\nStichprobenmittel der x_i_-Werte:", x_bar, "\nStichprobenmittel der y_i-Werte:", 
     y_bar, "\nStichprobenvarianz der x_i-Werte:", s2x, "\nStichprobenkovarianz der (x_i,y_i)-Werte:",
-    cxy, "beta_0_hat:"  , beta_0_hat, "\nbeta_1_hat:", beta_1_hat)
+    cxy, "beta_0_hat:"  , beta_0_hat, "\nbeta_1_hat:", beta_1_hat, 
+    "\nsigsqr_hat_ML-Schätzer:", sigsqr_hat, "\nsigsqr_hat_unverzerrt:", sigsqr_hat_unbiased)
 ```
 
 
@@ -176,10 +182,14 @@ X        = matrix(c(rep(1,n),x), nrow = n)      # Designmatrix
 I_n      = diag(n)                              # n x n Einheitsmatrix
 
 # Parameterschätzung
-beta_hat     = solve(t(X) %*% X) %*% t(X) %*% y   # \hat{\beta} = (X^T)X^{-1}X^Ty 
-
+beta_hat     = solve(t(X) %*% X) %*% t(X) %*% y    # \hat{\beta} = (X^T)X^{-1}X^Ty 
+sigsqu_hat =  (t(y - X %*% beta_hat) %*%           # \frac{(y - X\hat{\beta})^T(y - X\hat{\beta})}{n - p} 
+                     (y - X %*% beta_hat))/(n-p)   #      (unverzerrt)
+sigsqu_hat_ML =  (t(y - X %*% beta_hat) %*%        # \frac{(y - X\hat{\beta})^T(y - X\hat{\beta})}{n - p + 1}
+                     (y - X %*% beta_hat))/(n-p+1) #     (ML-Schätzer) 
 # Ausgabe
-cat("beta_0_hat:", beta_hat[1] , "\nbeta_1_hat:", beta_hat[2])
+cat("beta_0_hat:", beta_hat[1] , "\nbeta_1_hat:", beta_hat[2], "\nsigsqr_hat_ML-Schätzer:", 
+    sigsqr_hat, "\nsigsqr_hat_unverzerrt:", sigsqr_hat_unbiased)
 ```
 
 
@@ -780,6 +790,38 @@ T := \frac{c^T\hat{\beta}}{\sqrt{\hat{\sigma}^2c^T(X^TX)^{-1}c}}.
 
 
 
+# Beispiel T-Statistik - für $n=5$ und $p = 2$
+\vspace{3mm}
+\setstretch{1}
+\color{darkcyan}
+\small
+Wir betrachten das ALM
+
+\tiny
+\begin{align*}
+y \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X \in \mathbb{R}^{5 \times 2}, \beta \in \mathbb{R}^2, \sigma^2>0.
+\end{align*}
+
+\vspace{-3mm}
+
+\begin{align*}
+y = X \beta + \varepsilon \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
+= \begin{pmatrix}x_{11}&x_{12}\\x_{21}&x_{22}\\x_{31}&x_{32}\\x_{41}&x_{42}\\x_{51}&x_{52}\end{pmatrix} 
+\begin{pmatrix}\beta_1 \\ \beta_2 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4 \\ \varepsilon_5 \end{pmatrix}
+= \begin{pmatrix}x_{11} \beta_1 + x_{12} \beta_2 + \varepsilon_1 \\ x_{21} \beta_1 + x_{22} \beta_2 +\varepsilon_2 \\ x_{31} \beta_1 + x_{32} \beta_2 +\varepsilon_3 \\ x_{41} \beta_1 + x_{42} \beta_2 +\varepsilon_4 \\ x_{51} \beta_1 + x_{52} \beta_2 + \varepsilon_5 \end{pmatrix}
+\end{align*}
+
+
+Wenn wir einen *Kontrastgewichtsvektor* $c = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$, dann fließt $\hat{\beta}_1$ ein-fach in die T-Statistik ein und $\hat{\beta}_2$ gar nicht (null-fach). 
+\begin{align*}
+T = \frac{\begin{pmatrix}1&0\end{pmatrix}\begin{pmatrix}\hat{\beta}_1\\\hat{\beta}_1\end{pmatrix}}
+{\sqrt{\hat{\sigma}^2\begin{pmatrix}1&0\end{pmatrix}
+\begin{pmatrix}x_{11}&x_{21}&x_{31}&x_{41}&x_{51}\\x_{12}&x_{22}&x_{32}&x_{42}&x_{52}\end{pmatrix}
+\begin{pmatrix}x_{11}&x_{12}\\x_{21}&x_{22}\\x_{31}&x_{32}\\x_{41}&x_{42}\\x_{51}&x_{52}\end{pmatrix}^{-1}
+\begin{pmatrix}1\\0\end{pmatrix}}}
+\end{align*}
+Als ein anderes Beispiel könnten wir auch beide Betaparameterschätzer-Komponenten gleich gewichten, indem wir $c = \begin{pmatrix} \sfrac{1}{2} \\ \sfrac{1}{2} \end{pmatrix}$ wählen. 
+
 
 
 # T-Statistiken
@@ -833,13 +875,7 @@ T = \frac{\mbox{Geschätzte Effektstärke}}{\mbox{Geschätzte stichprobenumfangs
 \color{darkblue} 10. Geben Sie die Form der T-Statistik im Szenario von $n$ u.i.v. Zufallsvariablen wieder.
 
 \vspace{3mm}
-\color{black}
 \footnotesize
-
-Beispiel (1) Unabhängige und identisch normalverteilte Zufallsvariablen
-\vspace{2mm}
-\footnotesize
-
 \color{darkcyan} Wir haben das ALM Szenario unabhängiger und identisch normalverteilter Zufallsvariablen
 \begin{align*}
 y \sim N(X\beta,\sigma^2 I_n)
@@ -857,8 +893,7 @@ T
 = \sqrt{n}\frac{\bar{y}}{s_y}
 \end{align*}
 \color{darkcyan} was der Einstichproben-T-Teststatistik für den Fall $\mu_0 = 0$ entspricht (vgl.
-Einheit (13) Einstichproben-T-Tests in Wahrscheinlichkeitstheorie und Frequentistische
-Inferenz und Einheit (9) T-Tests in Allgemeines Lineares Modell). 
+Einheit (13) Einstichproben-T-Tests in WTFI und Einheit (9) T-Tests in ALM. 
 
 
 
@@ -888,7 +923,7 @@ Die T-Statistik nimmt hohe Werte für hohe Werte von $\bar{y}$ (Effekt), kleine 
 \color{black}
 \textit{Cohen's $d$} als \textit{Effektstärkenmaß} ist gegeben als
 \begin{align*}
-d := \frac{\bar{y}}{s_y^2},
+d := \frac{\bar{y}}{s_y},
 \end{align*}
 so dass
 \begin{align*}
@@ -934,6 +969,59 @@ T := \frac{c^T\hat{\beta} - c^T\beta_0}{\sqrt{\hat{\sigma}^2 c^T(X^TX)^{-1}c}}.
 \vspace{-2mm}
 
 
+# T-Statistiken
+\vspace{3mm}
+\setstretch{2}
+\large
+\color{darkblue} 12. Geben Sie die Definition der T-Teststatistik wieder.
+
+\vspace{3mm}
+\color{darkcyan}
+\footnotesize
+Im Folgenden sind 3 Beispiele dafür aufgeführt, wie eine T-Teststatistik aussehen könnte, für $p=2$, $n=5$, einen Nummhypothesenbetaparameter $\beta_0 = \begin{pmatrix}0 \\0\end{pmatrix}$ und einen Kontrastgewichtsvektor $c=\begin{pmatrix}1\\0\end{pmatrix}$. Bitte beachte, dass jedem Beispiel ein anderer Datensatz, i.e. $y^{(1)}, y^{(2)}$ und $y^{(3)}$  zugrunde liegt, mit welchem die entsprechenden Betaparameterschätzer, i.e. $\hat{\beta}^{(1)}, \hat{\beta}^{(2)}$ und $\hat{\beta}^{(3)}$, bestimmt wurden (Sonst hätten die $\hat{\beta}$s in allen 3 Beispielen den gleichen Wert).
+
+
+
+# T-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\color{darkcyan}
+\footnotesize
+
+Beispiel 1) Wir haben mithilfe eines Datensatzes $y^{(1)}$ den Betaparameter geschätzt und $\hat{\beta}^{(1)}=\begin{pmatrix}0\\0\end{pmatrix}$ erhalten.
+
+\tiny
+\begin{align*}
+T^{(1)} = \frac{\begin{pmatrix}1&0\end{pmatrix}\begin{pmatrix}0\\0\end{pmatrix}- 
+\begin{pmatrix}1&0\end{pmatrix}\begin{pmatrix}0\\0\end{pmatrix}}
+{\sqrt{\hat{\sigma}^2 c^T(X^TX)^{-1}c}}
+= \frac{0-0}{\sqrt{\hat{\sigma}^2 c^T(X^TX)^{-1}c}}
+= 0
+\end{align*}
+
+\footnotesize
+Beispiel 2) Wir haben mithilfe eines Datensatzes $y^{(2)}$ den Betaparameter geschätzt und $\hat{\beta}^{(2)}=\begin{pmatrix}2.81\\0.44\end{pmatrix}$ erhalten.
+\tiny
+\begin{align*}
+T^{(2)} = \frac{\begin{pmatrix}1&0\end{pmatrix}\begin{pmatrix}2.81\\0.44\end{pmatrix}- 
+\begin{pmatrix}1&0\end{pmatrix}\begin{pmatrix}0\\0\end{pmatrix}}
+{\sqrt{\hat{\sigma}^2 c^T(X^TX)^{-1}c}}
+= \frac{2.81-0}{\sqrt{\hat{\sigma}^2 c^T(X^TX)^{-1}c}} \neq 0
+\end{align*}
+
+\footnotesize
+Beispiel 3) Wir haben mithilfe eines Datensatzes $y^{(3)}$ den Betaparameter geschätzt und $\hat{\beta}^{(3)}=\begin{pmatrix}-4.33\\0.03\end{pmatrix}$ erhalten.
+\tiny
+\begin{align*}
+T^{(3)} = \frac{\begin{pmatrix}1&0\end{pmatrix}\begin{pmatrix}-4.33\\0.03\end{pmatrix}- 
+\begin{pmatrix}1&0\end{pmatrix}\begin{pmatrix}0\\0\end{pmatrix}}
+{\sqrt{\hat{\sigma}^2 c^T(X^TX)^{-1}c}}
+= \frac{-4.33-0}{\sqrt{\hat{\sigma}^2 c^T(X^TX)^{-1}c}} \neq 0
+\end{align*}
+
+Anmerkung:
+
+* \color{darkcyan} Zu Beispiel 1) Es ist äußerst unwahrscheinlch (idR unmöglich) ein $\hat{\beta}=\begin{pmatrix}0\\0\end{pmatrix}$  zu schätzen. Dieses Beispiel ist hier nur dafür da, um veranschaulichen, wie die T-Teststatistik bei unterschiedlichen Beispieldatensätzen und entsprechenden unterschiedlichen $\hat{\beta}$s aussehen kann. 
 
 
 
@@ -951,12 +1039,9 @@ T := \frac{c^T\hat{\beta} - c^T\beta_0}{\sqrt{\hat{\sigma}^2 c^T(X^TX)^{-1}c}}.
 \setstretch{1.5}
 
 * $T$ ist eine Funktion der Parameterschätzer und des Nullhypothesenbetaparameters $\beta_0$
-* Der Term $c^T\beta - c^T\beta_0$ misst den Abstand zwischen einem erechneten $\hat{\beta}$ und dem Nullhypothesenbetaparameter $\beta_0$
-* $T=0$, für $c^T\beta = c^T\beta_0$
-* $T\neq0$, für $c^T\beta \neq c^T\beta_0$
-
-
-
+* Der Term $c^T\hat{\beta} - c^T\beta_0$ misst den Abstand zwischen einem erechneten $\hat{\beta}$ und dem Nullhypothesenbetaparameter $\beta_0$
+* $T=0$, für $c^T\hat{\beta}  = c^T\beta_0$
+* $T\neq0$, für $c^T\hat{\beta}  \neq c^T\beta_0$
 
 
 
@@ -984,6 +1069,121 @@ T \sim t(\delta, n-p) \mbox{ mit } \delta := \frac{c^T\beta - c^T\beta_0}{\sqrt{
 Anmerkung:
 
 * $T$ ist eine Funktion der Parameterschätzer, $\delta$ ist eine Funktion der wahren, aber unbekannten, Parameter
+
+
+
+
+
+# T-Statistiken
+
+\small
+\color{darkcyan}
+Zur Veranschaulichung:
+Simulation Unabhängig und identische normalverteilte Zufallsvariablen (aus VO)
+
+\small
+Wahre, aber unbekannte, Hypothesenszenarien $c^T\beta = c^T\beta_0$ und $c^T\beta \neq c^T\beta_0$
+
+\vspace{2mm}
+\tiny
+\setstretch{1}
+```{r, eval=F, echo=F}
+# Libraries
+library(MASS)                                                  # multivariate Normalverteilung
+
+# Modellformulierung
+n          = 12                                                # Anzahl von Datenpunkten
+p          = 1                                                 # Anzahl von Betaparametern
+X          = matrix(c(rep(1,n)), nrow = n)                     # Designmatrix
+I_n        = diag(n)                                           # Einheitsmatrix
+beta       = c(0,1)                                            # wahre , aber unbekannte , Betaparameter
+nscn       = length(beta)                                      # Anzahl wahrer, aber unbekannter, Hypothesenszenarien
+sigsqr     = 1                                                 # wahrer, aber unbekannter, Varianzparameter
+c          = 1                                                 # Kontrastvektor von Interessse
+beta_0     = 0                                                 # Nullhypothesebetaparameter
+
+# Frequentistische Simulation
+nsim       = 1e4                                               # Anzahl Simulationen
+delta      = rep(NaN, nscn)                                    # Anzahl Nichtzentralitätsparameter
+Tee        = matrix(rep(NaN, nscn*nsim), ncol = nscn)          # T-Teststatistik Realisierungsarray
+for(s in 1:nscn){                                              # Hypothesenszenarien
+  delta[s]    = ((t(c) %*% beta[s] - t(c) %*% beta_0)/         # Nichtzentralitätsparameter
+                sqrt(sigsqr*t(c)%*%solve(t(X)%*%X)%*%c))
+  for(i in 1:nsim){                                            # Simulationsiterationen
+    y          = mvrnorm(1, X %*% beta[s], sigsqr*I_n)         # y
+    beta_hat   = solve(t(X) %*% X) %*% t(X) %*% y              # \hat{\beta}
+    eps_hat    = y - X %*% beta_hat                            # \hat{\eps}
+    sigsqr_hat = (t(eps_hat) %*% eps_hat)/(n-p)                # \hat{\sigma}^2
+    Tee[i,s]   = ((t(c) %*% beta_hat - t(c) %*% beta_0)/       # T
+                  sqrt(sigsqr_hat*t(c)%*%solve(t(X)%*%X)%*%c))
+  }
+}
+```
+
+```{r, eval = F, echo = F}
+library(latex2exp)
+# Visualisierung
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,2),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2.5,1,0),
+xaxs        = "i",
+yaxs        = "i",
+xpd         = TRUE,
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
+
+# T-Teststatistik Ergebnisraum
+xlims  = c(-5,12)
+t_min  = xlims[1]
+t_max  = xlims[2]
+t_res  = 1e3
+t      = seq(t_min, t_max, len = t_res)
+lab    = c(TeX("$\\c^T beta = \\c^T beta_0$"), TeX("$\\c^T beta \\neq \\c^T beta_0$") )
+
+# T-Teststatistiken
+for(s in 1:nscn){
+  p_t    = dt(t,n-p, delta[s])
+  hist(
+  Tee[,s],
+  breaks = 50,
+  col    = "gray90",
+  prob   = TRUE,
+  xlab   = TeX("$T$"),
+  ylab   = "",
+  xlim   = xlims,
+  ylim   = c(0,.4),
+  main   = lab[s])
+  lines(
+  t,
+  p_t,
+  type  = "l",
+  lwd   = 2,
+  col   = "darkorange")
+}
+
+# Speichern
+dev.copy2pdf(
+file        = file.path("7_Abbildungen", "alm_7_T_Teststatistik_1.pdf"),
+width       = 8,
+height      = 4)
+```
+
+
+```{r, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("7_Abbildungen/alm_7_T_Teststatistik_1.pdf")
+```
+
+
+
+
 
 
 
@@ -1026,6 +1226,98 @@ y = X_1\beta_1 + \varepsilon_1 \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
 das \textit{reduzierte Modell} und sprechen von einer \textit{Partionierung eines
 (vollständigen) Modells}.
 \end{definition}
+
+
+
+
+
+# Beispiel - vollständiges und reduziertes Modell
+
+\color{darkcyan}
+\footnotesize
+
+Wir haben das generative ALM
+\vspace{-2mm}
+\begin{align*}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{align*}
+\vspace{-2mm}
+
+in Matrixschreibweise
+\vspace{-2mm}
+\begin{align*}
+y \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X \in \mathbb{R}^{n \times p}, \beta \in \mathbb{R}^p \sigma^2 > 0
+\end{align*}
+\vspace{-4mm}
+
+mit der Partitionierung
+\vspace{-2mm}
+\begin{align*}
+X      = \begin{pmatrix} X_1     & X_2      \end{pmatrix},
+X_1      \in \mathbb{R}^{n\times p_1},
+X_2      \in \mathbb{R}^{n\times p_2},
+\text{ und }
+\beta := \begin{pmatrix} \beta_1 \\ \beta_2 \end{pmatrix},
+\beta_1 \in \mathbb{R}^{p_1},
+\beta_2 \in \mathbb{R}^{p_2}
+\end{align*}
+\vspace{-4mm}
+
+mit $p=p_1+p_2$.
+
+Ausgeschrieben sieht das für ein Beispiel mit $p_1=1$ und $p_2=1$ wie folgt aus:
+
+\begin{align*}
+X_1 = \begin{pmatrix}x_{1,1}\\\vdots\\x_{1,n}\end{pmatrix},
+X_2 = \begin{pmatrix}x_{2,1}\\\vdots\\x_{2,n}\end{pmatrix}
+\end{align*}
+
+\begin{align*}
+y = X \beta + \varepsilon \Leftrightarrow
+\begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} 
+= \begin{pmatrix}x_{1,1}&x_{2,1}\\\vdots&\vdots\\x_{1n}&x_{2n}\end{pmatrix} 
+\begin{pmatrix}\beta_1 \\ \beta_2 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\ \vdots \\ \varepsilon_n \end{pmatrix} 
+= \begin{pmatrix}x_{1,1}\beta_1+x_{2,1}\beta_2+\varepsilon_1\\\vdots\\x_{1,n}\beta_1+x_{2,n}\beta_2+\varepsilon_n\end{pmatrix} 
+\end{align*}
+
+
+# Beispiel - vollständiges und reduziertes Modell
+\color{darkcyan}
+\footnotesize
+
+Die Residuenvektoren
+\begin{align*}
+\hat{\varepsilon}_1 := y - X_1\hat{\beta}_1 \mbox{ und } \hat{\varepsilon} := y - X\hat{\beta}
+\end{align*}
+sehen dann ausgeschrieben so aus: 
+
+\begin{align}\label{part_1}
+\hat{\varepsilon}_1 := y - X_1\hat{\beta}_1
+\Leftrightarrow
+\begin{pmatrix}\hat{\varepsilon}_{1,1}\\\vdots\\\hat{\varepsilon}_{1,n}\end{pmatrix}
+= \begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} 
+- \begin{pmatrix}x_{1,1}\\\vdots\\x_{1,n}\end{pmatrix} 
+\hat{\beta}_1
+= \begin{pmatrix}y_1-x_{1,1}\hat{\beta}_1\\\vdots\\y_n-x_{1,n}\hat{\beta}_1\end{pmatrix} 
+\end{align}
+
+und
+
+\begin{align}\label{voll}
+\hat{\varepsilon} := y - X \hat{\beta}
+\Leftrightarrow
+\begin{pmatrix}\hat{\varepsilon}_{1}\\\vdots\\\hat{\varepsilon}_{n}\end{pmatrix}
+= \begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} 
+- \begin{pmatrix}x_{1,1}&x_{2,1}\\\vdots&\vdots\\x_{1,n}&x_{2,n}\end{pmatrix} 
+\begin{pmatrix}\hat{\beta}_1\\\hat{\beta}_2\end{pmatrix}
+= \begin{pmatrix}y_1-x_{1,1}\hat{\beta}_1-x_{2,1}\hat{\beta}_2\\\vdots\\y_n-x_{1,n}\hat{\beta}_1-x_{2,n}\hat{\beta}_2\end{pmatrix} 
+\end{align}
+
+Anmerkung: 
+
+* \color{darkcyan} $\hat{\varepsilon}_1$ in \eqref{part_1} ist hier nicht das gleiche wie  $\hat{\varepsilon}_1$ \eqref{voll}!
+* in \eqref{part_1} bezeichnet $\hat{\varepsilon}_1 \in \mathbb{R}^n$ den Residualvektor, der aus der 1. Partitionierung resultiert und in \eqref{voll} bezeichnet 
+* in \eqref{voll} bereichnet $\hat{\varepsilon}_1 \in \mathbb{R}^1$ einen Eintrag des Residualvektors der aus dem vollständigen Modell resultiert. 
 
 
 
@@ -1084,7 +1376,7 @@ gegeben und $\sigma^2 > 0$ als bekannt voraussgesetzt. Weiterhin seien
 \hat{\varepsilon}   := y - X\hat{\beta} \mbox{ und }
 \hat{\varepsilon}_1 := y - X_1\hat{\beta}_1
 \end{equation}
-die Residuenvektoren des vollständigen und es reduzierten Modells, respektive.
+die Residuenvektoren des vollständigen und des reduzierten Modells, respektive.
 Dann gilt
 \begin{equation}
 \ln \qoppa =
@@ -1152,9 +1444,9 @@ F := \frac{\frac{\hat{\varepsilon}_1^T\hat{\varepsilon}_1 - \hat{\varepsilon}^T\
 \footnotesize
 \setstretch{1.5}
 
-* Die F-Statistik und der Likelihood-Quotient sind nicht das gleich, messen aber intuitiv das gleiche. 
+* Die F-Statistik und der Likelihood-Quotient sind nicht das gleiche, messen aber intuitiv das gleiche. 
 * Beide Größen messen, wie viel wahrscheinlicher es ist, bestimmte Daten zu beobachten unter dem vollständigen als unter dem reduzierten Modell. 
-* Anders ausgedrückt messen beide Größen, inwieweit das Hinzunehmen des Regressors $p_2$ (so wie im vollständigen) die Erklärung der Daten im Vergleich zum reduzierten Modell verbessert.
+* Anders ausgedrückt messen beide Größen, inwieweit das Hinzunehmen der $p_2$ Regressoren (die im vollständigen Modell beinhaltet sind) die Erklärung der Daten im Vergleich zum reduzierten Modell (das keine $p_2$ Regressoren beinhaltet) verbessert.
 
 
 
@@ -1165,6 +1457,33 @@ F := \frac{\frac{\hat{\varepsilon}_1^T\hat{\varepsilon}_1 - \hat{\varepsilon}^T\
 \setstretch{1}
 \large
 \color{darkblue} 20. Definieren Sie und erläutern Sie den Zähler der F-Statistik.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+\setstretch{1.5}
+Der Zähler der F-Statistik
+\begin{align*}
+\frac{\hat{\varepsilon}_1^T\hat{\varepsilon}_1 - \hat{\varepsilon}^T\hat{\varepsilon}}{p_2}
+\end{align*}
+misst, inwieweit die $p_2$ Regressoren in $X_2$ die Residualquadratsumme reduzieren und zwar
+im Verhältnis zur Anzahl dieser Regressoren. Das heißt, dass bei gleicher Größe der
+Residualquadratsummenreduktion (und gleichem Nenner) ein größerer $F$ Wert resultiert,
+wenn diese durch weniger zusätzliche Regressoren resultiert, also $p_2$ klein ist (und vice versa).
+Im Sinne der Anzahl der Spalten von $X$ und der entsprechenden Komponenten von $\beta$
+favorisiert die $F$-Statistik also weniger "komplexe" Modelle.
+
+
+
+
+
+# F-Statistiken
+\vspace{3mm}
+\setstretch{1}
+\large
+\color{darkblue} 21. Definieren Sie und erläutern Sie den Nenner der F-Statistik.
 
 \vspace{3mm}
 \color{black}
@@ -1186,32 +1505,6 @@ die nicht durch die $p_1$ Regressoren in $X_1$ erklärt wird, in der Schätzung 
 widerspiegeln würde. Der Nenner der F-Statistik ist also in beiden Fällen der sinnvollere
 Schätzer von $\sigma^2$.
 
-
-
-
-
-
-# F-Statistiken
-\vspace{3mm}
-\setstretch{1}
-\large
-\color{darkblue} 21. Definieren Sie und erläutern Sie den Nenner der F-Statistik.
-
-\vspace{3mm}
-\color{black}
-\footnotesize
-
-\setstretch{1.5}
-Der Zähler der F-Statistik
-\begin{align*}
-\frac{\hat{\varepsilon}_1^T\hat{\varepsilon}_1 - \hat{\varepsilon}^T\hat{\varepsilon}}{p_2}
-\end{align*}
-misst, inwieweit die $p_2$ Regressoren in $X_2$ die Residualquadratsumme reduzieren und zwar
-im Verhältnis zur Anzahl dieser Regressoren. Das heißt, dass bei gleicher Größe der
-Residualquadratsummenreduktion (und gleichem Nenner) ein größerer $F$ Wert resultiert,
-wenn diese durch weniger zusätzliche Regressoren resultiert, also $p_2$ klein ist (und vice versa).
-Im Sinne der Anzahl der Spalten von $X$ und der entsprechenden Komponenten von $\beta$
-favorisiert die $F$-Statistik also weniger "komplexe" Modelle.
 
 
 
@@ -1278,95 +1571,154 @@ F \sim f(\delta, n, n-p) \mbox{ mit } \delta := \frac{K^T\beta \left(K^T(X^TX)^{
 
 
 
+# F-Statisik
 
-
-
-# Beispiel - vollständiges und reduziertes Modell
-
-\color{black}
 \footnotesize
+\color{darkcyan}
+Visualisierung zweier beispielhafter wahrer, aber unbekannten Betaparameter. 
 
-Wir haben das generative ALM
-\vspace{-2mm}
-\begin{align*}
-y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
-\end{align*}
-\vspace{-2mm}
+\tiny
+```{r, echo=F}
+# Libraries
+library(MASS)                                             # Multivariate Normalverteilung
 
-in Matrixschreibweise
-\vspace{-2mm}
-\begin{align*}
-y \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X \in \mathbb{R}^{n \times p}, \beta \in \mathbb{R}^p \sigma^2 > 0
-\end{align*}
-\vspace{-4mm}
+# Modellformulierung
+nmod   = 2                                                # Anzahl Modelle
+n      = 10                                               # Anzahl Datenpunkte
+p      = 2                                                # Anzahl Betaparameter
+p_1    = 1                                                # Anzahl Betaparameter reduziertes Modell
+p_2    = 1                                                # Anzahl zusätzlicher Betaparameter vollständiges Modell
+p      = p_1 + p_2                                        # Anzahl Betaparameter im vollständigem Modell
+x      = 1:n                                              # Prädiktorwerte
+X      = matrix(c(rep(1,n),x), nrow = n)                  # Designmatrix des vollständigen Modells
+X_1    = X[,1]                                            # Designmatrix des reduzierten Modells
+I_n    = diag(n)                                          # n x n Einheitsmatrix
+beta   = matrix(c(1,0,1,.5), nrow = 2)                    # wahre , aber unbekannte , Betaparameter
+nscn   = ncol(beta)                                       # Anzahl wahrer, aber unbekannter, Hypothesenszenarien
+sigsqr = 1                                                # wahrer, aber unbekannter, Varianzparameter
 
-mit der Partitionierung
-\vspace{-2mm}
-\begin{align*}
-X      = \begin{pmatrix} X_1     & X_2      \end{pmatrix},
-X_1      \in \mathbb{R}^{n\times p_1},
-X_2      \in \mathbb{R}^{n\times p_2},
-\text{ und }
-\beta := \begin{pmatrix} \beta_1 \\ \beta_2 \end{pmatrix},
-\beta_1 \in \mathbb{R}^{p_1},
-\beta_2 \in \mathbb{R}^{p_2}
-\end{align*}
-\vspace{-4mm}
+# Modellsimulation und Evaluierung
+Eff    = matrix(rep(NaN, nscn), nrow = nscn)              # F-Statistiik Realisierungsarray
+for(s in 1:nscn){                                         # Szenarieniterationen
+  y               = mvrnorm(1, X %*%beta[,s], sigsqr*I_n) # Datenrealisierung
+  beta_hat_1      = solve(t(X_1)%*%X_1)%*%t(X_1)%*%y      # Betaparameterschätzer reduziertes Modell
+  beta_hat        = solve(t(X)  %*%X  )%*%t(X)  %*%y      # Betaparameterschätzer vollständiges Modell
+  eps_1_hat       = y-X_1%*%beta_hat_1                    # Residuenvektor reduziertes Modell
+  eps_hat         = y-X%*%beta_hat                        # Residuenvektor vollständiges Modell
+  eps_1_eps_1_hat = t(eps_1_hat) %*% eps_1_hat            # RQS reduziertes Modell
+  eps_eps_hat     = t(eps_hat)   %*% eps_hat              # RQS vollständiges Modell
+  Eff[s]          = (((eps_1_eps_1_hat-eps_eps_hat)/p_2)/ # F-Statistik
+                       (eps_eps_hat/(n-p)))}
+```
 
-mit $p=p_1+p_2$.
+```{r, echo = F, eval=F}
+cat("F-Statistik für beta_2  = 0_{p_2}:", Eff[1],
+    "\nF-Statistik für beta_2 != 0_{p_2}:", Eff[2])
+```
 
-Ausgeschrieben sieht das für ein Beispiel mit $p_1=1$ und $p_2=1$ wie folgt aus:
+```{r, echo=F}
+# Libraries
+library(MASS)                                               # Multivariate Normalverteilung
 
-\begin{align*}
-X_1 = \begin{pmatrix}x_{1,1}\\\vdots\\x_{1,n}\end{pmatrix},
-X_2 = \begin{pmatrix}x_{2,1}\\\vdots\\x_{2,n}\end{pmatrix}
-\end{align*}
+# Modellformulierung
+nmod   = 2                                                  # Anzahl Modelle
+n      = 10                                                 # Anzahl Datenpunkte
+p      = 2                                                  # Anzahl Betaparameter
+p_1    = 1                                                  # Anzahl Betaparameter im reduzierten Modell
+p_2    = 1                                                  # Anzahl zusätzlicher Betaparameter im vollständigen Modell
+p      = p_1 + p_2                                          # Anzahl Betaparameter im vollständigem Modell
+x      = 1:n                                                # Prädiktorwerte
+X      = matrix(c(rep(1,n),x), nrow = n)                    # Designmatrix des vollständigen Modells
+X_1    = X[,1]                                              # Designmatrix des reduzierten Modells
+I_n    = diag(n)                                            # n x n Einheitsmatrix
+beta   = matrix(c(1,0,1,.5), nrow = 2)                      # wahre , aber unbekannte , Betaparameter
+nscn   = ncol(beta)                                         # Anzahl wahrer, aber unbekannter, Hypothesenszenarien
+sigsqr = 1                                                  # wahrer, aber unbekannter, Varianzparameter
+K      = matrix((c(0,1)), nrow = 2)
 
-\begin{align*}
-y = X \beta + \varepsilon \Leftrightarrow
-\begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} 
-= \begin{pmatrix}x_{1,1}&x_{2,1}\\\vdots&\vdots\\x_{1n}&x_{2n}\end{pmatrix} 
-\begin{pmatrix}\beta_1 \\ \beta_2 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\ \vdots \\ \varepsilon_n \end{pmatrix} 
-= \begin{pmatrix}x_{1,1}\beta_1+x_{2,1}\beta_2+\varepsilon_1\\\vdots\\x_{1,n}\beta_1+x_{2,n}\beta_2+\varepsilon_n\end{pmatrix} 
-\end{align*}
+# Frequentistische Simulation
+nsim   = 1e4                                                # Anzahl Realisierungen des n-dimensionalen ZVs
+delta  = rep(NaN,nscn)                                      # Nichtzentralitätsparameterarray
+Eff    = matrix(rep(NaN, nscn*nsim), nrow = nscn)           # F-Statistiik Realisierungsarray
+for(s in 1:nscn){                                           # Szenarieniterationen
+  delta[s] = (t(t(K)%*%beta[,s])%*%                         # Nichtzentralitätsparameter
+              solve(t(K)%*%solve(t(X)%*%X)%*%K) %*%
+               (t(K)%*%beta[,s])/sigsqr)
+  for(i in 1:nsim){                                         # Simulationsiterationen
+    y               = mvrnorm(1, X %*%beta[,s], sigsqr*I_n) # Datenrealisierung
+    beta_hat_1      = solve(t(X_1)%*%X_1)%*%t(X_1)%*%y      # Betaparameterschätzer reduziertes Modell
+    beta_hat        = solve(t(X)  %*%X  )%*%t(X)  %*%y      # Betaparameterschätzer vollständiges Modell
+    eps_1_hat       = y-X_1%*%beta_hat_1                    # Residuenvektor reduziertes Modell
+    eps_hat         = y-X%*%beta_hat                        # Residuenvektor vollständiges Modell
+    eps_1_eps_1_hat = t(eps_1_hat) %*% eps_1_hat            # RQS reduziertes Modell
+    eps_eps_hat     = t(eps_hat)   %*% eps_hat              # RQS vollständiges Modell
+    Eff[s,i]        = (((eps_1_eps_1_hat-eps_eps_hat)/p_2)/ # F-Statistik
+                         (eps_eps_hat/(n-p)))
+  }
+}
+```
 
+```{r, eval = F, echo = F}
 
-# Beispiel - vollständiges und reduziertes Modell
-\color{black}
-\footnotesize
+# Visualisierung
+graphics.off()
+dev.new()
+par(
+family      = "sans",
+mfcol       = c(1,2),
+pty         = "s",
+bty         = "l",
+lwd         = 1,
+las         = 1,
+mgp         = c(2.5,1,0),
+xaxs        = "i",
+yaxs        = "i",
+xpd         = TRUE,
+font.main   = 1,
+cex         = 1,
+cex.main    = 1.2)
 
-Die Residuenvektoren
-\begin{align*}
-\hat{\varepsilon}_1 := y - X_1\hat{\beta}_1 \mbox{ und } \hat{\varepsilon} := y - X\hat{\beta}
-\end{align*}
-sehen dann ausgeschrieben so aus: 
+# F-Statistik Ergebnisraum
+lab         = c(TeX("$\\beta = (1,0)^T$"), TeX("$\\beta = (1,0.5)^T$") )
+xlimits     = list(c(.05,6), c(0,80))
+ylimits     = list(c(0,2), c(0,0.05))
+breaks      = c(600,200)
 
-\begin{align*}
-\hat{\varepsilon}_1 := y - X_1\hat{\beta}_1
-\Leftrightarrow
-\begin{pmatrix}\hat{\varepsilon}_{1,1}\\\vdots\\\hat{\varepsilon}_{1,n}\end{pmatrix}
-= \begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} 
-- \begin{pmatrix}x_{1,1}\\\vdots\\x_{1,n}\end{pmatrix} 
-\hat{\beta}_1
-= \begin{pmatrix}y_1-x_{1,1}\hat{\beta}_1\\\vdots\\y_n-x_{1,n}\hat{\beta}_1\end{pmatrix} 
-\end{align*}
+# F-Teststatistiken
+for(s in 1:nscn){
+  xlims  = xlimits[[s]]
+  f_min  = xlims[1]
+  f_max  = xlims[2]
+  f_res  = 1e3
+  f      = seq(f_min, f_max, len = f_res)
+  p_f    = df(f,p_2,n-p, delta[s])
+  hist(
+  -100,#Eff[s,],
+  breaks = breaks[s],
+  col    = "gray90",
+  prob   = TRUE,
+  xlab   = TeX("$F$"),
+  ylab   = "",
+  xlim   = xlims,
+  ylim   = ylimits[[s]],
+  main   = lab[s])
+  lines(
+  f,
+  p_f,
+  type  = "l",
+  lwd   = 2,
+  col   = "darkorange")
+}
 
-und
-
-\begin{align*}
-\hat{\varepsilon} := y - X_1 \hat{\beta}
-\Leftrightarrow
-\begin{pmatrix}\hat{\varepsilon}_{1}\\\vdots\\\hat{\varepsilon}_{n}\end{pmatrix}
-= \begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} 
-- \begin{pmatrix}x_{1,1}&x_{2,1}\\\vdots&\vdots\\x_{1,n}&x_{2,n}\end{pmatrix} 
-\begin{pmatrix}\hat{\beta}_1\\\hat{\beta}_2\end{pmatrix}
-= \begin{pmatrix}y_1-x_{1,1}\hat{\beta}_1-x_{2,1}\hat{\beta}_2\\\vdots\\y_n-x_{1,n}\hat{\beta}_1-x_{2,n}\hat{\beta}_2\end{pmatrix} 
-\end{align*}
-
-Anmerkung: 
-
-* $\hat{\varepsilon}_1$ ist hier nicht das gleiche wie  $\varepsilon_1$
-
-
-
+# Speichern
+dev.copy2pdf(
+file        = file.path("7_Abbildungen", "alm_7_F_Statistik_Tut.pdf"),
+width       = 8,
+height      = 4)
+```
+\vfill
+```{r, echo = FALSE, out.width = "100%"}
+knitr::include_graphics("7_Abbildungen/alm_7_F_Statistik_Tut.pdf")
+```
+\vfill
 

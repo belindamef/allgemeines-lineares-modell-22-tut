@@ -31,7 +31,7 @@ Tutorium Allgemeines Lineares Modell
 BSc Psychologie SoSe 2022
 
 \vspace{2mm}
-\text{8. Termin (Teil 1): Modellschätzungen}
+\text{8. Termin: (6) Modellschätzungen}
 
 \vspace{18mm}
 Belinda Fleischmann
@@ -129,10 +129,10 @@ y \sim N(X\beta,\sigma^2I_5) \mbox{ mit } X \in \mathbb{R}^{5 \times 2}, \beta \
 \vspace{-3mm}
 
 \begin{align*}
-y = X \beta + \epsilon \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
+y = X \beta + \varepsilon \Leftrightarrow \begin{pmatrix}y_1\\y_2\\y_3\\y_4\\y_5\end{pmatrix} 
 = \begin{pmatrix}x_{11}&x_{12}\\x_{21}&x_{22}\\x_{31}&x_{32}\\x_{41}&x_{42}\\x_{51}&x_{52}\end{pmatrix} 
-\begin{pmatrix}\beta_1 \\ \beta_2 \end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \epsilon_4 \\ \epsilon_5 \end{pmatrix}
-= \begin{pmatrix}x_{11} \beta_1 + x_{12} \beta_2 + \epsilon_1 \\ x_{21} \beta_1 + x_{22} \beta_2 +\epsilon_2 \\ x_{31} \beta_1 + x_{32} \beta_2 +\epsilon_3 \\ x_{41} \beta_1 + x_{42} \beta_2 +\epsilon_4 \\ x_{51} \beta_1 + x_{52} \beta_2 + \epsilon_5 \end{pmatrix}
+\begin{pmatrix}\beta_1 \\ \beta_2 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \\ \varepsilon_4 \\ \varepsilon_5 \end{pmatrix}
+= \begin{pmatrix}x_{11} \beta_1 + x_{12} \beta_2 + \varepsilon_1 \\ x_{21} \beta_1 + x_{22} \beta_2 +\varepsilon_2 \\ x_{31} \beta_1 + x_{32} \beta_2 +\varepsilon_3 \\ x_{41} \beta_1 + x_{42} \beta_2 +\varepsilon_4 \\ x_{51} \beta_1 + x_{52} \beta_2 + \varepsilon_5 \end{pmatrix}
 \end{align*}
 
 \footnotesize
@@ -228,7 +228,7 @@ Wir betrachten das Szenario von $n$ Unabhängige und identisch normalverteilte Z
 \vspace{-3mm}
 \tiny
 \begin{align*}
-y_i = \mu + \epsilon_i, \epsilon_i \sim N(0,\sigma^2) \mbox{ für } i = 1,...,n, \text{ mit unabhängigen }\epsilon_i
+y_i = \mu + \varepsilon_i, \varepsilon_i \sim N(0,\sigma^2) \mbox{ für } i = 1,...,n, \text{ mit unabhängigen }\varepsilon_i
 \end{align*}
 
 \vspace{-3mm}
@@ -244,13 +244,13 @@ y \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X := 1_n \in \mathbb{R}^{n \times 1}, 
 \vspace{-3mm}
 
 \begin{align*}
-y = X \beta + \epsilon = X \mu + \epsilon
+y = X \beta + \varepsilon = X \mu + \varepsilon
 \Leftrightarrow \begin{pmatrix}y_1\\ \vdots \\y_n\end{pmatrix} 
 = \begin{pmatrix}1\\\vdots\\1\end{pmatrix}
-\beta + \begin{pmatrix}\epsilon_1 \\ \vdots \\ \epsilon_n \end{pmatrix}
+\beta + \begin{pmatrix}\varepsilon_1 \\ \vdots \\ \varepsilon_n \end{pmatrix}
 = \begin{pmatrix}1\\ \vdots \\1\end{pmatrix}
-\mu + \begin{pmatrix}\epsilon_1 \\ \vdots \\ \epsilon_n \end{pmatrix}
-= \begin{pmatrix}\mu+\epsilon_1\\ \vdots \\ \mu+\epsilon_n\end{pmatrix} 
+\mu + \begin{pmatrix}\varepsilon_1 \\ \vdots \\ \varepsilon_n \end{pmatrix}
+= \begin{pmatrix}\mu+\varepsilon_1\\ \vdots \\ \mu+\varepsilon_n\end{pmatrix} 
 \end{align*}
 
 \footnotesize
@@ -316,11 +316,11 @@ y \sim N(X\beta,\sigma^2I_n) \mbox{ mit } X \in \mathbb{R}^{n \times 2}, \beta \
 
 \vspace{-3mm}
 \begin{align*}
-y = X \beta + \epsilon \Leftrightarrow
+y = X \beta + \varepsilon \Leftrightarrow
 \begin{pmatrix}y_1\\\vdots\\y_n\end{pmatrix} 
 = \begin{pmatrix}1&x_{1}\\\vdots&\vdots\\1&x_{n}\end{pmatrix} 
-\begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\epsilon_1 \\ \vdots \\ \epsilon_n \end{pmatrix} 
-= \begin{pmatrix}\beta_0+x_{1}\beta_1+\epsilon_1\\\vdots\\\beta_0+x_{n}\beta_1+\epsilon_n\end{pmatrix} 
+\begin{pmatrix}\beta_0 \\ \beta_1 \end{pmatrix} + \begin{pmatrix}\varepsilon_1 \\ \vdots \\ \varepsilon_n \end{pmatrix} 
+= \begin{pmatrix}\beta_0+x_{1}\beta_1+\varepsilon_1\\\vdots\\\beta_0+x_{n}\beta_1+\varepsilon_n\end{pmatrix} 
 \end{align*}
 
 \footnotesize

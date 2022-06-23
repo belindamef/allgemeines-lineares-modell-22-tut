@@ -31,7 +31,7 @@ Tutorium Allgemeines Lineares Modell
 BSc Psychologie SoSe 2022
 
 \vspace{2mm}
-\text{2. Termin: Vektoren und Regression}
+\text{2. Termin: Vektoren und (1) Regression}
 
 \vspace{18mm}
 Belinda Fleischmann
