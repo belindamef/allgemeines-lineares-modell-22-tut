@@ -1,0 +1,294 @@
+---
+fontsize: 8pt
+bibliography: 11_Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: yes
+    includes:
+      in_header: 11_header.tex
+classoption: t    
+---
+
+
+```{r, include = F}
+source("11_R_Common.R")
+```
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%"}
+knitr::include_graphics("11_Abbildungen/wtfi_otto.png")
+```
+
+\vspace{2mm}
+
+\Huge
+Tutorium Allgemeines Lineares Modell
+\vspace{2mm}
+
+
+\normalsize
+BSc Psychologie SoSe 2022
+
+\vspace{2mm}
+\center
+13. Termin: \text{(11) Zweifaktorielle Varianzanalyse}
+
+\vspace{18mm}
+Belinda Fleischmann
+
+\vspace{3mm}
+\scriptsize
+Inhalte basieren auf [ALM Kursmaterialien](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2022/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+
+# Selbstkontrollfragen
+\footnotesize
+\begin{enumerate}
+\justifying
+\item Erläutern Sie das Anwendungsszenario der zweifaktoriellen Varianzanalyse (ZVA).
+\item Aus wie vielen Datenpunkten besteht ein Datensatz eines 3 x 4 ZVA Designs mit 10 Datenpunkten pro Zelle? 
+\item Erläutern Sie die intuitive Bedeutung eines Haupteffektes in einem ZVA Design.
+\item Erläutern Sie die intuitive Bedeutung einer Interkation ein einem ZVA Design.
+\item Geben Sie die Definition des additiven Modells der ZVA mit Referenzgruppe (RG) wieder.
+\item Erläutern Sie die Bedeutung der Parameter $\mu_0,\alpha_2$ und $\beta_2$ im additiven Modell der ZVA mit RG.
+\item Bestimmen Sie $\mu_{ij}$ für $\mu_0 := 2,\alpha_2 = -1$ und $\beta_2 := 3$ im additiven Modell der ZVA mit RG.
+\item Geben Sie die Designmatrixform des Modells einer additiven 2 x 2 ZVA mit RG für $n_{ij} := 1$ an.
+\item Geben Sie die Designmatrixform des Modells einer additiven 2 x 2 ZVA mit RG für $n_{ij} := 3$ an.
+\item Geben Sie die Definition des Modells der ZVA mit Interaktion und RG wieder.
+\item Erläutern Sie die Bedeutung der Parameter $\mu_0,\alpha_2, \beta_2$ und $\gamma_{22}$ im Modell der ZVA mit Interaktion und RG.
+\item Geben Sie die Designmatrixform des Modells einer 2 x 2 ZVA mit Interaktion und RG für $n_{ij} := 1$ an.
+\item Geben Sie die Designmatrixform des Modells einer 2 x 2 ZVA mit Interaktion und RG für $n_{ij} := 3$ an.
+\item Geben Sie das Theorem zur Betaparameterschätzung im additiven 2 x 2 ZVA Modell mit RG wieder.
+\item Geben Sie das Theorem zur Betaparameterschätzung im 2 x 2 ZVA Modell mit Interaktion und RG wieder.
+\end{enumerate}
+
+# Selbstkontrollfragen
+\footnotesize
+\begin{enumerate}
+\setcounter{enumi}{15}
+\justifying
+\item Erzeugen Sie einen Beispieldatensatz des Anwendungsbeispiels einer 2 x 2 ZVA 
+mit den Faktoren Therapie (F2F, ONL) und Alter (YA,OA) basierend
+auf dem Modell der ZVA mit Interaktion und Referenzgruppe für von Ihnen selbst gewählte
+Parameterwerte $\mu_0,\alpha_2,\beta_2,\gamma_{22}$ und $\sigma^2$. Visualisieren
+Sie den erzeugten Datensatz mithilfe eines Barplots, eines Barplots und eines Lineplots.
+\item Bestimmen Sie Betaparameterschätzer für den von Ihnen erzeugten Datensatz im
+Modell der additiven 2 x 2 ZVA mit Referenzgruppe und im Modell der 2 x 2 mit Interaktion und Referenzgruppe. 
+Erläutern Sie die Gemeinsamkeiten und Unterschiede der Betaparameterschätzer vor dem
+Hintergrund der von Ihnen gewählten wahren, aber unbekannten, Parameterwerte des Datensatzes.
+\item Führen Sie basierend auf dem von Ihnen erzeugten Datensatz einen F-Test für den Haupteffekt
+des Faktors Therapie, einen F-Test für den Haupteffekt des Faktors Alter und einen F-Test für
+die Interaktion der Faktoren durch. Dokumentieren und erläutern Sie Ihre Ergebnisse.
+\end{enumerate}
+
+
+
+
+
+
+
+# Anwendungsszenario - \textcolor{red}{???} - \textcolor{darkblue}{SKF 1}
+\vspace{3mm}
+\large
+\color{darkblue} 1. Erläutern Sie das Anwendungsszenario der zweifaktoriellen Varianzanalyse (ZVA).
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+# Anwendungsszenario - \textcolor{red}{???} - \textcolor{darkblue}{SKF 2}
+\vspace{3mm}
+\large
+\color{darkblue} 2. Aus wie vielen Datenpunkten besteht ein Datensatz eines 3 x 4 ZVA Designs mit 10 Datenpunkten pro Zelle? 
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+
+# Anwendungsszenario - \textcolor{red}{???} - \textcolor{darkblue}{SKF 2}
+\vspace{3mm}
+\large
+\color{darkblue} 2. Aus wie vielen Datenpunkten besteht ein Datensatz eines 3 x 4 ZVA Designs mit 10 Datenpunkten pro Zelle? 
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+
+# Anwendungsszenario - Haupteffekt - \textcolor{darkblue}{SKF 3}
+\vspace{3mm}
+\large
+\color{darkblue} 3. Erläutern Sie die intuitive Bedeutung eines Haupteffektes in einem ZVA Design.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+
+
+# Anwendungsszenario - Interaktion - \textcolor{darkblue}{SKF 4}
+\vspace{3mm}
+\large
+\color{darkblue} 4. Erläutern Sie die intuitive Bedeutung einer Interkation ein einem ZVA Design.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+
+# Modellformulierung - \textcolor{red}{???} - \textcolor{darkblue}{SKF 5}
+\vspace{3mm}
+\large
+\color{darkblue} 5. Geben Sie die Definition des additiven Modells der ZVA mit Referenzgruppe (RG) wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+# Modellformulierung - \textcolor{red}{???} - \textcolor{darkblue}{SKF 6}
+\vspace{3mm}
+\large
+\color{darkblue} 6. Erläutern Sie die Bedeutung der Parameter $\mu_0,\alpha_2$ und $\beta_2$ im additiven Modell der ZVA mit RG.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+# Modellformulierung - \textcolor{red}{???} - \textcolor{darkblue}{SKF 7}
+\vspace{3mm}
+\large
+\color{darkblue} 7. Bestimmen Sie $\mu_{ij}$ für $\mu_0 := 2,\alpha_2 = -1$ und $\beta_2 := 3$ im additiven Modell der ZVA mit RG.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+# Modellformulierung - Designmatrixform - \textcolor{darkblue}{SKF 8}
+\vspace{3mm}
+\large
+\color{darkblue} 8. Geben Sie die Designmatrixform des Modells einer additiven 2 x 2 ZVA mit RG für $n_{ij} := 1$ an.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+# Modellformulierung - Designmatrixform - \textcolor{darkblue}{SKF 9}
+\vspace{3mm}
+\large
+\color{darkblue} 9. Geben Sie die Designmatrixform des Modells einer additiven 2 x 2 ZVA mit RG für $n_{ij} := 3$ an.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+
+# Modellformulierung - ZVA mit Interaktion und RG - \textcolor{darkblue}{SKF 10}
+\vspace{3mm}
+\large
+\color{darkblue} 10. Geben Sie die Definition des Modells der ZVA mit Interaktion und RG wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+
+# Modellformulierung - Bedeutung $\mu_0,\alpha_2, \beta_2$ und $\gamma_{22}$ - \textcolor{darkblue}{SKF 11}
+\vspace{3mm}
+\large
+\color{darkblue} 11. Erläutern Sie die Bedeutung der Parameter $\mu_0,\alpha_2, \beta_2$ und $\gamma_{22}$ im Modell der ZVA mit Interaktion und RG.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+# Modellformulierung - Designmatrixform - \textcolor{darkblue}{SKF 12}
+\vspace{3mm}
+\large
+\color{darkblue} 12. Geben Sie die Designmatrixform des Modells einer 2 x 2 ZVA mit Interaktion und RG für $n_{ij} := 1$ an.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+# Modellformulierung - Designmatrixform - \textcolor{darkblue}{SKF 13}
+\vspace{3mm}
+\large
+\color{darkblue} 13. Geben Sie die Designmatrixform des Modells einer 2 x 2 ZVA mit Interaktion und RG für $n_{ij} := 3$ an.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+# Modellschätzung - additives 2 x 2 ZVA Modell mit RG - \textcolor{darkblue}{SKF 14}
+\vspace{3mm}
+\large
+\color{darkblue} 14. Geben Sie das Theorem zur Betaparameterschätzung im additiven 2 x 2 ZVA Modell mit RG wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+# Modellschätzung - 2 x 2 ZVA Modell mit Interaktion und RG - \textcolor{darkblue}{SKF 15}
+\vspace{3mm}
+\large
+\color{darkblue} 15. Geben Sie das Theorem zur Betaparameterschätzung im 2 x 2 ZVA Modell mit Interaktion und RG wieder.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+# Anwendungsbeispiel - Modellformulierung und Datensimulation - \textcolor{darkblue}{SKF 16}
+\vspace{3mm}
+\large
+\color{darkblue} 16. Erzeugen Sie einen Beispieldatensatz des Anwendungsbeispiels einer 2 x 2 ZVA 
+mit den Faktoren Therapie (F2F, ONL) und Alter (YA,OA) basierend
+auf dem Modell der ZVA mit Interaktion und Referenzgruppe für von Ihnen selbst gewählte
+Parameterwerte $\mu_0,\alpha_2,\beta_2,\gamma_{22}$ und $\sigma^2$. Visualisieren
+Sie den erzeugten Datensatz mithilfe eines Barplots, eines Barplots und eines Lineplots.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+# Anwendungsbeispiel - Modellschätzung - \textcolor{darkblue}{SKF 17}
+\vspace{3mm}
+\large
+\color{darkblue} 17. Bestimmen Sie Betaparameterschätzer für den von Ihnen erzeugten Datensatz im
+Modell der additiven 2 x 2 ZVA mit Referenzgruppe und im Modell der 2 x 2 mit Interaktion und Referenzgruppe. 
+Erläutern Sie die Gemeinsamkeiten und Unterschiede der Betaparameterschätzer vor dem
+Hintergrund der von Ihnen gewählten wahren, aber unbekannten, Parameterwerte des Datensatzes.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+
+
+# Anwendungsbeispiel - Modellevaluation - \textcolor{darkblue}{SKF 18} - 
+\vspace{3mm}
+\large
+\color{darkblue} 18. Führen Sie basierend auf dem von Ihnen erzeugten Datensatz einen F-Test für den Haupteffekt
+des Faktors Therapie, einen F-Test für den Haupteffekt des Faktors Alter und einen F-Test für
+die Interaktion der Faktoren durch. Dokumentieren und erläutern Sie Ihre Ergebnisse.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
