@@ -7,6 +7,7 @@ output:
     keep_tex: yes
     includes:
       in_header: 0_header.tex
+classoption: t   
 ---
 
 ```{r, include = F}
@@ -43,6 +44,7 @@ Inhalte basieren auf [ALM Kursmaterialien](https://www.ipsy.ovgu.de/Institut/Abt
 
 
 # Organisatorisches
+\vspace{3mm}
 \setstretch{1}
 
 Termine:
@@ -65,7 +67,7 @@ Kontakt
 
 
 # Ziele der Veranstaltung
-\vspace{-30pt}
+\vspace{3mm}
 
 Allgemeines Ziel des Tutoriums
 
@@ -89,6 +91,7 @@ Ziel der heutigen Veranstaltung
 \vfill
 
 # Vektoren
+\vspace{3mm}
 \setstretch{2}
 Motivation
 
@@ -128,6 +131,7 @@ Selbstkontrollfragen
 
 
 # Reeller Vektorraum
+\vspace{3mm}
 \small
 \setstretch{1.2}
 \begin{definition}[Vektorraum]
@@ -169,6 +173,7 @@ Elemente $v,w,u \in V$ und $a,b \in S$ folgende Bedingungen gelten:
 
 
 # Reeller Vektorraum
+\vspace{3mm}
 \small
 \justifying
 
@@ -196,6 +201,7 @@ x_1 \\ \vdots \\ x_m
 
 
 # Reeller Vektorraum
+\vspace{3mm}
 \small
 \setstretch{1.2}
 \justifying
@@ -235,6 +241,7 @@ Bemerkungen
 
 
 # Reeller Vektorraum
+\vspace{3mm}
 \setstretch{1}
 
 \textcolor{darkcyan}{Beispiele}
@@ -253,6 +260,7 @@ Bemerkungen
 
 
 # Reeller Vektorraum
+\vspace{3mm}
 \setstretch{1}
 
 \textcolor{darkcyan}{Rechenbeispiele in R}
@@ -283,7 +291,7 @@ a * x                           # Skalarmultiplikation
 ```
 
 # Reeller Vektorraum
-
+\vspace{3mm}
 \textcolor{darkcyan}{Visualisierung von $x:= \begin{pmatrix}4\\8\end{pmatrix}$ in $\mathbb{R}^2$}
 \vspace{9pt}
 
@@ -330,6 +338,7 @@ arrows(0, 0, x_1, x_2, length = 0.15)
 
 
 # Reeller Vektorraum
+\vspace{3mm}
 \textcolor{darkcyan}{Vektoraddition in $\mathbb{R}^2$}
 
 \vspace{9pt}
@@ -396,6 +405,7 @@ col         = c("black", "black", "black", "gray60", "gray80"))
 
 
 # Reeller Vektorraum
+\vspace{3mm}
 \textcolor{darkcyan}{Vektorsubtraktion in $\mathbb{R}^2$}
 
 \vspace{9pt}
@@ -471,7 +481,7 @@ col         = c("black", "black", "black", "gray80", "gray80", "gray80", "gray80
 
 
 # Reeller Vektorraum
-
+\vspace{3mm}
 \textcolor{darkcyan}{Skalarmultiplikation in $\mathbb{R}^2$}
 \vspace{9pt}
 \small
@@ -533,6 +543,7 @@ col         = c("gray70", "black"))
 
 
 # Vektoren
+\vspace{3mm}
 \vfill
 \setstretch{2.3}
 \Large
@@ -547,6 +558,7 @@ Selbstkontrollfragen
 
 
 # Euklidischer Vektorraum
+\vspace{3mm}
 \justifying
 \setstretch{1.2}
 
@@ -566,7 +578,7 @@ Bemerkungen
 
 
 # Euklidischer Vektorraum
-
+\vspace{3mm}
 \textcolor{darkcyan}{Beispiel für Skalarprodukt}
 
 \footnotesize
@@ -599,6 +611,7 @@ t(x) %*% y
 
 
 # Euklidischer Vektorraum
+\vspace{3mm}
 \justify
 \setstretch{1.2}
 
@@ -618,6 +631,7 @@ Bemerkungen
 
 
 # Euklidischer Vektorraum
+\vspace{3mm}
 \justify
 \setstretch{1.2}
 \small 
@@ -669,7 +683,7 @@ plot(x, cos(x), type="l",
 
 
 # Euklidischer Vektorraum
-
+\vspace{3mm}
 \textcolor{darkcyan}{Beispiele für Vektorlängen in $\mathbb{R}^2$}
 \vspace{9pt}
 
@@ -746,6 +760,7 @@ lwd         = 2)
 
 
 # Euklidischer Vektorraum
+\vspace{3mm}
 \textcolor{darkcyan}{Beispiele Vektorlängen in $\mathbb{R}^2$}
 
 \footnotesize
@@ -781,6 +796,7 @@ norm(matrix(c(3,1), nrow = 2), type = "2")  # Vektorlänge = l_2 Norm (type = "2
 
 
 # Euklidischer Vektorraum
+\vspace{3mm}
 \textcolor{darkcyan}{Beispiele für Abstände zwischen Vektoren in $\mathbb{R}^2$}
 \vspace{9pt}
 
@@ -833,6 +849,7 @@ col         = "gray80")
 
 
 # Euklidischer Vektorraum
+\vspace{3mm}
 \textcolor{darkcyan}{Beispiele Abstände zwischen Vektoren in $\mathbb{R}^2$}
 \footnotesize
 \setstretch{1}
@@ -853,7 +870,7 @@ norm(matrix(c(1,1), nrow = 2) - matrix(c(4,1), nrow = 2), type = "2")
 
 
 # Euklidischer Vektorraum
-
+\vspace{3mm}
 Kosinus und Arkuskosinus auf $[0,\pi]$
 \setstretch{1}
 \vspace{6pt}
@@ -923,6 +940,7 @@ Umrechnung zwischen Gradmaß [deg] und Bogenmaß [rad]:
 
 
 # Euklidischer Vektorraum
+\vspace{3mm}
 \textcolor{darkcyan}{Beispiele für Winkel zwischen Vektoren in $\mathbb{R}^2$}
 
 \vspace{6pt}
@@ -978,6 +996,7 @@ lwd         = 2)
 
 
 # Euklidischer Vektorraum
+\vspace{3mm}
 \textcolor{darkcyan}{Beispiel 1) für Winkel zwischen Vektoren in $\mathbb{R}^2$}
 
 \vspace{6pt}
@@ -1014,6 +1033,7 @@ print(w)
 
 
 # Euklidischer Vektorraum
+\vspace{3mm}
 \textcolor{darkcyan}{Beispiel 2) für Winkel zwischen Vektoren in $\mathbb{R}^2$}
 
 
@@ -1051,6 +1071,7 @@ print(w)
 
 
 # Euklidischer Vektorraum
+\vspace{3mm}
 \setstretch{1.2}
 \small
 \begin{definition}[Orthogonalität und Orthonormalität von Vektoren]
@@ -1085,6 +1106,7 @@ also
 
 
 # Vektoren
+\vspace{3mm}
 \vfill
 \setstretch{2.3}
 \Large
@@ -1099,6 +1121,7 @@ Selbstkontrollfragen
 
 
 # Lineare Unabhängigkeit
+\vspace{3mm}
 \setstretch{1}
 \small
 \begin{definition}[Linearkombination]
@@ -1140,6 +1163,7 @@ w
 
 
 # Lineare Unabhängigkeit
+\vspace{3mm}
 \small
 \begin{definition}[Lineare Unabhängigkeit]
 \justifying
@@ -1160,6 +1184,7 @@ Bemerkungen
 
 
 # Lineare Unabhängigkeit
+\vspace{3mm}
 \small
 \begin{theorem}[Lineare Abhängigkeit von zwei Vektoren]
 \justifying
@@ -1188,6 +1213,7 @@ des Nullelementes, die nicht die triviale Repräsentation ist, und damit sind
 $v_1$ und $v_2$ nicht linear unabhängig.
 
 # Lineare Unabhängigkeit
+\vspace{3mm}
 \small
 \textcolor{darkcyan}{Beispiel linear abhängiger Vektoren}
 
@@ -1216,6 +1242,7 @@ a_1v_1 + a_2v_2 = 0
 mit $a_1 = 1 \neq 0$ und  $a_2 = -\lambda \neq 0$.
 
 # Lineare Unabhängigkeit
+\vspace{3mm}
 \setstretch{1.1}
 \small
 \begin{theorem}[Lineare Abhängigkeit einer Menge von Vektoren]

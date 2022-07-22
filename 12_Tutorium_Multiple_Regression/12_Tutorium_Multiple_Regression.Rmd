@@ -1,0 +1,378 @@
+---
+fontsize: 8pt
+bibliography: 12_Referenzen.bib
+citation_package: natbib
+output:
+  beamer_presentation:
+    keep_tex: yes
+    includes:
+      in_header: 12_header.tex
+classoption: t    
+---
+
+
+```{r, include = F}
+source("12_R_Common.R")
+```
+
+#  {.plain}
+\center
+```{r, echo = FALSE, out.width = "20%"}
+knitr::include_graphics("12_Abbildungen/wtfi_otto.png")
+```
+
+\vspace{2mm}
+
+\Huge
+Tutorium Allgemeines Lineares Modell
+\vspace{2mm}
+
+
+\normalsize
+BSc Psychologie SoSe 2022
+
+\vspace{2mm}
+\center
+14. Termin: \text{(12) Multiple Regression}
+
+\vspace{18mm}
+Belinda Fleischmann
+
+\vspace{3mm}
+\scriptsize
+Inhalte basieren auf [ALM Kursmaterialien](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Lehre/Sommersemester+2022/Allgemeines+Lineares+Modell.html) von [Dirk Ostwald](https://www.ipsy.ovgu.de/Institut/Abteilungen+des+Institutes/Methodenlehre+I+_+Experimentelle+und+Neurowissenschaftliche+Psychologie/Team/Dirk+Ostwald.html), lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+
+
+# Selbstkontrollfragen
+\vspace{3mm}
+
+\footnotesize
+\begin{enumerate}
+\justifying
+\item Erläutern Sie das Anwendungsszenario und die Ziele der multiplen Regression.
+\item Definieren Sie das Modell der multiplen Regression.
+\item Erläutern Sie die Begriffe Regressor, Prädiktor, Kovariate und Feature im Rahmen der multiplen Regression.
+\item Erläutern Sie, warum $\hat{\beta} \approx \mbox{Regressorkovarianz}^{-1} \mbox{Regressordatenkovarianz}$ gilt.
+\item Erläutern Sie den Zusammenhang zwischen Betaparameterschätzern und partieller Korrelation in einem multiplen
+Regressionmodell mit Interzeptprädiktor und zwei kontinuierlichen Prädiktoren anhand der Formel
+\begin{equation}
+\hat{\beta}_1 = r_{y,x_1|x_2}\sqrt{\frac{1 -r_{y,x_2}^2}{1 -r_{x_1,x_2}^2}}\frac{s_y}{s_{x_1}}.
+\end{equation}
+\item $X \in \mathbb{R}^{n \times 2}$ sei die Designmatrix eines multiplen Regressionsmodells mit zwei Prädiktoren
+und Betaparametervektor $\beta := (\beta_1,\beta_2)^2$. Geben Sie den Kontrastgewichtsvektor an, 
+um die Nullhypothese $H_0 : \beta_1 = \beta_2$ mithilfe der T-Statistik zu testen.
+\item Simulieren Sie einen Datensatz eines multiplen Regressionsmodells mit Interzept und
+zwei kontinuierlichen Regressoren $x_{1},x_{2} \in \mathbb{R}^n$, wobei $x_{i2} := ax_{i1} + \xi_i$ mit $\xi_i \sim N(0,\sigma^2_{\xi})$  für  $i = 1,...,n$
+sein soll. Wählen Sie für die Simulation des Datensatzes $y \in \mathbb{R}^n$ 
+den wahren, aber unbekannten, Betaparametervektor $\beta = (0,1,0)^T$ und testen Sie
+die Nullhypothesen $H_0 : \beta_j = 0$ für $j = 0,1,2$. Erläutern Sie Ihre Ergebnisse.
+Wiederholen Sie Analyse für den wahren, aber unbekannten, Betaparametervektor $\beta = (0,0,1)^T$.
+\end{enumerate}
+
+
+
+
+# Anwendungsszenario - \textcolor{darkblue}{SKF 1}
+\vspace{3mm}
+\large
+\color{darkblue} Erläutern Sie das Anwendungsszenario und die Ziele der multiplen Regression.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+**Anwendungsszenario**
+
+* Generalisierung der einfachen linearen Regression zu mehr als einer unabhängigen Variable.
+* Eine univariate abhängige Variable bestimmt an randomisierten experimentellen Einheiten.
+* Zwei oder mehr "kontinuierliche" unabhängige Variablen.
+* Die unabhängigen Variablen heißen Regressoren, Prädiktoren, Kovariaten oder Features.
+\vspace{2mm}
+
+**Ziele**
+
+* Quantifizierung des Erklärungspotentials der Variation der AV durch die Variation der UVs.
+* Quantifizierung des Einflusses einzelner UVs auf die AV im Kontext anderer UVs.
+* Prädiktion von AV Werten aus UV Werten nach Parameterschätzung.
+\vspace{2mm}
+
+**Anwendungsbeispiel**
+
+* BDI Differenzwerte in Abhängigkeit von Therapiedauer und Alter
+
+
+
+
+
+# Modellformulierung - \textcolor{darkblue}{SKF 2}
+\vspace{3mm}
+\large
+\color{darkblue} Definieren Sie das Modell der multiplen Regression.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+\setstretch{1.2}
+
+
+\begin{definition}[Modell der multiplen Regression]
+\justifying
+$y_i$ mit $i = 1,...,n$ sei die Zufallsvariable, die den $i$ten Wert einer abhängigen
+Variable modelliert. Dann hat das \textit{Modell der multiplen Regression}
+die strukturelle Form \begin{equation}
+y_i = x_{i1}\beta_1 + \cdots + x_{ip}\beta_p + \varepsilon_i \mbox{ mit }
+\varepsilon_i \sim N(0,\sigma^2) \mbox{ u.i.v. für } i = 1,...,n \mbox{ und } \sigma^2 > 0,
+\end{equation}
+wobei $x_{ij} \in \mathbb{R}$ mit $1 \le i \le n$ und $1 \le j \le p$ den $i$ten Wert der $j$te
+unabhängigen Variable bezeichnet. Die unabhängigen Variablen werden auch
+\textit{Regressoren, Prädiktoren, Kovariaten} oder \textit{Features} genannt. Mit
+\begin{equation}
+x_i := (x_{i1}, ..., x_{ip})^T \in \mathbb{R}^p
+\mbox{ und }
+\beta := (\beta_1,..., \beta_p)^T \in \mathbb{R}^p
+\end{equation}
+hat das Modell der multiplen Regression die Datenverteilungsform
+\begin{equation}
+y_i \sim N(\mu_i,\sigma^2) \mbox{ u.i.v. für } i = 1,...,n, \mbox{ wobei } \mu_i := x^T_i\beta.
+\end{equation}
+In diesem Zusammenhang wird $x_i \in \mathbb{R}^p$ auch als $i$ter \textit{ Featurevektor } bezeichnet.
+Die Designmatrixform des Modells der multiplen Regression schließlich ist gegeben durch
+\begin{equation}
+y = X\beta + \varepsilon \mbox{ mit } \varepsilon \sim N(0_n,\sigma^2I_n)
+\end{equation}
+mit
+\begin{equation}
+y     := (y_1,...,y_n)^T,
+X     := (x_{ij})_{1 \le i \le n, 1 \le j \le p} \in \mathbb{R}^{n \times p},
+\beta := (\beta_1,...,\beta_p)^T \in \mathbb{R}^p \mbox{ und }
+\sigma^2 > 0.
+\end{equation}
+\end{definition}
+
+
+
+
+# Modellformulierung - Begriffe - \textcolor{darkblue}{SKF 3}
+\vspace{3mm}
+\large
+\color{darkblue} Erläutern Sie die Begriffe Regressor, Prädiktor, Kovariate und Feature im Rahmen der multiplen Regression.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+**Regressor**, **Prädiktor**, **Kovariate** und **Feature** sind synonyme Bezeichnungen für die unabhängige Variable im Modell der multiplen Regression.
+
+
+
+
+
+# Modellschätzung - \textcolor{darkblue}{SKF 4}
+\vspace{3mm}
+\large
+\color{darkblue} Erläutern Sie, warum $\hat{\beta} \approx \mbox{Regressorkovariation}^{-1} \mbox{Regressordatenkovariation}$ gilt.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+Der Betaparameterschätzer hat bekanntlich die Form
+\begin{align*}
+\hat{\beta} := (X^TX)^{-1}X^Ty
+\end{align*}
+
+Dabei quantifizieren in sehr grober Auflösung
+
+* $X^Ty \in \mathbb{R}^p$ die Kovariation der Regressoren \textcolor{darkcyan}{(Spalten der Designmatrix)} mit den Daten \textcolor{darkcyan}{$y$} und
+* $X^TX \in \mathbb{R}^{p \times p}$ die Kovariation der Regressoren untereinander.
+
+Damit ergibt sich für die Betaparameterschätzer also eine Interpretation als
+"regressorkovariationnormalisierte Regressordatenkovariation". 
+
+
+
+# Modellschätzung - \textcolor{darkblue}{SKF 5} - Zusammenhang zu partieller Korrelation
+\vspace{3mm}
+\large
+\color{darkblue} Erläutern Sie den Zusammenhang zwischen Betaparameterschätzern und partieller Korrelation in einem multiplen
+Regressionmodell mit Interzeptprädiktor und zwei kontinuierlichen Prädiktoren anhand der Formel
+\begin{align*}
+\hat{\beta}_1 = r_{y,x_1|x_2}\sqrt{\frac{1-r_{y,x_2}^2}{1 -r_{x_1,x_2}^2}}\frac{s_y}{s_{x_1}}.
+\end{align*}
+
+\vspace{-2mm}
+\color{black}
+\footnotesize
+
+\begin{itemize}
+\item Im Allgemeinen gilt für $1 \le i,l \le k$, dass $\hat{\beta}_k \neq r_{y,x_k|x_l}$.
+\item Betaparameterschätzer sind also im Allgemeinen keine partiellen Stichprobenkorrelationen.
+\item $\hat{\beta}_k = r_{y,x_k|x_l}$ für $1 \le i,l \le k$ gilt genau dann, wenn $s_y = s_{x_1} = s_{x_2}$ und zudem
+\begin{itemize}
+\justifying
+\begin{small}
+\item \footnotesize $r_{y,x_l} = r_{x_k,x_l} = 0$, wenn also die Stichprobenkorrelationen der Daten
+      und der Werte des zweiten Regressors, sowie die Stichprobenkorrelation der Werte
+      der beiden Regressoren gleich Null sind. Dies kann der Fall sein, wenn einer der
+      Regressoren die Daten ``sehr gut erklärt'' und der andere Regressor von dem
+      ersten ``sehr verschieden'' ist.
+\item $|r_{y,x_l}| = |r_{x_k,x_l}|$, wenn also die obige Stichprobenkorrelationen
+      dem Betrage nach gleich sind. Dies ist vermutlich selten der Fall.
+\end{small}
+\end{itemize}
+\end{itemize}
+
+
+# Anwendungsszenario - \textcolor{darkblue}{SKF 6}
+\vspace{3mm}
+\large
+\color{darkblue} $X \in \mathbb{R}^{n \times 2}$ sei die Designmatrix eines multiplen Regressionsmodells mit zwei Prädiktoren
+und Betaparametervektor $\beta := (\beta_1,\beta_2)^2$. Geben Sie den Kontrastgewichtsvektor an, 
+um die Nullhypothese $H_0 : \beta_1 = \beta_2$ mithilfe der T-Statistik zu testen.
+
+\vspace{3mm}
+\color{black}
+\footnotesize
+
+$c = (1,-1)^T$ 
+
+
+
+# Anwendungsszenario - \textcolor{darkblue}{SKF 7}
+\vspace{3mm}
+\large
+\color{darkblue} Simulieren Sie einen Datensatz eines multiplen Regressionsmodells mit Interzept und
+zwei kontinuierlichen Regressoren $x_{1},x_{2} \in \mathbb{R}^n$, wobei $x_{i2} := ax_{i1} + \xi_i$ mit $\xi_i \sim N(0,\sigma^2_{\xi})$  für  $i = 1,...,n$
+sein soll. Wählen Sie für die Simulation des Datensatzes $y \in \mathbb{R}^n$ 
+den wahren, aber unbekannten, Betaparametervektor $\beta = (0,1,0)^T$ und testen Sie
+die Nullhypothesen $H_0 : \beta_j = 0$ für $j = 0,1,2$. Erläutern Sie Ihre Ergebnisse.
+Wiederholen Sie Analyse für den wahren, aber unbekannten, Betaparametervektor $\beta = (0,0,1)^T$.
+
+
+
+# Anwendungsszenario - \textcolor{darkblue}{SKF 7}
+\vspace{2mm}
+\normalsize
+\color{darkblue}für $\beta = (0,1,0)^T$
+\vspace{2mm}
+\color{black}
+\tiny
+\setstretch{0.6}
+
+
+```{r, echo = T, eval = T}
+# Modellformulierung und Datensimulation
+library(MASS)                                                 # Multivariate Normalverteilung
+set.seed(1)                                                   # reproduzierbare Daten
+n          = 100                                              # Anzahl Datenpunkte
+p          = 3                                                # Anzahl Parameter
+a          = 10                                               # Regressortransformationsparameter
+sigsqr_xi  = 1e0                                              # Regressorvarianzparameter
+I_n        = diag(n)                                          # Identitätsmatrix
+x_1        = round(runif(n,0,10))                             # Regressorwerte x_1
+x_2        = mvrnorm(1, a*x_1, sigsqr_xi*I_n)                 # eine Realisierung eines n-dimensionalen ZVs                  
+X          = matrix(c(rep(1,n),x_1,x_2), nrow = n)            # Designmatrix
+beta       = matrix(c(0,1,0), nrow = p)                       # Betaparametervektor
+sigsqr     = 1e0                                              # Varianzparameter
+y          = mvrnorm(1, X %*% beta, sigsqr*I_n)               # eine Realisierung eines n-dimensionalen ZVs
+n          = length(y)                                        # Anzahl Datenpunkte
+p          = ncol(X)                                          # Anzahl Parameter
+beta_hat   = solve(t(X) %*% X) %*% t(X) %*% y                 # Betaparameterschätzer
+eps_hat    = y - X %*% beta_hat                               # Residuenvektor
+sigsqr_hat = (t(eps_hat) %*% eps_hat) /(n-p)                  # Varianzparameterschätzer
+
+# Modellevaluation | Parameterinferenz
+C          = diag(p)                                          # Kontrastgewichtsvektoren
+ste        = rep(NaN, ncol(C))                                # Konstraststandardfehler
+tee        = rep(NaN, ncol(C))                                # T-Statistiken
+pvals      = rep(NaN, ncol(C))                                # p-Werte
+for(i in 1:ncol(C)){
+    c        = C[,i]                                          # Kontrastgewichtsvektor
+    t_num    = t(c)%*%beta_hat                                # Zähler der T-Statistik
+    ste[i]   = sqrt(sigsqr_hat*t(c)%*%solve(t(X)%*%X)%*%c)    # Kontraststandardfehler/Nenner der T-Statistik
+    tee[i]   = t_num/ste[i]                                   # T-Statistik
+    pvals[i] = 2*(1 - pt(abs(tee[i]),n-p))                    # p-Wert
+}
+```
+
+
+
+
+# Anwendungsszenario - \textcolor{darkblue}{SKF 7}
+\vspace{2mm}
+\normalsize
+\color{darkblue}für $\beta = (0,1,0)^T$
+\vspace{1mm}
+\color{black}
+\tiny
+\setstretch{0.6}
+
+```{r, echo = T, eval = T}
+# Ausgabe
+R            = data.frame(beta_hat,ste, tee, pvals)
+rownames(R)  = c("(Intercept)", "x_1", "x_2")
+colnames(R)  = c("Estimate", "Std. Error", "t value", "Pr(>|t|)")
+print(R)
+```
+
+
+# Anwendungsszenario - \textcolor{darkblue}{SKF 7}
+\vspace{2mm}
+\normalsize
+\color{darkblue}für $\beta = (0,0,1)^T$
+\vspace{1mm}
+\color{black}
+\tiny
+\setstretch{0.6}
+
+
+```{r, echo = T, eval = T}
+# Modellformulierung und Datensimulation
+library(MASS)                                                 # Multivariate Normalverteilung
+set.seed(1)                                                   # reproduzierbare Daten
+n          = 100                                              # Anzahl Datenpunkte
+p          = 3                                                # Anzahl Parameter
+a          = 10                                               # Regressortransformationsparameter
+sigsqr_xi  = 1e0                                              # Regressorvarianzparameter
+I_n        = diag(n)                                          # Identitätsmatrix
+x_1        = round(runif(n,0,10))                             # Regressorwerte x_1
+x_2        = mvrnorm(1, a*x_1, sigsqr_xi*I_n)                 # eine Realisierung eines n-dimensionalen ZVs                  
+X          = matrix(c(rep(1,n),x_1,x_2), nrow = n)            # Designmatrix
+beta       = matrix(c(0,0,1), nrow = p)                       # Betaparametervektor
+sigsqr     = 1e0                                              # Varianzparameter
+y          = mvrnorm(1, X %*% beta, sigsqr*I_n)               # eine Realisierung eines n-dimensionalen ZVs
+n          = length(y)                                        # Anzahl Datenpunkte
+p          = ncol(X)                                          # Anzahl Parameter
+beta_hat   = solve(t(X) %*% X) %*% t(X) %*% y                 # Betaparameterschätzer
+eps_hat    = y - X %*% beta_hat                               # Residuenvektor
+sigsqr_hat = (t(eps_hat) %*% eps_hat) /(n-p)                  # Varianzparameterschätzer
+
+# Modellevaluation | Parameterinferenz
+C          = diag(p)                                          # Kontrastgewichtsvektoren
+ste        = rep(NaN, ncol(C))                                # Konstraststandardfehler
+tee        = rep(NaN, ncol(C))                                # T-Statistiken
+pvals      = rep(NaN, ncol(C))                                # p-Werte
+for(i in 1:ncol(C)){
+    c        = C[,i]                                          # Kontrastgewichtsvektor
+    t_num    = t(c)%*%beta_hat                                # Zähler der T-Statistik
+    ste[i]   = sqrt(sigsqr_hat*t(c)%*%solve(t(X)%*%X)%*%c)    # Kontraststandardfehler/Nenner der T-Statistik
+    tee[i]   = t_num/ste[i]                                   # T-Statistik
+    pvals[i] = 2*(1 - pt(abs(tee[i]),n-p))                    # p-Wert
+}
+```
+
+# Anwendungsszenario - \textcolor{darkblue}{SKF 7}
+\vspace{2mm}
+\normalsize
+\color{darkblue}für $\beta = (0,0,1)^T$
+\vspace{1mm}
+\color{black}
+\tiny
+\setstretch{0.6}
+
+```{r, echo = T, eval = T}
+# Ausgabe
+R            = data.frame(beta_hat,ste, tee, pvals)
+rownames(R)  = c("(Intercept)", "x_1", "x_2")
+colnames(R)  = c("Estimate", "Std. Error", "t value", "Pr(>|t|)")
+print(R)
+```
