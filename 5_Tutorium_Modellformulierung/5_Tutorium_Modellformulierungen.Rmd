@@ -11,7 +11,7 @@ output:
 
 
 ```{r, include = F}
-source("5_R_common.R")
+source("5_R_Common.R")
 ```
 
 #  {.plain}
